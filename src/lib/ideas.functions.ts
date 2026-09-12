@@ -12,8 +12,18 @@ import {
 } from "./ideas-shared";
 
 export function db() {
-  const url = process.env["IDEAVAULT_DB_URL"];
-  const key = process.env["IDEAVAULT_DB_ANON_KEY"];
+  // Production keeps server-only names; the local .env uses the same public
+  // values with VITE_ names so the browser auth client can read them. Falling
+  // back here is server-only and keeps local preview reproducible without a
+  // second credentials file.
+  const url =
+    process.env["IDEAVAULT_DB_URL"] ||
+    process.env["VITE_IDEAVAULT_DB_URL"] ||
+    import.meta.env.VITE_IDEAVAULT_DB_URL;
+  const key =
+    process.env["IDEAVAULT_DB_ANON_KEY"] ||
+    process.env["VITE_IDEAVAULT_DB_ANON_KEY"] ||
+    import.meta.env.VITE_IDEAVAULT_DB_ANON_KEY;
   if (!url || !key) throw new Error("BBI database credentials are not configured.");
   return createClient(url, key, {
     auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
