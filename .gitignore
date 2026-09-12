@@ -50,3 +50,8 @@ shot.mjs
 
 # Vercel local deployment output
 .vercel/
+
+# Local environment files -- never commit credentials
+.env
+.env.*
+!.env.example
