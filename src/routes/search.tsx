@@ -8,12 +8,7 @@ import { SiteShell, Breadcrumbs } from "@/components/site-shell";
 import { AdSlot } from "@/components/AdSlot";
 import { searchIdeas } from "@/lib/ideas.functions";
 import type { IdeaCard as IdeaCardData } from "@/lib/ideas-shared";
-import {
-  useDepthScene,
-  useElementPointerGroup,
-  useStaggerReveal,
-  useTextReveal,
-} from "@/motion";
+import { useDepthScene, useElementPointerGroup, useStaggerReveal, useTextReveal } from "@/motion";
 
 export const Route = createFileRoute("/search")({
   validateSearch: z.object({ q: z.string().optional() }),
@@ -90,7 +85,6 @@ function SearchPage() {
   // (see motion.css, coarse-pointer block).
   const sceneRef = useDepthScene<HTMLDivElement>({ strength: 0.5 });
 
-
   const query = useQuery({
     queryKey: ["search", q ?? ""],
     queryFn: () => searchIdeas({ data: { q: q ?? "" } }),
@@ -98,7 +92,7 @@ function SearchPage() {
   });
 
   return (
-    <SiteShell>
+    <SiteShell tone="instrument">
       <div ref={sceneRef} className="cx-scene mx-auto max-w-6xl px-4 py-12">
         {/* EDITABLE SECTION START — safe to add, remove, or reorder sections below without breaking routing or data fetching. */}
         <Breadcrumbs items={[{ label: "Home", to: "/" }, { label: "Search" }]} />

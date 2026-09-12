@@ -8,12 +8,7 @@ import { SiteShell, Breadcrumbs } from "@/components/site-shell";
 import { getListicle, type ListicleEntry, type ListiclePage } from "@/lib/lists.functions";
 import { JsonLd, breadcrumbSchema } from "@/lib/schema";
 import { siteUrl } from "@/lib/site-config";
-import {
-  useDepthScene,
-  useElementPointerGroup,
-  useStaggerReveal,
-  useTextReveal,
-} from "@/motion";
+import { useDepthScene, useElementPointerGroup, useStaggerReveal, useTextReveal } from "@/motion";
 
 /**
  * PROJECT_BRIEF.md Section 6.3 — the listicle template. One page per category,
@@ -58,12 +53,12 @@ export const Route = createFileRoute("/list/$slug")({
   },
   component: ListiclePageRoute,
   errorComponent: () => (
-    <SiteShell>
+    <SiteShell tone="instrument">
       <p className="mx-auto max-w-6xl px-4 py-24">Couldn't load this list — try refreshing.</p>
     </SiteShell>
   ),
   notFoundComponent: () => (
-    <SiteShell>
+    <SiteShell tone="instrument">
       <div className="mx-auto max-w-6xl px-4 py-24">
         <p>We don't have a list for that category.</p>
         <Link to="/list" className="mt-4 inline-block text-primary underline">
@@ -216,7 +211,6 @@ function ListiclePageRoute() {
   // (see motion.css, coarse-pointer block).
   const sceneRef = useDepthScene<HTMLDivElement>({ strength: 0.5 });
 
-
   const entriesPointerRef = useElementPointerGroup<HTMLDivElement>(".mo-card");
   const entriesRevealRef = useStaggerReveal<HTMLDivElement>({
     selector: ".mo-card",
@@ -281,7 +275,7 @@ function ListiclePageRoute() {
           ]),
         ]}
       />
-      <SiteShell>
+      <SiteShell tone="instrument">
         <div ref={sceneRef} className="cx-scene mx-auto max-w-6xl px-4 py-12">
           {/* EDITABLE SECTION START — safe to add, remove, or reorder sections below without breaking routing or data fetching. */}
           <Breadcrumbs

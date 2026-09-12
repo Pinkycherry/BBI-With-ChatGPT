@@ -52,7 +52,7 @@ export const Route = createFileRoute("/calculator/$slug")({
   },
   component: CalculatorRoute,
   notFoundComponent: () => (
-    <SiteShell>
+    <SiteShell tone="instrument">
       <div className="mx-auto max-w-3xl px-4 py-24">
         <h1 className="text-2xl font-bold">That calculator doesn&apos;t exist</h1>
         <p className="mt-2 text-muted-foreground">
@@ -115,7 +115,7 @@ function CalculatorPage({ calculator }: { calculator: Calculator }) {
           ]),
         ]}
       />
-      <SiteShell>
+      <SiteShell tone="instrument">
         <div ref={sceneRef} className="cx-scene mx-auto max-w-6xl px-3 py-12 sm:px-4">
           {/* EDITABLE SECTION START — safe to add, remove, or reorder sections below without breaking routing or data fetching. */}
           <Breadcrumbs
@@ -125,9 +125,7 @@ function CalculatorPage({ calculator }: { calculator: Calculator }) {
               { label: pageName },
             ]}
           />
-          <p className="mt-6 t-eyebrow">
-            Calculator
-          </p>
+          <p className="mt-6 t-eyebrow">Calculator</p>
           <h1
             ref={titleRef}
             className="cx-layer cx-z3 mt-4 text-4xl font-extrabold tracking-tight sm:text-5xl"
@@ -162,9 +160,7 @@ function CalculatorPage({ calculator }: { calculator: Calculator }) {
               <div ref={fieldsRef} className="mt-6 space-y-7">
                 {fieldGroups(calculator).map(({ group, fields }) => (
                   <fieldset key={group} className="border-0 p-0">
-                    <legend className="t-eyebrow">
-                      {group}
-                    </legend>
+                    <legend className="t-eyebrow">{group}</legend>
                     <div className="mt-4 grid grid-cols-[repeat(auto-fit,minmax(15rem,1fr))] gap-5">
                       {fields.map((field) => (
                         <FieldInput

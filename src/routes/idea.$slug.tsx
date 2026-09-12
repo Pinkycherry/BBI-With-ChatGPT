@@ -127,12 +127,12 @@ export const Route = createFileRoute("/idea/$slug")({
   },
   component: IdeaPage,
   errorComponent: () => (
-    <SiteShell>
+    <SiteShell tone="instrument">
       <p className="mx-auto max-w-6xl px-4 py-24">This idea could not be loaded.</p>
     </SiteShell>
   ),
   notFoundComponent: () => (
-    <SiteShell>
+    <SiteShell tone="instrument">
       <div className="mx-auto max-w-6xl px-4 py-24">
         <p>That idea does not exist in the library.</p>
         <Link to="/browse" className="mt-4 inline-block text-primary underline">
@@ -219,7 +219,17 @@ function DemandBlock({ score }: { score: number | null }) {
  * settled value instead, so the verdict is simply there.
  */
 function ComputedVerdictPanel({ idea }: { idea: IdeaDetail }) {
-  const stageRef = useScrollProgress<HTMLElement>({ mode: "pinned", spanVh: 1.6 });
+  // The pin is what the verdict crossfade needs, and ONLY the verdict crossfade
+  // needs it. `pinSpacing` makes ScrollTrigger insert a spacer the length of
+  // the pin — at spanVh 1.6 that is 1,440px of reserved scroll on a 900px
+  // screen — and it was reserved unconditionally, including on every idea
+  // whose `verdict` field is empty. The result was a screen and a half of
+  // blank under this panel on those pages, holding space for a reveal that
+  // had nothing to reveal. No verdict, no pin.
+  const hasVerdict = Boolean(idea.verdict?.trim());
+  const stageRef = useScrollProgress<HTMLElement>(
+    hasVerdict ? { mode: "pinned", spanVh: 1.2 } : { mode: "unpinned" },
+  );
 
   return (
     <section
@@ -261,7 +271,7 @@ function ComputedVerdictPanel({ idea }: { idea: IdeaDetail }) {
         </div>
       </div>
 
-      {idea.verdict && (
+      {hasVerdict && (
         <div
           className="mt-6 border-t border-primary/30 pt-5"
           style={{
@@ -359,7 +369,7 @@ function IdeaPage() {
           breadcrumbSchema(breadcrumbItems),
         ]}
       />
-      <SiteShell>
+      <SiteShell tone="instrument">
         <div
           ref={mastheadRef}
           className="cx-scene mx-auto grid max-w-6xl gap-10 px-4 py-12 lg:grid-cols-[minmax(0,1fr)_20rem]"

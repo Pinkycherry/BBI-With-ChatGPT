@@ -4,7 +4,7 @@ import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { SiteShell, Breadcrumbs } from "@/components/site-shell";
 import { getCatalog } from "@/lib/ideas.functions";
 import FocusCards from "@/components/aceternity/focus-cards";
-import { photoAt } from "@/config/imagery";
+import { categoryImage } from "@/config/category-imagery";
 import { JsonLd, breadcrumbSchema, collectionPageSchema } from "@/lib/schema";
 import { usePillInteraction } from "@/hooks/use-pill-interaction";
 import { useScrollProgress, useTextReveal } from "@/motion";
@@ -32,14 +32,14 @@ export const Route = createFileRoute("/browse")({
   }),
   component: BrowsePage,
   errorComponent: () => (
-    <SiteShell>
+    <SiteShell tone="instrument">
       <p className="mx-auto max-w-6xl px-4 py-24">
         Couldn't load the idea library — try refreshing.
       </p>
     </SiteShell>
   ),
   notFoundComponent: () => (
-    <SiteShell>
+    <SiteShell tone="instrument">
       <p className="mx-auto max-w-6xl px-4 py-24">That page doesn't exist.</p>
     </SiteShell>
   ),
@@ -91,7 +91,7 @@ function BrowsePage() {
           ]),
         ]}
       />
-      <SiteShell>
+      <SiteShell tone="instrument">
         <div ref={depthRef} className="bbi-depth mx-auto max-w-6xl px-4 py-12">
           <Breadcrumbs items={[{ label: "Home", to: "/" }, { label: "Browse" }]} />
           <div className="bbi-depth-back">
@@ -110,12 +110,13 @@ function BrowsePage() {
               line of text and a count, roughly 1,600px of page to say what a
               grid says in 400. FocusCards instead: hovering one category pulls
               it forward and lets the rest fall back, so a long grid answers
-              where the reader is looking. Photography comes from
-              ethicalfounder.com, BBI's parent site — see src/config/imagery.ts. */}
+              where the reader is looking. Each card carries that category's own
+              featured image — see src/config/category-imagery.ts and the field
+              standard in IMAGE_SEO.md. */}
           <FocusCards
             className="bbi-depth-front mt-8"
-            cards={data.categories.map((category, index) => {
-              const photo = photoAt(index);
+            cards={data.categories.map((category) => {
+              const photo = categoryImage(category.categorySlug);
               return {
                 title: category.categoryName,
                 meta: `${category.ideaCount} blueprints`,
