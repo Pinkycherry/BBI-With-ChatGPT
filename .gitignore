@@ -47,3 +47,6 @@ shot.mjs
 
 # Local Supabase stand-in for offline rendering (never committed)
 .localdev/
+
+# Vercel local deployment output
+.vercel/

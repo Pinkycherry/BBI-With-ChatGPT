@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery, useMutation } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { useEffect, useRef, useState, lazy, Suspense } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { IdeaCard } from "@/components/idea-card";
 import { SiteShell } from "@/components/site-shell";
@@ -15,16 +15,10 @@ import InfiniteMovingCards from "@/components/aceternity/infinite-moving-cards";
 import MovingImageCards from "@/components/aceternity/moving-image-cards";
 import LayoutTextFlip from "@/components/aceternity/layout-text-flip";
 import TextGenerateEffect from "@/components/aceternity/text-generate-effect";
-import BlurText from "@/components/aceternity/blur-text";
+import { SeedExperience, HomepageDepth } from "@/components/home/seed-experience";
+import seedStyles from "@/components/home/seed-experience.css?url";
 import SpotlightCard from "@/components/aceternity/spotlight-card";
 
-/* WebGL is not on the critical path. `ogl` was bundled into the shared routes
-   chunk — 169KB shipped to every visitor of every page for two decorative
-   canvases that only exist on the homepage hero. Lazy, they split into their
-   own chunk that is fetched after the page has painted, and a browser that
-   never gets there never pays for it. */
-const MoltenMetal = lazy(() => import("@/components/aceternity/molten-metal"));
-const GlowCursor = lazy(() => import("@/components/aceternity/glow-cursor"));
 import EncryptedText from "@/components/aceternity/encrypted-text";
 import LinkPreview from "@/components/aceternity/link-preview";
 import Lens from "@/components/aceternity/lens";
@@ -82,19 +76,7 @@ function ArrowGlyph() {
   );
 }
 
-function HeroCta() {
-  return (
-    <HoverBorderGradient asChild containerClassName="rounded-full justify-self-start">
-      <Link
-        to="/browse"
-        className="rounded-full text-xs font-extrabold uppercase tracking-[0.18em]"
-      >
-        <ArrowGlyph />
-        <span>Browse the library</span>
-      </Link>
-    </HoverBorderGradient>
-  );
-}
+
 
 /** Split live categories evenly across 4 marquee rows (works for 9 or 100+). */
 
@@ -195,18 +177,6 @@ function tickerRows<T>(categories: T[], rowCount = 4): T[][] {
   return rows.filter((r) => r.length > 0);
 }
 
-/** Hero content panels. */
-const HERO_PANELS = [
-  {
-    label: "What you get",
-    body: "Every idea here comes with four honest things: who will actually buy from you, how the money really works, the painful risks people find out too late, and a straight answer — build it, or walk away. This is not a list. This is the research you wish someone gave you before you spent your time or money.",
-  },
-  {
-    label: "How it works",
-    body: "Browse any category. Read the full blueprint. If it feels right, tap Validate — and get real research on your idea for free, using AI tools you already pay for. No extra charge. No monthly limit. Free to browse. Free to validate, again and again.",
-  },
-];
-
 /** General closing FAQ. */
 const FAQS = [
   {
@@ -257,6 +227,7 @@ export const Route = createFileRoute("/")({
     ]);
   },
   head: () => ({
+    links: [{ rel: "stylesheet", href: seedStyles }],
     meta: [
       { title: "BBI — Bro Business Ideas | Researched Startup Blueprints" },
       {
@@ -298,12 +269,8 @@ function HomePage() {
 
   return (
     <SiteShell tone="instrument">
-      {/* The trail. It does not replace the system cursor — the canvas is
-          pointer-events:none, so every hit target is exactly where it was. */}
-      <Suspense fallback={null}>
-        <GlowCursor />
-      </Suspense>
-
+      <div className="seed-page">
+      <HomepageDepth />
       {/* LLM crawlable summary */}
       <p className="sr-only">
         BBI (Bro Business Ideas) is a business idea directory and startup intelligence library. This
@@ -312,117 +279,7 @@ function HomePage() {
         by sector, investment level, and founder profile.
       </p>
 
-      {/* HERO. The readout sidebar is gone — it was a generic dashboard rail
-          and it stole a fifth of the fold from the headline. The two figures
-          it carried now sit inline under the H1, where they read as part of
-          the sentence rather than as chrome. */}
-      <section
-        id="hero"
-        data-anchor="hero"
-        data-anchor-label="Top"
-        className="relative overflow-hidden border-b border-[var(--ins-rule)]"
-      >
-        {/* The field lives in the HERO, not behind the document. Fixed to the
-            viewport it showed through every section — sections have no ground
-            of their own — so all the body copy and every heading sat on moving
-            light bands. They measured #FFFFFF and still read grey, because the
-            thing behind them was brighter than they were. */}
-        <div aria-hidden className="pointer-events-none absolute inset-0">
-          <Suspense fallback={null}>
-            <MoltenMetal className="h-full w-full" brightness={1.15} speed={0.18} opacity={0.9} />
-          </Suspense>
-          <div className="absolute inset-0 bg-gradient-to-b from-[var(--ins-void)]/55 via-[var(--ins-void)]/62 to-[var(--ins-void)]" />
-        </div>
-        {/* Centred. The hero was a left column with two thirds of the fold
-            empty beside it; with no image left to fill that space there was
-            nothing holding the right-hand side. */}
-        <div className="relative mx-auto flex max-w-[62rem] flex-col items-center px-6 py-12 text-center lg:py-16">
-          <p className="ins-legend">The Truth About Business Ideas</p>
-
-          {/* The H1 is real type on every device now. The particle heading it
-              replaced resolved into readable letterforms only at desktop
-              display size — on a phone it rendered this line as a smear of
-              dots — and its pointer listener sat on the window, so a tap
-              anywhere scattered it. The blur reveal reads the same on a 390px
-              screen as on a 1440px one, and it is text the whole time. */}
-          <h1 className="mt-5 max-w-[20ch]">
-            <BlurText text="Tired of paying just to check if your idea will work?" />
-          </h1>
-
-          {/* The two figures, at display size. They are the fold's proof —
-              the reader's first question is whether anything is actually
-              behind the promise — so they are set as large as the headline
-              rather than as a caption under it, and both of them count up. */}
-          <dl className="mt-8 flex flex-wrap items-end justify-center gap-x-12 gap-y-5 sm:gap-x-16">
-            <div>
-              <dd className="ins-num text-[3.25rem] font-bold leading-[0.95] text-[var(--ins-bright)] sm:text-[4.5rem]">
-                <Odometer value={catalog.totalIdeas} format={(n) => `${Math.round(n)}`} />
-              </dd>
-              <dt className="mt-1.5 text-sm text-[var(--ins-dim)]">researched blueprints</dt>
-            </div>
-            <div aria-hidden className="hidden h-14 w-px bg-[var(--ins-rule)] sm:block" />
-            <div>
-              <dd className="ins-num text-[3.25rem] font-bold leading-[0.95] text-[var(--ins-bright)] sm:text-[4.5rem]">
-                <Odometer value={catalog.categories.length} format={(n) => `${Math.round(n)}`} />
-              </dd>
-              <dt className="mt-1.5 text-sm text-[var(--ins-dim)]">live categories</dt>
-            </div>
-          </dl>
-
-          {/* No image. The hero is the headline, the proof, the promise and
-              the way in — nothing else. The picture that used to sit here was
-              the tallest thing above the fold, was hotlinked from another
-              domain, and said nothing the headline had not already said. */}
-          <Lens className="mt-8 max-w-[62ch] text-base leading-relaxed text-[var(--ins-read)]">
-            <p>
-              We built a free home for real business ideas — side hustles, zero investment ideas,
-              work from home ideas, and low investment ideas. Every idea is researched, not guessed.
-              We tell you who will actually pay you, how the money works, and what will hurt you in
-              year one. Then we give it to you straight — build it, or walk away. Browse for free.
-              Validate as many times as you want. Pay only once, if you ever want full access.
-            </p>
-          </Lens>
-
-          <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-            <HeroCta />
-            <HoverBorderGradient asChild containerClassName="rounded-full">
-              <Link
-                to="/search"
-                search={{ q: "" }}
-                className="ins-num rounded-full text-[0.8125rem]"
-              >
-                <SearchGlyph />
-                <span>Search idea blueprints…</span>
-              </Link>
-            </HoverBorderGradient>
-          </div>
-
-          {/* Every clause here is already true elsewhere on the site — the
-              library is free to browse, nothing asks for a card, and the one
-              payment is optional. Nothing new is claimed. */}
-          <p className="mt-5 text-sm text-[var(--ins-dim)]">
-            100% free to browse · No credit card required · Pay only if you want full access
-          </p>
-        </div>
-
-        {/* The two hero panels, sharing one rule with the block above. */}
-        <div className="mx-auto max-w-[92rem]">
-          <div className="ins-grid border-t border-[var(--ins-rule)] sm:grid-cols-2">
-            {HERO_PANELS.map((panel) => (
-              <SpotlightCard
-                key={panel.label}
-                className="ins-cell border-0 px-6 py-7"
-              >
-                <h3 className="text-base font-semibold text-[var(--ins-bright)]">{panel.label}</h3>
-                <TextGenerateEffect
-                  words={panel.body}
-                  className="mt-2 max-w-[58ch] text-sm leading-relaxed text-[var(--ins-read)]"
-                />
-              </SpotlightCard>
-            ))}
-          </div>
-        </div>
-      </section>
+      <SeedExperience totalIdeas={catalog.totalIdeas} categoryCount={catalog.categories.length} />
 
       {/* SURPRISE ME — Section 8.1, directly below the hero, before any other content */}
       <SurpriseMeSection categories={catalog.categories} />
@@ -621,6 +478,7 @@ function HomePage() {
 
       <div className="px-3 pb-10 sm:px-4">
         <AdSlot position="homepage-above-footer" size="banner" />
+      </div>
       </div>
     </SiteShell>
   );
