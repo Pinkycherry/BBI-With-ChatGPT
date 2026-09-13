@@ -23,6 +23,24 @@
 @media(max-width:480px){.library-intro{margin-top:.6rem}.library-intro .page-heading{font-size:2.35rem}.library-intro .muted{font-size:.91rem;line-height:1.75}.library-group-filter{gap:.45rem;margin-bottom:2rem}.library-group-filter .pill{font-size:.76rem}.library-category-grid{gap:.75rem}.library-category-card{padding:.4rem;border-radius:1.25rem}.library-category-image{border-radius:.9rem;aspect-ratio:1.15}.library-card-arrow{width:1.75rem;height:1.75rem;right:.45rem;bottom:.45rem}.library-card-arrow>svg{width:16px}.library-category-copy{padding:.7rem .35rem .5rem}.library-category-copy h3{font-size:.86rem;line-height:1.4}.library-card-count{font-size:.65rem}.library-category-section{margin-block:1.9rem 2.5rem}.library-category-hero .page-heading{font-size:2.2rem}.library-category-hero{padding:1.2rem}.library-category-hero>img{max-height:13rem}.library-category-hero .eyebrow{font-size:.63rem}.library-filters{gap:.85rem .65rem}.library-filters .input{font-size:.82rem}.library-idea-grid{grid-template-columns:1fr}.library-empty{padding:2rem 1.3rem}.library-empty .button{font-size:.8rem}.library-idea-placeholder{padding:1.25rem}.library-placeholder-answers{gap:.4rem}.library-placeholder-answers span{font-size:.66rem;padding:.35rem .55rem}.library-search-intro{text-align:left;margin-top:.6rem}.library-search-intro .page-heading{font-size:2.6rem}.library-search-intro p.muted{font-size:.9rem}.library-search-form{padding:1rem}.library-search-suggestions>div{padding:1.3rem}.blueprint-intro .page-heading{font-size:2.6rem}.blueprint-summary{font-size:.95rem}.blueprint-answer-nav{padding:.4rem;gap:.2rem}.blueprint-answer-nav a{flex-direction:column;gap:.45rem;padding:.6rem .2rem;font-size:.7rem}.blueprint-answer{padding:1.4rem}.blueprint-answer>.section-heading{font-size:1.8rem}.blueprint-answer p{font-size:.86rem}.blueprint-metrics,.blueprint-balance,.blueprint-verdict-options,.blueprint-aside{grid-template-columns:1fr}.blueprint-metrics{gap:0}.blueprint-signal{padding:1.1rem}.blueprint-verdict-options{gap:1rem}.blueprint-aside-card{padding:1.35rem}.blueprint-publication{padding:1.1rem 1.3rem}.blueprint-publication dl{grid-template-columns:1fr}.blueprint-back{font-size:.8rem}}
 @media(prefers-reduced-motion:reduce){.library-category-card,.library-category-image img{transition:none!important;transform:none!important}.blueprint-page{scroll-behavior:auto!important}}
 
+/* Keep library surfaces neutral on the light reference ground. */
+.library-page :is(.library-category-card,.library-footnote,.library-category-hero,.library-filters,.library-idea-placeholder,.library-idea-card,.library-empty,.library-search-form,.library-search-suggestions>div,.blueprint-answer-nav,.blueprint-answer,.blueprint-aside-card,.blueprint-publication){
+  background:rgba(255,255,255,.86)!important;
+  border-color:#dde4f0!important;
+  border-top-color:#dde4f0!important;
+  box-shadow:0 22px 55px -34px rgba(55,83,124,.42),inset 0 1px 0 rgba(255,255,255,.96)!important;
+  backdrop-filter:blur(20px) saturate(110%)!important;
+  -webkit-backdrop-filter:blur(20px) saturate(110%)!important;
+}
+.library-page :is(.library-category-image,.library-placeholder-art){background:#eef1f8!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.94),0 14px 32px -26px rgba(55,83,124,.38)!important}
+.library-page .library-card-arrow{background:rgba(255,255,255,.9)!important;color:#25354d!important;border-color:#c6d4e8!important;box-shadow:0 8px 18px -14px rgba(55,83,124,.48)!important}
+.library-page .library-pill-active{background:#2c6fe9!important;color:#fff!important;border-color:#2c6fe9!important;box-shadow:0 10px 22px -15px rgba(44,111,233,.65)!important}
+.library-page .library-placeholder-art>svg{background:rgba(255,255,255,.82)!important;border-color:#c6d4e8!important;color:#2c6fe9!important;box-shadow:0 14px 32px -18px rgba(44,111,233,.34)!important}
+.library-page .blueprint-section-icon,.library-page .blueprint-signal,.library-page .library-placeholder-answers span{background:#eef1f8!important;border-color:#dde4f0!important}
+.library-page .blueprint-verdict{background:rgba(255,255,255,.9)!important;border-color:#c6d4e8!important}
+.library-page .library-heading-accent,.library-page .text-link,.library-page .library-idea-card h3 a:hover{color:#2c6fe9}
+.library-page .muted,.library-page .library-card-count,.library-page .library-rail-placeholder{color:#536885!important}
+
 /* Glass treatment for the library and blueprint surfaces. */
 .library-page :is(.library-category-card,.library-footnote,.library-category-hero,.library-filters,.library-idea-placeholder,.library-idea-card,.library-empty,.library-search-form,.library-search-suggestions>div,.blueprint-answer-nav,.blueprint-answer,.blueprint-aside-card,.blueprint-publication){
   background:linear-gradient(135deg,rgba(126,185,255,.16),rgba(28,49,99,.36))!important;
@@ -81,3 +99,18 @@
   background:radial-gradient(ellipse at 90% 0%,rgba(177,122,255,.28),transparent 58%),linear-gradient(135deg,rgba(75,203,255,.18),rgba(41,37,102,.44))!important;
   border-color:rgba(154,224,255,.55)!important;
 }
+
+/* Final light-ground override wins over legacy dark-glass declarations above. */
+.library-page :is(.library-category-card,.library-footnote,.library-category-hero,.library-filters,.library-idea-placeholder,.library-idea-card,.library-empty,.library-search-form,.library-search-suggestions>div,.blueprint-answer-nav,.blueprint-answer,.blueprint-aside-card,.blueprint-publication),
+.blueprint-page :is(.blueprint-answer-nav,.blueprint-answer,.blueprint-aside-card,.blueprint-publication){background:rgba(255,255,255,.86)!important;border-color:#dde4f0!important;border-top-color:#dde4f0!important;box-shadow:0 22px 55px -34px rgba(55,83,124,.42),inset 0 1px 0 rgba(255,255,255,.96)!important;backdrop-filter:blur(20px) saturate(110%)!important;-webkit-backdrop-filter:blur(20px) saturate(110%)!important}
+.library-page :is(.library-category-image,.library-placeholder-art),.blueprint-page :is(.secondary-category-art,.secondary-editorial-art){background:#eef1f8!important}
+.library-page .library-card-arrow{background:rgba(255,255,255,.9)!important;color:#25354d!important;border-color:#c6d4e8!important}
+.library-page .library-pill-active{background:#2c6fe9!important;color:#fff!important;border-color:#2c6fe9!important}
+.library-page .blueprint-verdict,.blueprint-page .blueprint-verdict{background:rgba(255,255,255,.9)!important;border-color:#c6d4e8!important}
+
+:root[data-theme="dark"] .library-page :is(.library-category-card,.library-footnote,.library-category-hero,.library-filters,.library-idea-placeholder,.library-idea-card,.library-empty,.library-search-form,.library-search-suggestions>div,.blueprint-answer-nav,.blueprint-answer,.blueprint-aside-card,.blueprint-publication),
+:root[data-theme="dark"] .blueprint-page :is(.blueprint-answer-nav,.blueprint-answer,.blueprint-aside-card,.blueprint-publication){background:rgba(28,43,69,.88)!important;border-color:#526987!important;border-top-color:#8ca5c6!important;box-shadow:0 26px 70px -34px rgba(0,0,0,.72),inset 0 1px 0 rgba(255,255,255,.16)!important}
+:root[data-theme="dark"] .library-page :is(.library-category-image,.library-placeholder-art),:root[data-theme="dark"] .blueprint-page :is(.secondary-category-art,.secondary-editorial-art){background:#243754!important}
+:root[data-theme="dark"] .library-page .library-card-arrow{background:rgba(36,55,84,.9)!important;color:#f4f7fc!important;border-color:#526987!important}
+:root[data-theme="dark"] .library-page .library-pill-active{background:#78a9f2!important;color:#10203a!important;border-color:#78a9f2!important}
+:root[data-theme="dark"] .library-page .muted,:root[data-theme="dark"] .library-page .library-card-count,:root[data-theme="dark"] .library-page .library-rail-placeholder{color:#c5d2e5!important}

@@ -100,9 +100,6 @@ function RootComponent() {
   return (
     <QueryClientProvider client={queryClient}>
       <div ref={glassPointerRef} className="site-frame">
-        <a href="#main-content" className="skip-link">
-          Skip to content
-        </a>
         <Header />
         <noscript>
           <div className="noscript-note">

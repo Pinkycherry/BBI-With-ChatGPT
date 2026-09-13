@@ -18,11 +18,11 @@ export function Brand() {
 }
 
 function ThemeToggle() {
-  const [dark, setDark] = useState(true);
+  const [dark, setDark] = useState(false);
   useEffect(() => {
     try {
       const saved = localStorage.getItem("bbi-theme");
-      const isDark = saved !== "light";
+      const isDark = saved === "dark";
       document.documentElement.dataset["theme"] = isDark ? "dark" : "light";
       setDark(isDark);
     } catch {
@@ -80,7 +80,18 @@ export function Header() {
       <div className="header-inner">
         <Brand />
         <nav className="header-navigation" aria-label="Main navigation">
-          <details className="browse-menu" ref={details}>
+          <details
+            className="browse-menu"
+            ref={details}
+            onPointerEnter={(event) => {
+              if (event.pointerType === "mouse" && details.current) details.current.open = true;
+            }}
+            onPointerLeave={(event) => {
+              if (event.pointerType === "mouse" && details.current && !details.current.matches(":focus-within")) {
+                details.current.open = false;
+              }
+            }}
+          >
             <summary>
               <span className="desktop-label">Browse ideas</span>
               <span className="mobile-label">

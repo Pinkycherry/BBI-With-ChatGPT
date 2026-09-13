@@ -43,44 +43,6 @@ export type BlueprintProps = {
   focus_keyword: string;
 };
 
-export const BLUEPRINT_PLACEHOLDERS: BlueprintProps = {
-  idea_id: "Placeholder — idea identifier", // PLACEHOLDER: idea_id
-  category_name: "Category placeholder", // PLACEHOLDER: category_name
-  category_slug: "Placeholder — category slug", // PLACEHOLDER: category_slug
-  subcategory_name: "Subcategory placeholder", // PLACEHOLDER: subcategory_name
-  subcategory_slug: "Placeholder — subcategory slug", // PLACEHOLDER: subcategory_slug
-  title: "Blueprint title placeholder", // PLACEHOLDER: title
-  slug: "Placeholder — idea slug", // PLACEHOLDER: slug
-  summary: "Placeholder — a plain-language introduction to the opportunity and the problem it solves.", // PLACEHOLDER: summary
-  business_description: "Placeholder — what the business does, what the customer receives, and what running it involves.", // PLACEHOLDER: business_description
-  tags: "Placeholder — researched topic tags", // PLACEHOLDER: tags
-  pros_json: "Placeholder — evidence-backed reasons this business could work for the right founder.", // PLACEHOLDER: pros_json
-  cons_json: "Placeholder — the difficult work, hidden costs, and reasons this business could fail.", // PLACEHOLDER: cons_json
-  verdict: "Placeholder — a direct founder-fit verdict, including when you should not build this business.", // PLACEHOLDER: verdict
-  trend_score: "Awaiting research", // PLACEHOLDER: trend_score
-  tier: "Placeholder — publication tier", // PLACEHOLDER: tier
-  market_opportunity: "Placeholder — the specific unmet need and the research supporting it.", // PLACEHOLDER: market_opportunity
-  target_customer: "Placeholder — the person who pays, their situation, and why this problem matters to them.", // PLACEHOLDER: target_customer
-  how_you_make_money: "Placeholder — what you sell, how customers pay, and what remains after the costs.", // PLACEHOLDER: how_you_make_money
-  startup_cost: "Placeholder — setup costs", // PLACEHOLDER: startup_cost
-  income_potential: "Placeholder — income range and assumptions", // PLACEHOLDER: income_potential
-  competition_edge: "Placeholder — the existing alternatives and a defensible reason to choose this business.", // PLACEHOLDER: competition_edge
-  getting_started_steps: "Placeholder — the practical sequence from researching the customer to making the first sale.", // PLACEHOLDER: getting_started_steps
-  tools_needed: "Placeholder — essential tools and what each one is needed for.", // PLACEHOLDER: tools_needed
-  time_to_first_customer: "Placeholder — realistic time to first customer", // PLACEHOLDER: time_to_first_customer
-  faq_json: "Placeholder — questions and answers specific to this blueprint.", // PLACEHOLDER: faq_json
-  research_facts: "Placeholder — dated research findings, supporting evidence, and relevant context.", // PLACEHOLDER: research_facts
-  external_links: "Placeholder — verified sources and further reading.", // PLACEHOLDER: external_links
-  internal_link_anchors: "Placeholder — related blueprints and library reading.", // PLACEHOLDER: internal_link_anchors
-  seo_title: "Placeholder — page title", // PLACEHOLDER: seo_title
-  meta_description: "Placeholder — page description", // PLACEHOLDER: meta_description
-  focus_keyword: "Placeholder — primary topic", // PLACEHOLDER: focus_keyword
-};
-
-export function createBlueprintPlaceholder(identity: Partial<Pick<BlueprintProps, "slug" | "category_name" | "category_slug" | "subcategory_slug" | "subcategory_name">> = {}): BlueprintProps {
-  return { ...BLUEPRINT_PLACEHOLDERS, ...identity };
-}
-
 export function contentList(value: BlueprintList): readonly string[] {
   return typeof value === "string" ? (value.trim() ? [value] : []) : value;
 }
@@ -111,12 +73,11 @@ const ANSWERS = [
 
 export function BlueprintPage(props: BlueprintProps) {
   const category = getCategory(props.category_slug);
-  const isPlaceholder = props.title === BLUEPRINT_PLACEHOLDERS.title;
   return (
     <article className="bbi-page blueprint-page">
       <Link to="/browse" className="text-link blueprint-back"><ArrowLeft size={16} aria-hidden="true" />Back to the library</Link>
       <header className="blueprint-intro">
-        <div className="library-inline"><span className="eyebrow">The BBI blueprint</span><span className="pill">Free to read</span>{isPlaceholder && <span className="pill">Template preview</span>}</div>
+        <div className="library-inline"><span className="eyebrow">The BBI blueprint</span><span className="pill">Free to read</span></div>
         <h1 className="page-heading">{props.title}</h1>
         <p className="blueprint-summary">{props.summary}</p>
         <div className="library-inline blueprint-tags">
@@ -168,7 +129,7 @@ export function BlueprintPage(props: BlueprintProps) {
         </div>
 
         <aside className="blueprint-aside" aria-label="Supporting research">
-          <section className="glass-panel blueprint-aside-card"><FileText size={22} aria-hidden="true" /><h2>Research notes</h2><ResearchList value={props.research_facts} /><Field label="Trend signal"><p>{props.trend_score ?? BLUEPRINT_PLACEHOLDERS.trend_score}</p></Field></section>
+          <section className="glass-panel blueprint-aside-card"><FileText size={22} aria-hidden="true" /><h2>Research notes</h2>{contentList(props.research_facts).length > 0 ? <ResearchList value={props.research_facts} /> : <p className="muted">Research notes will be added as this blueprint is updated.</p>}<Field label="Trend signal"><p>{props.trend_score ?? "No trend signal published yet."}</p></Field></section>
           <section className="glass-panel blueprint-aside-card"><Link2 size={22} aria-hidden="true" /><h2>Follow the evidence</h2><SourceLinks value={props.external_links} /><Field label="Keep exploring"><SourceLinks value={props.internal_link_anchors} internal /></Field></section>
           <div className="blueprint-aside-note"><span className="eyebrow">Your decision. Your pace.</span><p>No signup, no paywall, no email gate.</p><Link to="/browse" className="text-link">Explore the library<ArrowUpRight size={17} aria-hidden="true" /></Link></div>
         </aside>

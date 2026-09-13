@@ -137,7 +137,6 @@ export function TreeHero({ className = "" }: { className?: string }) {
           draggable={false}
           style={{ filter: `url(#${filterId}) drop-shadow(0 12px 15px rgb(148 104 27 / 12%))` }}
         />
-        {/* PLACEHOLDER: editorial tree captions; replace with final brand copy. */}
         <div className="bbi-tree-label bbi-tree-label-research">
           <span className="bbi-tree-label-icon">
             <Sprout size={17} strokeWidth={1.7} />
@@ -164,7 +163,6 @@ export function TreeHero({ className = "" }: { className?: string }) {
         <span className="bbi-tree-satellite bbi-tree-satellite-one" aria-hidden="true" />
         <span className="bbi-tree-satellite bbi-tree-satellite-two" aria-hidden="true" />
       </motion.div>
-      {/* PLACEHOLDER: decorative artwork caption and no-script description. */}
       <div className="bbi-tree-caption">
         <span /> THE POSSIBILITY TREE <MoveUpRight size={12} aria-hidden="true" />
       </div>
@@ -177,7 +175,6 @@ export function TreeHero({ className = "" }: { className?: string }) {
   );
 }
 
-// PLACEHOLDER: explanatory captions for the brief's four required blueprint answers.
 const ANSWERS = [
   {
     icon: Users,
@@ -266,7 +263,6 @@ export function BlueprintScroll({ className = "" }: { className?: string }) {
       className={`bbi-answer-section ${className}`}
       aria-labelledby="blueprint-answers-heading"
     >
-      {/* PLACEHOLDER: introductory section copy; the four-answer order is fixed. */}
       <div className="bbi-answer-heading">
         <div>
           <p className="bbi-answer-eyebrow">INSIDE EVERY BLUEPRINT</p>

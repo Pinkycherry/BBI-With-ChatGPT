@@ -281,6 +281,13 @@
 :root[data-theme="dark"] .secondary-page .secondary-dark-card { background: radial-gradient(ellipse at right top, #3d5890, transparent 80%), #172b4d; }
 :root[data-theme="dark"] .secondary-page .secondary-dark-card .button { background: var(--surface-solid); color: var(--foreground); border-color: var(--border); }
 
+/* Light-ground correction for secondary templates. */
+.secondary-page :is(.glass-panel,.secondary-hub-intro,.secondary-collection,.secondary-tool-card,.secondary-related-card,.secondary-faq,.secondary-faq-category,.secondary-form,.secondary-calculator-result,.secondary-question-card,.secondary-notes-review,.secondary-free-card,.secondary-principle,.secondary-service-card,.secondary-account-card,.secondary-legal-nav,.secondary-legal-document,.secondary-editorial-card,.secondary-editorial-placeholder,.secondary-list-entry,.secondary-about-draft){background:rgba(255,255,255,.86)!important;border-color:#dde4f0!important;border-top-color:#dde4f0!important;box-shadow:0 22px 55px -34px rgba(55,83,124,.42),inset 0 1px 0 rgba(255,255,255,.96)!important;backdrop-filter:blur(20px) saturate(110%)!important;-webkit-backdrop-filter:blur(20px) saturate(110%)!important}
+.secondary-page :is(.secondary-search,.secondary-number-input,.secondary-field :is(.input,textarea,select),.secondary-question-card textarea){background:#fff!important;color:#25354d!important;border-color:#c6d4e8!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.96),0 8px 24px -20px rgba(55,83,124,.48)!important;backdrop-filter:blur(14px) saturate(105%)!important;-webkit-backdrop-filter:blur(14px) saturate(105%)!important}
+.secondary-page :is(.secondary-category-art,.secondary-editorial-art,.secondary-article-cover,.secondary-seed-image){background:#eef1f8!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.94),0 14px 32px -26px rgba(55,83,124,.38)!important}
+.secondary-page :is(.secondary-category-art img,.secondary-seed-image img){mix-blend-mode:normal!important;opacity:1!important}
+.secondary-page .secondary-icon{background:#eef1f8!important;border-color:#c6d4e8!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.95),0 12px 28px -18px rgba(44,111,233,.32)!important}
+
 /* Frosted surfaces across the secondary templates. */
 .secondary-page :is(.glass-panel,.secondary-hub-intro,.secondary-collection,.secondary-tool-card,.secondary-related-card,.secondary-faq,.secondary-faq-category,.secondary-form,.secondary-calculator-result,.secondary-question-card,.secondary-notes-review,.secondary-free-card,.secondary-principle,.secondary-service-card,.secondary-account-card,.secondary-legal-nav,.secondary-legal-document,.secondary-editorial-card,.secondary-editorial-placeholder,.secondary-list-entry,.secondary-about-draft){
   background:linear-gradient(135deg,rgba(126,185,255,.16),rgba(28,49,99,.36))!important;
@@ -326,4 +333,17 @@
   background:radial-gradient(ellipse at 90% 0%,rgba(126,112,255,.35),transparent 62%),linear-gradient(140deg,rgba(21,42,87,.92),rgba(13,21,57,.96))!important;
   border-color:rgba(175,221,255,.4)!important;
 }
+
+/* Final light-ground override wins over legacy dark-glass declarations above. */
+.secondary-page :is(.glass-panel,.secondary-hub-intro,.secondary-collection,.secondary-tool-card,.secondary-related-card,.secondary-faq,.secondary-faq-category,.secondary-form,.secondary-calculator-result,.secondary-question-card,.secondary-notes-review,.secondary-free-card,.secondary-principle,.secondary-service-card,.secondary-account-card,.secondary-legal-nav,.secondary-legal-document,.secondary-editorial-card,.secondary-editorial-placeholder,.secondary-list-entry,.secondary-about-draft){background:rgba(255,255,255,.86)!important;border-color:#dde4f0!important;border-top-color:#dde4f0!important;box-shadow:0 22px 55px -34px rgba(55,83,124,.42),inset 0 1px 0 rgba(255,255,255,.96)!important;backdrop-filter:blur(20px) saturate(110%)!important;-webkit-backdrop-filter:blur(20px) saturate(110%)!important}
+.secondary-page :is(.secondary-search,.secondary-number-input,.secondary-field :is(.input,textarea,select),.secondary-question-card textarea){background:#fff!important;color:#25354d!important;border-color:#c6d4e8!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.96),0 8px 24px -20px rgba(55,83,124,.48)!important}
+.secondary-page :is(.secondary-category-art,.secondary-editorial-art,.secondary-article-cover,.secondary-seed-image){background:#eef1f8!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.94),0 14px 32px -26px rgba(55,83,124,.38)!important}
+.secondary-page :is(.secondary-category-art img,.secondary-seed-image img){mix-blend-mode:normal!important;opacity:1!important}
+.secondary-page .secondary-icon{background:#eef1f8!important;border-color:#c6d4e8!important;box-shadow:inset 0 1px 0 rgba(255,255,255,.95),0 12px 28px -18px rgba(44,111,233,.32)!important}
+.secondary-page .secondary-draft{color:#7f5410!important;border-color:#d6b669!important;background:#fff8df!important}
+:root[data-theme="dark"] .secondary-page :is(.glass-panel,.secondary-hub-intro,.secondary-collection,.secondary-tool-card,.secondary-related-card,.secondary-faq,.secondary-faq-category,.secondary-form,.secondary-calculator-result,.secondary-question-card,.secondary-notes-review,.secondary-free-card,.secondary-principle,.secondary-service-card,.secondary-account-card,.secondary-legal-nav,.secondary-legal-document,.secondary-editorial-card,.secondary-editorial-placeholder,.secondary-list-entry,.secondary-about-draft){background:rgba(28,43,69,.88)!important;border-color:#526987!important;border-top-color:#8ca5c6!important;box-shadow:0 26px 70px -34px rgba(0,0,0,.72),inset 0 1px 0 rgba(255,255,255,.16)!important}
+:root[data-theme="dark"] .secondary-page :is(.secondary-search,.secondary-number-input,.secondary-field :is(.input,textarea,select),.secondary-question-card textarea){background:#1c2b45!important;color:#f4f7fc!important;border-color:#526987!important}
+:root[data-theme="dark"] .secondary-page :is(.secondary-category-art,.secondary-editorial-art,.secondary-article-cover,.secondary-seed-image){background:#243754!important}
+:root[data-theme="dark"] .secondary-page .secondary-icon{background:#243754!important;border-color:#526987!important}
+:root[data-theme="dark"] .secondary-page .secondary-draft{color:#edd79b!important;border-color:#746842!important;background:#342f22!important}
 

@@ -19,7 +19,6 @@ import { Badge } from "@/components/bbi/primitives";
 
 export const Route = createFileRoute("/")({ component: HomePage });
 
-// PLACEHOLDER: Editorial interface copy below can be replaced with the founder’s final copy.
 function HomePage() {
   const homeRef = useRef<HTMLDivElement>(null);
   const reducedMotion = useReducedMotion();
