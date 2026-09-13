@@ -11,20 +11,66 @@ import {
   type IdeaRow,
 } from "./ideas-shared";
 
+/**
+ * Every name we will accept for the database URL and anon key, in priority
+ * order.
+ *
+ * The reason this is a list rather than one name: the same credentials get
+ * entered under different names depending on where they are set. A local
+ * `.env` and the browser client both use the `VITE_` prefix, Vercel's own
+ * Supabase integration injects `SUPABASE_URL`, and this file originally read
+ * only the bare `IDEAVAULT_` pair. Any one of those being the only one set
+ * used to take the whole site down with "credentials are not configured",
+ * because server code never sees a `VITE_` variable through `import.meta.env`.
+ * Reading all of them means the site comes up whichever pair is present.
+ */
+const URL_VARS = [
+  "IDEAVAULT_DB_URL",
+  "VITE_IDEAVAULT_DB_URL",
+  "SUPABASE_URL",
+  "NEXT_PUBLIC_SUPABASE_URL",
+  "VITE_SUPABASE_URL",
+] as const;
+
+const KEY_VARS = [
+  "IDEAVAULT_DB_ANON_KEY",
+  "VITE_IDEAVAULT_DB_ANON_KEY",
+  "SUPABASE_ANON_KEY",
+  "NEXT_PUBLIC_SUPABASE_ANON_KEY",
+  "VITE_SUPABASE_ANON_KEY",
+  "SUPABASE_PUBLISHABLE_KEY",
+] as const;
+
+function firstSet(names: readonly string[]): string | undefined {
+  for (const name of names) {
+    const value = process.env[name];
+    if (value && value.trim()) return value.trim();
+  }
+  return undefined;
+}
+
 export function db() {
-  // Production keeps server-only names; the local .env uses the same public
-  // values with VITE_ names so the browser auth client can read them. Falling
-  // back here is server-only and keeps local preview reproducible without a
-  // second credentials file.
-  const url =
-    process.env["IDEAVAULT_DB_URL"] ||
-    process.env["VITE_IDEAVAULT_DB_URL"] ||
-    import.meta.env.VITE_IDEAVAULT_DB_URL;
-  const key =
-    process.env["IDEAVAULT_DB_ANON_KEY"] ||
-    process.env["VITE_IDEAVAULT_DB_ANON_KEY"] ||
-    import.meta.env.VITE_IDEAVAULT_DB_ANON_KEY;
-  if (!url || !key) throw new Error("BBI database credentials are not configured.");
+  const url = firstSet(URL_VARS);
+  const key = firstSet(KEY_VARS);
+
+  // Name the half that is missing, so a misconfigured deploy is a one-line
+  // diagnosis instead of a blank page.
+  if (!url || !key) {
+    const missing = [!url ? "database URL" : null, !key ? "anon key" : null]
+      .filter(Boolean)
+      .join(" and ");
+    const accepted = [
+      !url ? `URL: ${URL_VARS.join(", ")}` : null,
+      !key ? `key: ${KEY_VARS.join(", ")}` : null,
+    ]
+      .filter(Boolean)
+      .join(" | ");
+    throw new Error(
+      `BBI database credentials are not configured — missing the ${missing}. ` +
+        `Set any one of these in the deployment environment (${accepted}).`,
+    );
+  }
+
   return createClient(url, key, {
     auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
   });

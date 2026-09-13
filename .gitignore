@@ -11,7 +11,6 @@ node_modules
 dist
 dist-ssr
 .output
-.vercel/
 .vinxi
 .tanstack/**
 .nitro
@@ -40,3 +39,19 @@ LOGIN_CREDENTIALS_AND_API_KEYS.md
 
 # scrollcraft local workspace (tool-generated, not app source)
 /scrollcraft/
+
+# Temporary screenshot fixtures (never committed)
+src/lib/ideas.json
+src/lib/catalog.json
+shot.mjs
+
+# Local Supabase stand-in for offline rendering (never committed)
+.localdev/
+
+# Vercel local deployment output
+.vercel/
+
+# Local environment files -- never commit credentials
+.env
+.env.*
+!.env.example

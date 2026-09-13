@@ -7,6 +7,12 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 
 export default defineConfig({
+  // No `ssr.noExternal` for React here, deliberately. Listing react/react-dom
+  // there forces Vite to inline them into the SSR bundle, and React's entry is
+  // CommonJS (`module.exports = require(...)`). Vite 8's module runner
+  // evaluates an inlined module as ESM, where `module` does not exist, so
+  // every route died with "ReferenceError: module is not defined" before it
+  // rendered. Left external, Node's CommonJS loader handles them and SSR works.
   tanstackStart: {
     // Redirect TanStack Start's bundled server entry to src/server.ts (our SSR error wrapper).
     // nitro/vite builds from this
