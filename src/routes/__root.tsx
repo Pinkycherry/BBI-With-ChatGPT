@@ -1,108 +1,74 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import {
   Outlet,
-  Link,
   createRootRouteWithContext,
-  useRouter,
   HeadContent,
   Scripts,
+  useRouter,
 } from "@tanstack/react-router";
-import { useEffect, type ReactNode } from "react";
-
+import type { ReactNode } from "react";
+import { ArrowLeft, RefreshCw } from "lucide-react";
+import { Header } from "@/components/bbi/header";
+import { Footer } from "@/components/bbi/footer";
 import "../styles.css";
-import "../motion.css";
-import { PointerChannelProvider, PageTransition } from "../motion";
-import { SiteTextMotion } from "@/components/site-text-motion";
-import { reportLovableError } from "../lib/lovable-error-reporting";
-import { catalogQuery } from "../lib/ideas.functions";
 
 function NotFoundComponent() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-7xl font-bold text-foreground">404</h1>
-        <h2 className="mt-4 text-xl font-semibold text-foreground">Page not found</h2>
-        <p className="mt-2 text-sm text-muted-foreground">
-          The page you're looking for doesn't exist or has been moved.
-        </p>
-        <div className="mt-6">
-          <Link
-            to="/"
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-          >
-            Go home
-          </Link>
-        </div>
-      </div>
+    <div className="bbi-page error-state">
+      <p className="eyebrow">Page not found</p>
+      <h1 className="page-heading">A different branch.</h1>
+      <p className="muted">This page is not in the library. Find your next starting point below.</p>
+      <a className="button button-primary" href="/browse">
+        <ArrowLeft size={16} aria-hidden="true" />
+        Explore the library
+      </a>
     </div>
   );
 }
 
-function ErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
-  console.error(error);
+function ErrorComponent({ reset }: { error: Error; reset: () => void }) {
   const router = useRouter();
-  useEffect(() => {
-    reportLovableError(error, { boundary: "tanstack_root_error_component" });
-  }, [error]);
-
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4">
-      <div className="max-w-md text-center">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground">
-          This page didn't load
-        </h1>
-        <p className="mt-2 text-sm text-muted-foreground">
-          Something went wrong on our end. You can try refreshing or head back home.
-        </p>
-        <div className="mt-6 flex flex-wrap justify-center gap-2">
-          <button
-            onClick={() => {
-              router.invalidate();
-              reset();
-            }}
-            className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/90"
-          >
-            Try again
-          </button>
-          <a
-            href="/"
-            className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
-          >
-            Go home
-          </a>
-        </div>
-      </div>
+    <div className="bbi-page error-state">
+      <p className="eyebrow">Something interrupted this page</p>
+      <h1 className="page-heading">Let's try that again.</h1>
+      <p className="muted">The page could not finish loading.</p>
+      <button
+        className="button button-primary"
+        onClick={() => {
+          void router.invalidate();
+          reset();
+        }}
+      >
+        <RefreshCw size={16} aria-hidden="true" />
+        Try again
+      </button>
+      <a href="/browse" className="text-link">
+        Return to the library
+      </a>
     </div>
   );
 }
 
 export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
-  loader: ({ context }) => context.queryClient.ensureQueryData(catalogQuery),
   head: () => ({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "BBI — Bro Business Ideas | Researched Business Idea Blueprints" },
+      { title: "BBI — Business ideas, honestly researched | businessidea.io" },
       {
         name: "description",
         content:
-          "Researched business idea blueprints with market context, trend scores and honest founder-fit verdicts.",
+          "A free library of 290 researched business-idea blueprints across 14 categories. Who pays, how the money works, what hurts, and an honest founder-fit verdict.",
       },
-      { name: "author", content: "BBI — Bro Business Ideas" },
-      { property: "og:title", content: "BBI — Bro Business Ideas" },
-      {
-        property: "og:description",
-        content: "Researched business idea blueprints with market context and trend scores.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
+      { name: "theme-color", content: "#f4f7fc" },
     ],
     links: [
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Sans+Condensed:wght@600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Geist:wght@400;500;600;700;800&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Geist:wght@400;500;550;600;650;700&family=IBM+Plex+Mono:wght@400;500&display=swap",
       },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
     ],
@@ -115,7 +81,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
 
 function RootShell({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" className="light">
+    <html lang="en">
       <head>
         <HeadContent />
       </head>
@@ -129,19 +95,24 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
-
   return (
     <QueryClientProvider client={queryClient}>
-      {/* Publishes --ptr-x/y/v and --scroll-v on :root for the whole site.
-          Renders no DOM of its own and holds no React state. */}
-      <PointerChannelProvider />
-      {/* Desktop-only custom pointer; refuses to run on touch or reduced motion. */}
-      {/* Wave word-reveal on every heading, and anything with data-wave. */}
-      <SiteTextMotion />
-      <PageTransition>
-        {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
-        <Outlet />
-      </PageTransition>
+      <div className="site-frame">
+        <a href="#main-content" className="skip-link">
+          Skip to content
+        </a>
+        <Header />
+        <noscript>
+          <div className="noscript-note">
+            You're viewing the static library. <a href="/browse">Browse categories</a>
+            <a href="/faq">Read common questions</a>
+          </div>
+        </noscript>
+        <main id="main-content" className="site-main" tabIndex={-1}>
+          <Outlet />
+        </main>
+        <Footer />
+      </div>
     </QueryClientProvider>
   );
 }

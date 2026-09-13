@@ -2,3972 +2,1191 @@
 @source "../src";
 @import "tw-animate-css";
 @theme inline {
-  --radius-sm: calc(var(--radius) - 4px);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) + 4px);
-  --radius-2xl: calc(var(--radius) + 8px);
-  --radius-3xl: calc(var(--radius) + 12px);
-  --radius-4xl: calc(var(--radius) + 16px);
-  /* Instrument Serif (display) + Inter (body), set on main. Headings default
-     to Inter via the h1-h4 rule below; the serif is opted into per-headline
-     with .cine-display. */
-  /* Geist carries the whole interface: a modern grotesque with tight, even
-     colour that holds up from 11px labels to a 60px headline. Geist Mono is
-     reserved for figures — trend scores, counts, IDs — so numbers line up in
-     a column and read as data. Instrument Serif is kept for the single
-     display moment per page, not as a general heading face. */
-  --font-display: "Geist", ui-sans-serif, system-ui, sans-serif;
-  --font-sans: "Geist", ui-sans-serif, system-ui, sans-serif;
-  --font-serif: "Instrument Serif", ui-serif, Georgia, serif;
-  --font-mono: "Geist Mono", ui-monospace, SFMono-Regular, monospace;
+  --font-sans: "Geist", "Segoe UI", sans-serif;
+  --font-display: "Geist", "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
-  --color-card-foreground: var(--card-foreground);
-  --color-popover: var(--popover);
-  --color-popover-foreground: var(--popover-foreground);
+  --color-card-foreground: var(--foreground);
+  --color-popover: var(--surface-solid);
+  --color-popover-foreground: var(--foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
   --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary-foreground: var(--foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
   --color-accent: var(--accent);
-  --color-accent-foreground: var(--accent-foreground);
-  --color-destructive: var(--destructive);
-  --color-destructive-foreground: var(--destructive-foreground);
+  --color-accent-foreground: var(--foreground);
   --color-border: var(--border);
-  --color-input: var(--input);
-  --color-ring: var(--ring);
-  --color-ring-offset-background: var(--background);
-  --color-ember: var(--ember);
-  /* Highlight hues — see the HIGHLIGHT PALETTE block below for why these
-     exist and what each one means. Registered here so `text-hl-gold`,
-     `bg-hl-green/10` etc. are available as ordinary utilities. */
-  --color-hl-gold: var(--hl-gold);
-  --color-hl-green: var(--hl-green);
-  --color-hl-coral: var(--hl-coral);
-  --color-hl-teal: var(--hl-teal);
-  --color-amber-glow: var(--amber-glow);
-  --color-warm: var(--warm);
-  --color-glass-border: var(--glass-border);
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
-  --color-chart-5: var(--chart-5);
-  --color-sidebar: var(--sidebar);
-  --color-sidebar-foreground: var(--sidebar-foreground);
-  --color-sidebar-primary: var(--sidebar-primary);
-  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
-  --color-sidebar-accent: var(--sidebar-accent);
-  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
-  --color-sidebar-border: var(--sidebar-border);
-  --color-sidebar-ring: var(--sidebar-ring);
-  --ease-glass: cubic-bezier(0.16, 1, 0.3, 1);
+  --color-input: var(--border);
+  --color-ring: var(--primary);
+  --color-destructive: var(--negative);
+  --color-destructive-foreground: #fff;
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-base: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: 2.25rem;
+  --text-4xl: 3rem;
+  --text-5xl: 4rem;
+  --spacing: 0.25rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.875rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.75rem;
+  --radius-2xl: 2rem;
+  --ease-glass: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --ease-spring: cubic-bezier(0.16, 1, 0.3, 1);
+  --animate-duration-fast: 160ms;
+  --animate-duration-normal: 280ms;
+  --animate-duration-slow: 700ms;
 }
 :root {
-  /* Dark mode is removed; <html> now always carries class="light" (set
-     statically in __root.tsx, not toggled), so the html.light block below
-     always wins the cascade over these base values. Kept as the fallback
-     for any render path that somehow skips that class, not as a live theme. */
-  --radius: 0.5rem;
-  /* ============================================================
-     FINAL LOOK — GLOW & GLASS (Image 2 exact match)
-     Deep space black + neon cyan / electric blue glow system.
-     ============================================================ */
-  --background: #0C0C25; /* pure deep space */
-  --background-2: #12123A;
-  --foreground: #FCFBFE; /* luminous near-white */
-  --foreground-hover: #0C0C25;
-  /* Dark translucent glass */
-  --card: rgba(16, 16, 46, 0.55);
-  --card-foreground: #FCFBFE;
-  --popover: #12123A;
-  --popover-foreground: #FCFBFE;
-  /* Tertiary palette (indigo → violet → white) */
-  --primary: #8886DB;
-  --primary-foreground: #0C0C25;
-  --secondary: #1A1846;
-  --secondary-foreground: #FCFBFE;
-  --muted: rgba(182, 181, 227, 0.08);
-  --muted-foreground: #B6B5E3;
-  --accent: #B6B5E3;
-  --accent-foreground: #0C0C25;
-  --destructive: oklch(0.63 0.21 25);
-  --destructive-foreground: #ffffff;
-  --border: rgba(182, 181, 227, 0.24);
-  --input: rgba(182, 181, 227, 0.16);
-  --ring: #DAD9F2;
-  --ember: #4643BA;
-  --amber-glow: #DAD9F2;
-  --warm: #B6B5E3;
-  --glass-border: rgba(182, 181, 227, 0.38);
-  --sidebar: #0C0C25;
-  --sidebar-foreground: #FCFBFE;
-  --sidebar-primary: #FCFBFE;
-  --sidebar-primary-foreground: #0C0C25;
-  --sidebar-accent: rgba(182, 181, 227, 0.1);
-  --sidebar-accent-foreground: #FCFBFE;
-  --sidebar-border: rgba(182, 181, 227, 0.2);
-  --sidebar-ring: #DAD9F2;
-  --rot-1: #FCFBFE;
-  --rot-2: #DAD9F2;
-  --rot-3: #8886DB;
-  --rot-4: #B6B5E3;
-  --rot-5: #8886DB;
-  /* Reference violet companion to the cyan — used in glass gradients + rims */
-  --violet: #8886DB;
-  --violet-soft: #B6B5E3;
-  /* Highlight hues, tuned for the dark fallback ground. */
-  --hl-gold: #E0A93B;
-  --hl-green: #4FBF8B;
-  --hl-coral: #F0876B;
-  --hl-teal: #5FB6D1;
+  color-scheme: light;
+  --background: #f4f7fc;
+  --foreground: #172b4d;
+  --card: rgba(255, 255, 255, 0.68);
+  --surface-solid: #fff;
+  --primary: #246bfd;
+  --primary-foreground: #fff;
+  --secondary: #e9effb;
+  --muted: #e9eff7;
+  --muted-foreground: #52647e;
+  --accent: #c6f3ff;
+  --border: #cedaec;
+  --glass-edge: rgba(255, 255, 255, 0.95);
+  --positive: #197453;
+  --positive-soft: #e5f5ed;
+  --negative: #a23f55;
+  --negative-soft: #fcebf0;
+  --ice: #c6f3ff;
+  --lilac: #dad4fa;
+  --shadow: 0 12px 40px -24px #496dac66, inset 0 1px 0 var(--glass-edge);
+  --motion-fast: 160ms;
+  --motion-normal: 280ms;
+  --motion-slow: 700ms;
+  --radius: 1.25rem;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --background: #101e35;
+  --foreground: #edf4ff;
+  --card: rgba(31, 51, 80, 0.86);
+  --surface-solid: #1d304d;
+  --primary: #94baff;
+  --primary-foreground: #102342;
+  --secondary: #263e60;
+  --muted: #213652;
+  --muted-foreground: #b1c1d9;
+  --accent: #254f67;
+  --border: #435a7a;
+  --glass-edge: rgba(204, 226, 255, 0.22);
+  --positive: #93ddbb;
+  --positive-soft: #1e453d;
+  --negative: #ffb3c3;
+  --negative-soft: #512b3c;
+  --ice: #234b65;
+  --lilac: #3a355e;
+  --shadow: 0 16px 40px -22px #0009, inset 0 1px 0 var(--glass-edge);
 }
 @layer base {
-  html {
-    overflow-x: clip;
-  }
   * {
-    border-color: var(--color-border);
+    box-sizing: border-box;
+  }
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
   }
   body {
-    background-color: #0C0C25 !important;
-    color: var(--color-foreground);
+    margin: 0;
+    background: var(--background);
+    color: var(--foreground);
     font-family: var(--font-sans);
-    position: relative;
-    overflow-x: hidden;
+    font-size: 1rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
   }
-  /* STARFIELD + deep nebula wash — the reference's dark space backdrop */
-  body::before {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: -2;
-    pointer-events: none;
-    background-image:
-      radial-gradient(1.5px 1.5px at 12% 18%, rgba(255, 255, 255, 0.9), transparent 60%),
-      radial-gradient(1.5px 1.5px at 78% 12%, rgba(255, 255, 255, 0.75), transparent 60%),
-      radial-gradient(1px 1px at 32% 62%, rgba(182, 181, 227, 0.7), transparent 60%),
-      radial-gradient(1.5px 1.5px at 88% 68%, rgba(182, 181, 227, 0.75), transparent 60%),
-      radial-gradient(1px 1px at 55% 32%, rgba(255, 255, 255, 0.6), transparent 60%),
-      radial-gradient(1px 1px at 8% 82%, rgba(255, 255, 255, 0.55), transparent 60%),
-      radial-gradient(1.5px 1.5px at 66% 88%, rgba(255, 255, 255, 0.6), transparent 60%),
-      radial-gradient(1px 1px at 42% 8%, rgba(255, 255, 255, 0.5), transparent 60%),
-      radial-gradient(1px 1px at 94% 40%, rgba(255, 255, 255, 0.5), transparent 60%),
-      radial-gradient(1px 1px at 22% 44%, rgba(182, 181, 227, 0.45), transparent 60%);
-    background-size: 340px 340px;
-    background-repeat: repeat;
-    opacity: 0.5;
-    animation: bbi-star-twinkle 7s ease-in-out infinite alternate;
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
   }
-  body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: -3;
-    pointer-events: none;
-    background:
-      radial-gradient(60rem 40rem at 20% 0%, rgba(255, 255, 255, 0.06), transparent 70%),
-      radial-gradient(52rem 38rem at 88% 28%, rgba(136, 134, 219, 0.05), transparent 70%),
-      radial-gradient(46rem 34rem at 50% 100%, rgba(182, 181, 227, 0.04), transparent 70%);
+  button,
+  summary,
+  a {
+    -webkit-tap-highlight-color: transparent;
   }
-  @keyframes bbi-star-twinkle {
-    from { opacity: 0.32; }
-    to { opacity: 0.6; }
+  button,
+  summary {
+    cursor: pointer;
   }
-  h1, h2, h3, h4 {
-    /* Clean geometric sans by default; the elegant serif is opted into with
-       .cine-display on the headlines that carry the cinematic weight. */
-    font-family: var(--font-sans);
-    letter-spacing: -0.018em;
+  a {
+    color: inherit;
+    text-decoration: none;
   }
-  .cine-display {
+  p,
+  h1,
+  h2,
+  h3,
+  h4 {
+    margin: 0;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
     font-family: var(--font-display);
-    font-weight: 400;
-    letter-spacing: -0.015em;
+    font-weight: 550;
+    line-height: 1.2;
+    text-wrap: balance;
   }
-  /* Neon-lit accent words inside headings, like the reference title treatment */
-  h1 .text-accent,
-  h1 .text-primary,
-  h2 .text-accent,
-  h2 .text-primary {
-    text-shadow:
-      0 0 14px rgba(255, 255, 255, 0.34),
-      0 0 30px rgba(70, 67, 186, 0.18);
+  img,
+  svg,
+  video {
+    max-width: 100%;
   }
-  section, [id] {
-    scroll-margin-top: 6.5rem !important;
+  img {
+    display: block;
+    height: auto;
   }
-  input::placeholder,
-  textarea::placeholder {
-    color: rgba(182, 181, 227, 0.55) !important;
-    opacity: 1;
+  svg {
+    flex-shrink: 0;
+  }
+  button {
+    color: inherit;
+  }
+  ::selection {
+    background: var(--lilac);
+    color: var(--foreground);
+  }
+  :focus-visible {
+    outline: 3px solid var(--primary);
+    outline-offset: 4px;
+  }
+  :disabled {
+    cursor: not-allowed;
+  }
+  [id] {
+    scroll-margin-top: 6rem;
   }
 }
-/* ================================================================
-   AMBIENT TWIN RINGS — neon cyan hollow glow bands
-   ================================================================ */
-.bbi-twin-ring {
-  position: fixed;
-  border-radius: 9999px;
-  pointer-events: none;
-  z-index: 0;
-  mix-blend-mode: screen;
-}
-.bbi-twin-ring.ring-1 {
-  width: clamp(22rem, 45vw, 38rem);
-  height: clamp(22rem, 45vw, 38rem);
-  top: 10%;
-  left: 15%;
-  background: radial-gradient(
-    circle,
-    transparent 0%,
-    transparent 40%,
-    rgba(182, 181, 227, 0.1) 45%,
-    rgba(182, 181, 227, 0.28) 51%,
-    rgba(70, 67, 186, 0.2) 58%,
-    transparent 65%,
-    transparent 100%
-  );
-  filter: blur(28px);
-  opacity: 0.7;
-  animation: bbi-ring-dance-1 22s ease-in-out infinite alternate;
-}
-.bbi-twin-ring.ring-2 {
-  width: clamp(20rem, 40vw, 34rem);
-  height: clamp(20rem, 40vw, 34rem);
-  top: 25%;
-  right: 15%;
-  background: radial-gradient(
-    circle,
-    transparent 0%,
-    transparent 38%,
-    rgba(182, 181, 227, 0.12) 43%,
-    rgba(182, 181, 227, 0.26) 49%,
-    rgba(70, 67, 186, 0.18) 56%,
-    transparent 63%,
-    transparent 100%
-  );
-  filter: blur(26px);
-  opacity: 0.65;
-  animation: bbi-ring-dance-2 26s ease-in-out infinite alternate;
-}
-@keyframes bbi-ring-dance-1 {
-  0% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(120px, 80px) scale(1.1); }
-  100% { transform: translate(-40px, 140px) scale(0.95); }
-}
-@keyframes bbi-ring-dance-2 {
-  0% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(-100px, -60px) scale(1.08); }
-  100% { transform: translate(60px, -120px) scale(0.92); }
-}
-/* ================================================================
-   GLOW & GLASS PANEL — exact Image 2 dark neon glass
-   ================================================================ */
-@utility glass {
+.site-frame {
+  min-height: 100svh;
+  overflow: clip;
   background:
-    linear-gradient(140deg, rgba(255, 255, 255, 0.10) 0%, rgba(255, 255, 255, 0.05) 48%, rgba(255, 255, 255, 0.03) 100%) !important;
-  backdrop-filter: blur(24px) saturate(180%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.16) !important;
-  border-top-color: rgba(255, 255, 255, 0.34);
-  border-left-color: rgba(255, 255, 255, 0.26);
-  position: relative;
-  box-shadow:
-    0 0 0 1px rgba(182, 181, 227, 0.08),
-    0 0 22px -10px rgba(255, 255, 255, 0.32),
-    0 0 46px -18px rgba(136, 134, 219, 0.24),
-    0 20px 50px -12px rgba(0, 0, 0, 0.75),
-    inset 0 1px 1px 0 rgba(255, 255, 255, 0.35),
-    inset 0 -1px 1px 0 rgba(0, 0, 0, 0.4) !important;
-  color: var(--foreground);
-  /* neon rim-light sweeping the top-left edge, exactly as in the reference */
-  &::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    border-radius: inherit;
-    padding: 1px;
-    background: linear-gradient(135deg, rgba(182, 181, 227, 0.68) 0%, rgba(255, 255, 255, 0.46) 32%, transparent 55%);
-    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-    mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    pointer-events: none;
-  }
+    radial-gradient(
+      ellipse at 90% 6%,
+      color-mix(in srgb, var(--ice) 45%, transparent),
+      transparent 33rem
+    ),
+    radial-gradient(
+      ellipse at 6% 20%,
+      color-mix(in srgb, var(--lilac) 25%, transparent),
+      transparent 30rem
+    );
 }
-/* Two things were wrong here and both are fixed below.
-   1. `transition: all` swept box-shadow into the transition, so the browser
-      recomputed and repainted a six-layer blurred shadow bitmap every frame,
-      on every card, for the length of every hover. That is the exact
-      regression the CATEGORY HEADING GLOW block further down documents having
-      already been caught and fixed once. The transition is now limited to
-      transform and border-color, which composite; the shadow still changes on
-      hover, it just swaps rather than animating, which is imperceptible
-      underneath a 350ms lift.
-   2. Every declaration carried `!important`, which beat `.mo-card:hover` from
-      motion.css on every card on the site — the motion system was running at
-      partial strength wherever the two met. The specificity here (0,2,0 on
-      `.glass-hover:hover`) already wins against `.glass` (0,1,0) on its own,
-      so none of it was needed. */
-@utility glass-hover {
-  transition:
-    border-color 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.5s cubic-bezier(0.22, 1, 0.36, 1),
-    background 0.5s cubic-bezier(0.22, 1, 0.36, 1) !important;
-  /* No transform on either side of this merge: main's cinematic layer states
-     "no lift, no tilt, no scale-up hover" and this branch had already removed
-     the translateY(-4px) scale(1.01). Same conclusion, reached twice. */
-  &:hover {
-    border-color: rgba(182, 181, 227, 0.62) !important;
-    box-shadow:
-      0 0 0 1px rgba(182, 181, 227, 0.24),
-      0 0 34px -8px rgba(136, 134, 219, 0.5),
-      0 0 90px -30px rgba(70, 67, 186, 0.45),
-      inset 0 1px 2px 0 rgba(255, 255, 255, 0.5) !important;
-  }
+.site-main {
+  min-height: 65svh;
 }
-
-/* main has no reduced-motion guard for glass-hover; this branch does. Kept —
-   dropping it in a merge would be a silent accessibility regression. */
-@media (prefers-reduced-motion: reduce) {
-  .glass-hover,
-  .glass-hover:hover {
-    transition: none;
-    transform: none;
-  }
+.bbi-page {
+  width: min(1240px, 100% - 40px);
+  margin-inline: auto;
+  padding-block: 42px 70px;
 }
-
-@utility glass-nav {
-  position: relative;
-  z-index: 50;
-  background: rgba(12, 12, 37, 0.92) !important;
-  backdrop-filter: blur(24px) saturate(180%) !important;
-  border-bottom: 1px solid rgba(182, 181, 227, 0.2) !important;
-  box-shadow:
-    0 0 34px -14px rgba(182, 181, 227, 0.18),
-    0 12px 40px -10px rgba(0, 0, 0, 0.9) !important;
-}
-/* ================================================================
-   GLOW PILL BUTTONS — neon cyan glass (Image 2 style)
-   ================================================================ */
-/* Opt-in only. This block used to also match `a[href*="/category/"]` and
-   `a[href*="/search"]`, which forced pill styling — with `!important` — onto
-   EVERY link to a category or the search page anywhere on the site, including
-   the browse-page category headings, the mobile menu rows, the homepage
-   search field, and an inline "keyword search" link sitting mid-sentence on
-   /services. Those four all carry their own intended styling and were losing
-   to this rule. Anything that genuinely wants a pill carries `.glass-pill`
-   explicitly, `CategoryBadge` included. */
-.glass-pill {
-  color: #FCFBFE !important;
-  display: inline-flex;
+.eyebrow {
+  display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  padding: 0.45rem 0.95rem;
-  border-radius: 0.375rem;
-  font-weight: 600;
-  line-height: 1.25;
-  background: linear-gradient(
-    180deg,
-    rgba(136, 134, 219, 0.26) 0%,
-    rgba(43, 40, 113, 0.34) 55%,
-    rgba(70, 67, 186, 0.28) 100%
-  ) !important;
-  backdrop-filter: blur(18px) saturate(150%) !important;
-  border: 1px solid rgba(182, 181, 227, 0.42) !important;
-  box-shadow:
-    0 1px 0 0 rgba(255, 255, 255, 0.35) inset,
-    0 0 18px -8px rgba(136, 134, 219, 0.5) inset,
-    0 10px 22px -12px rgba(0, 0, 0, 0.8) !important;
-  /* `transform` belongs in this list. Without it, a `.mo-row` or `.mo-lift`
-     sitting on a pill snaps to its offset in a single frame instead of
-     easing — and because this declaration is `!important`, the page cannot
-     add it back. The GSAP pill-interaction hook writes transform directly
-     rather than through a transition, so it is unaffected either way. */
-  transition: box-shadow 0.3s ease, border-color 0.3s ease, color 0.2s ease, background 0.25s ease, transform 0.24s cubic-bezier(0.16, 1, 0.3, 1) !important;
-  animation: none !important;
+  gap: 9px;
+  color: var(--muted-foreground);
+  font-family: var(--font-mono);
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+  line-height: 1.5;
 }
-.glass-pill:hover {
-  color: #FFFFFF !important;
-  /* transform is owned by the GSAP pill-interaction hook, not this rule. */
-  background: linear-gradient(
-    180deg,
-    rgba(136, 134, 219, 0.42) 0%,
-    rgba(70, 67, 186, 0.44) 55%,
-    rgba(58, 54, 151, 0.4) 100%
-  ) !important;
-  border-color: rgba(218, 217, 242, 0.7) !important;
-  box-shadow:
-    0 1px 0 0 rgba(255, 255, 255, 0.5) inset,
-    0 0 26px -8px rgba(136, 134, 219, 0.7) inset,
-    0 16px 30px -14px rgba(0, 0, 0, 0.85),
-    0 0 24px -10px rgba(136, 134, 219, 0.55) !important;
+.page-heading {
+  max-width: 900px;
+  font-size: clamp(2.25rem, 5vw, 4rem);
+  letter-spacing: -0.055em;
+  line-height: 1.08;
+  margin-block: 16px;
 }
-/* GOLDEN TREE — both tree assets are hotlinked from a different domain
-   (ethicalfounder.com), so any technique that reads their actual pixel data
-   (a CSS mask-image, an SVG luminance filter) is blocked by the browser
-   unless that domain sends CORS headers — it doesn't, and a real attempt at
-   that made the tree fully invisible. mix-blend-mode:screen below is a pure
-   rendering composite (no pixel read required), so it's the only
-   cross-origin-safe way to fade the image's own dark background into this
-   glow. It won't be pixel-perfect transparency; a real fix needs either a
-   source file with a genuine alpha channel, or CORS headers on the host.
-   No box, no fixed aspect-ratio frame, no rounded card — just a large, heavily
-   blurred glow sitting behind the artwork so the screen-blended tree has
-   something dark to read against, with zero perceptible edge in any theme.
-   isolation:isolate keeps the img's mix-blend-mode contained to this glow
-   only, not the whole page, so the result is consistent in light and dark. */
-.tree-asset-container {
-  isolation: isolate;
+.section-heading {
+  font-size: clamp(1.7rem, 3vw, 2.35rem);
+  letter-spacing: -0.045em;
 }
-.tree-asset-container::before {
-  content: "";
-  position: absolute;
-  inset: -22%;
-  z-index: -1;
-  pointer-events: none;
-  background: radial-gradient(
-    ellipse 50% 50% at 50% 48%,
-    rgba(70, 67, 186, 0.55) 0%,
-    rgba(12, 12, 37, 0.88) 38%,
-    rgba(12, 12, 37, 0) 70%
-  );
-  filter: blur(48px);
-  animation: bbi-tree-glow-pulse 6s ease-in-out infinite;
-}
-.tree-asset-container img,
-[alt*="Golden Tree"] {
-  mix-blend-mode: screen;
-  filter: brightness(1.18) contrast(1.08) saturate(1.05);
-}
-/* The "alive" motion lives on the ::before glow (opacity breathing) rather
-   than the img itself, so it never fights the img's own Tailwind filter/
-   drop-shadow utilities for control of the `filter` property. */
-@keyframes bbi-tree-glow-pulse {
-  0%, 100% { opacity: 0.85; }
-  50%      { opacity: 1; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .tree-asset-container::before { animation: none; }
-}
-html.light .tree-asset-container::before {
-  background: radial-gradient(
-    ellipse 50% 50% at 50% 48%,
-    rgba(43, 40, 113, 0.65) 0%,
-    rgba(12, 12, 37, 0.94) 38%,
-    rgba(12, 12, 37, 0) 70%
-  );
-}
-
-/* Scroll reveal is now GSAP/ScrollTrigger-driven — see
-   src/components/reveal.tsx. No CSS class hooks needed here anymore. */
-@utility sheen {
-  position: relative;
-  overflow: hidden;
-  &::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(115deg, transparent 35%, rgba(182, 181, 227, 0.2) 50%, transparent 65%);
-    transform: translateX(-120%);
-    transition: transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  &:hover::after {
-    transform: translateX(120%);
-  }
-}
-/* --- STANDARDIZED PLATE RADII ---
-   Was a capsule set (1.75rem / 1.25rem / 1.5rem). A plate is printed and
-   trimmed, not moulded, so the corners tighten to a crisp radius. Not zero:
-   hard corners plus hairline rules is the broadsheet look, which is a
-   different design and not this one. */
-@utility blob-1 { border-radius: 0.5rem; }
-@utility blob-2 { border-radius: 0.5rem; }
-@utility blob-3 { border-radius: 0.5rem; }
-@utility blob-4 { border-radius: 0.5rem; }
-@utility blob-5 { border-radius: 0.5rem; }
-@utility blob-6 { border-radius: 0.5rem; }
-@utility blob-sm-1 { border-radius: 0.375rem; }
-@utility blob-sm-2 { border-radius: 0.375rem; }
-@utility blob-sm-3 { border-radius: 0.375rem; }
-@utility blob-portrait-1 { border-radius: 0.4375rem; }
-@utility blob-portrait-2 { border-radius: 0.4375rem; }
-@utility blob-portrait-3 { border-radius: 0.4375rem; }
-@utility bbi-shape-banner { border-radius: 0.5rem; }
-@utility bbi-shape-diamond { border-radius: 0.5rem; }
-@utility bbi-shape-step { border-radius: 0.375rem; }
-@utility bbi-shape-step-badge { border-radius: 0.85rem; }
-@utility bbi-shape-soft-deep { border-radius: 0.5rem; }
-@utility bbi-shape-hex { border-radius: 0.375rem; }
-@utility bbi-shape-ticket { border-radius: 0.5rem; }
-@utility bbi-shape-card-a { border-radius: 0.5rem; }
-@utility bbi-shape-compare-round { border-radius: 0.4375rem; }
-@utility bbi-shape-compare-sharp { border-radius: 1rem; }
-@utility bbi-shape-shield { border-radius: 0.5rem; }
-@utility bbi-shape-faq1 { border-radius: 0.375rem; }
-@utility bbi-shape-faq2 { border-radius: 0.375rem; }
-@utility bbi-shape-faq3 { border-radius: 0.375rem; }
-@utility bbi-shape-stat-1 { border-radius: 0.375rem; }
-@utility bbi-shape-stat-2 { border-radius: 0.375rem; }
-@utility bbi-shape-stat-3 { border-radius: 0.375rem; }
-/* A `.mo-link` draws its own underline as a scaled pseudo-element. Anywhere a
-   more specific rule also sets `text-decoration: underline` — `.wp-prose a`
-   below is the live case — the element ends up with two lines about 2px
-   apart on hover. The class opts out of the static one wherever it appears. */
-:where(.wp-prose) a.mo-link,
-a.mo-link {
-  text-decoration: none;
-}
-
-/* WordPress article content */
-.wp-prose {
-  font-size: 1rem;
-  line-height: 1.85;
+.muted {
   color: var(--muted-foreground);
 }
-.wp-prose > *:first-child { margin-top: 0; }
-.wp-prose p { margin: 1.15rem 0; }
-.wp-prose h2,
-.wp-prose h3,
-.wp-prose h4 {
-  font-family: var(--font-display);
-  color: var(--foreground);
-  letter-spacing: -0.01em;
-  margin: 2.25rem 0 0.85rem;
+.glass-panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-top-color: var(--glass-edge);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
 }
-.wp-prose h2 { font-size: 1.6rem; font-weight: 700; }
-.wp-prose h3 { font-size: 1.25rem; font-weight: 700; }
-.wp-prose h4 { font-size: 1.05rem; font-weight: 600; }
-.wp-prose strong { color: var(--foreground); font-weight: 700; }
-.wp-prose a {
-  color: var(--accent);
+.button {
+  display: inline-flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+  min-height: 46px;
+  padding: 11px 20px;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  font-weight: 550;
+  font-size: 0.875rem;
+  line-height: 1.35;
+  transition:
+    background var(--motion-fast),
+    box-shadow var(--motion-fast),
+    transform var(--motion-fast);
+}
+.button:hover {
+  transform: translateY(-2px);
+}
+.button-primary {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  box-shadow:
+    0 5px 12px -6px #246bfd99,
+    inset 0 1px 0 #ffffff40;
+}
+.button-primary:hover {
+  background: color-mix(in srgb, var(--primary) 90%, var(--foreground));
+}
+.button-secondary {
+  background: var(--card);
+  border-color: var(--border);
+  box-shadow: inset 0 1px 0 var(--glass-edge);
+}
+.button-secondary:hover {
+  background: var(--secondary);
+}
+.icon-button {
+  width: 42px;
+  min-height: 42px;
+  padding: 0;
+  display: inline-grid;
+  place-items: center;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 50%;
+}
+.pill,
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  font-size: 0.7rem;
+  line-height: 1.5;
+  font-weight: 500;
+}
+.pill {
+  background: var(--card);
+}
+.badge-positive {
+  color: var(--positive);
+  background: var(--positive-soft);
+  border-color: color-mix(in srgb, var(--positive) 25%, transparent);
+}
+.badge-negative {
+  color: var(--negative);
+  background: var(--negative-soft);
+  border-color: color-mix(in srgb, var(--negative) 25%, transparent);
+}
+.input {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 46px;
+  padding: 11px 14px;
+  color: var(--foreground);
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+.input::placeholder {
+  color: var(--muted-foreground);
+  opacity: 1;
+}
+.field-label {
+  display: block;
+  font-size: 0.82rem;
+  font-weight: 550;
+  margin-bottom: 7px;
+}
+.text-link {
+  color: var(--primary);
+  text-underline-offset: 4px;
+}
+.text-link:hover {
+  text-decoration: underline;
+}
+.content-grid {
+  display: grid;
+  gap: 18px;
+}
+.skip-link {
+  position: fixed;
+  top: 10px;
+  left: 15px;
+  z-index: 100;
+  padding: 12px 20px;
+  background: var(--foreground);
+  color: var(--background);
+  border-radius: 8px;
+  transform: translateY(-160%);
+}
+.skip-link:focus {
+  transform: translateY(0);
+}
+.noscript-note {
+  padding: 14px 20px;
+  background: var(--secondary);
+  font-size: 0.85rem;
+}
+.noscript-note a {
+  text-decoration: underline;
+  margin-right: 16px;
+}
+.site-header {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  background: color-mix(in srgb, var(--background) 89%, transparent);
+  backdrop-filter: blur(18px);
+  border-bottom: 1px solid var(--border);
+}
+.header-inner {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  height: 80px;
+  width: min(1320px, 100% - 40px);
+  margin-inline: auto;
+}
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  white-space: nowrap;
+}
+.brand-mark {
+  display: grid;
+  place-items: center;
+  width: 39px;
+  height: 43px;
+  color: var(--primary);
+  background: linear-gradient(150deg, var(--surface-solid), var(--secondary));
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+}
+.brand-name {
+  font-size: 1.55rem;
+  letter-spacing: -0.09em;
+  font-weight: 650;
+  line-height: 1.1;
+}
+.brand-domain {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 0.55rem;
+  color: var(--muted-foreground);
+  letter-spacing: 0.025em;
+}
+.header-navigation {
+  display: flex;
+  align-items: center;
+  gap: 27px;
+  margin-left: auto;
+  font-size: 0.82rem;
+}
+.header-navigation > a {
+  color: var(--muted-foreground);
+  padding-block: 12px;
+}
+.header-navigation > a:hover,
+.header-navigation > a[aria-current="page"] {
+  color: var(--primary);
+}
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+.header-status {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 0.65rem;
+  color: var(--muted-foreground);
+  white-space: nowrap;
+  margin-right: 8px;
+}
+.status-dot {
+  width: 6px;
+  height: 6px;
+  background: var(--positive);
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--positive) 8%, transparent);
+}
+.browse-menu > summary {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+  list-style: none;
+  padding-block: 14px;
+}
+.browse-menu > summary::-webkit-details-marker {
+  display: none;
+}
+.browse-menu[open] > summary {
+  color: var(--primary);
+}
+.menu-panel {
+  position: absolute;
+  top: calc(100% + 8px);
+  left: max(20px, calc((100vw - 1040px) / 2));
+  right: max(20px, calc((100vw - 1040px) / 2));
+  max-height: calc(100svh - 110px);
+  overflow-y: auto;
+  padding: 26px;
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-shadow: 0 25px 65px -20px #10234250;
+}
+.menu-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 16px;
+  margin-bottom: 18px;
+}
+.menu-groups {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 24px;
+}
+.menu-groups h2 {
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  font-size: 0.66rem;
+  letter-spacing: 0.08em;
+  color: var(--muted-foreground);
+  margin-bottom: 9px;
+}
+.menu-groups a {
+  display: flex;
+  align-items: center;
+  min-height: 40px;
+  padding: 5px 7px;
+  border-radius: 7px;
+  line-height: 1.5;
+  font-size: 0.8rem;
+}
+.menu-groups a:hover {
+  background: var(--secondary);
+  color: var(--primary);
+}
+.mobile-label,
+.mobile-menu-links {
+  display: none;
+}
+.site-footer {
+  border-top: 1px solid var(--border);
+  background: var(--card);
+}
+.footer-inner {
+  width: min(1240px, 100% - 40px);
+  margin: auto;
+  padding-block: 36px 24px;
+}
+.footer-main {
+  display: grid;
+  grid-template-columns: 1.6fr repeat(3, 1fr);
+  gap: 32px;
+}
+.footer-brand > p {
+  max-width: 250px;
+  font-size: 0.8rem;
+  color: var(--muted-foreground);
+  margin-top: 15px;
+}
+.footer-column h2 {
+  font-size: 0.7rem;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  margin-bottom: 13px;
+}
+.footer-column a {
+  display: block;
+  padding-block: 4px;
+  color: var(--muted-foreground);
+  font-size: 0.8rem;
+}
+.footer-column a:hover {
+  color: var(--primary);
   text-decoration: underline;
   text-underline-offset: 3px;
 }
-.wp-prose a:hover { color: var(--primary); }
-.wp-prose ul, .wp-prose ol { margin: 1.15rem 0; padding-left: 1.35rem; }
-.wp-prose ul { list-style: disc; }
-.wp-prose ol { list-style: decimal; }
-.wp-prose li { margin: 0.5rem 0; }
-.wp-prose li::marker { color: var(--primary); }
-.wp-prose img { border-radius: 1rem; margin: 1.75rem 0; max-width: 100%; height: auto; }
-.wp-prose figure { margin: 1.75rem 0; }
-.wp-prose figcaption { font-size: 0.8rem; text-align: center; opacity: 0.7; }
-.wp-prose blockquote {
-  margin: 1.75rem 0;
-  padding: 0.25rem 0 0.25rem 1.15rem;
-  border-left: 3px solid var(--primary);
-  color: var(--foreground);
-  font-style: italic;
-}
-.wp-prose code {
-  background: rgba(182, 181, 227, 0.1);
-  padding: 0.15rem 0.4rem;
-  border-radius: 0.35rem;
-  font-size: 0.9em;
-}
-.wp-prose pre {
-  background: rgba(0, 0, 0, 0.6);
-  padding: 1rem;
-  border-radius: 1rem;
-  overflow-x: auto;
-  margin: 1.5rem 0;
-}
-.wp-prose table {
-  width: 100%;
-  border-collapse: collapse;
-  margin: 1.75rem 0;
-  font-size: 0.9rem;
-}
-.wp-prose th, .wp-prose td {
-  border: 1px solid var(--border);
-  padding: 0.6rem 0.75rem;
-  text-align: left;
-}
-.wp-prose th { color: var(--foreground); background: rgba(182, 181, 227, 0.08); }
-.wp-prose hr { border-color: var(--border); margin: 2.25rem 0; }
-.wp-prose nav ul { list-style: none; padding-left: 0; }
-.wp-prose nav li { margin: 0.3rem 0; }
-/* --- RESPONSIVE ORBIT DIAGRAM --- */
-.bbi-orbit-wrap {
-  position: relative;
-  width: clamp(11rem, 50vw, 17rem);
-  aspect-ratio: 1 / 1;
-  margin: 1rem auto;
-}
-.bbi-orbit-ring {
-  position: absolute;
-  inset: 0;
-  border-radius: 9999px;
-  border: 1px dashed rgba(182, 181, 227, 0.35);
-}
-.bbi-orbit-ring-inner {
-  inset: 15%;
-  border-color: rgba(182, 181, 227, 0.5);
-  animation: bbi-orbit-spin 34s linear infinite;
-}
-.bbi-orbit-ring-outer {
-  animation: bbi-orbit-spin-rev 58s linear infinite;
-}
-@keyframes bbi-orbit-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-@keyframes bbi-orbit-spin-rev {
-  from { transform: rotate(360deg); }
-  to { transform: rotate(0deg); }
-}
-.bbi-orbit-center {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 40%;
-  aspect-ratio: 1 / 1;
-  transform: translate(-50%, -50%);
-  border-radius: 9999px;
+.footer-bottom {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 0.4rem;
-  background: linear-gradient(135deg, #DAD9F2, #4643BA);
-  box-shadow:
-    0 0 20px 0 rgba(182, 181, 227, 0.42),
-    0 0 40px -8px rgba(70, 67, 186, 0.34);
-}
-.bbi-orbit-center-label {
-  font-family: var(--font-display);
-  font-weight: 800;
-  font-size: clamp(0.6rem, 2vw, 0.8rem);
-  color: #0C0C25;
-  line-height: 1.1;
-}
-.bbi-orbit-center-sub {
-  margin-top: 0.1rem;
-  font-size: clamp(0.48rem, 1.4vw, 0.58rem);
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(12, 12, 37, 0.75);
-}
-.bbi-orbit-node {
-  position: absolute;
-  transform: translate(-50%, -50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.2rem;
-  width: max-content;
-  max-width: 4.5rem;
-  text-align: center;
-}
-.bbi-orbit-dot {
-  width: 0.5rem;
-  height: 0.5rem;
-  border-radius: 9999px;
-  background: var(--accent);
-  box-shadow: 0 0 9px rgba(182, 181, 227, 0.68);
-}
-.bbi-orbit-node-label {
-  font-size: 0.6rem;
-  font-weight: 600;
-  color: var(--foreground);
-  line-height: 1.15;
-}
-/* --- TOAST SLIDE ANIMATION --- */
-@keyframes bbi-toast-slide {
-  from { opacity: 0; transform: translateY(16px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-.animate-toast-slide {
-  animation: bbi-toast-slide 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-/* --- MOBILE OVERRIDE FIXES --- */
-@media (max-width: 639px) {
-  .bbi-shape-card-a .flex.flex-wrap,
-  .bbi-shape-diamond .flex.flex-wrap {
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 0.5rem !important;
-  }
-  .bbi-shape-card-a .flex.flex-wrap > a,
-  .bbi-shape-diamond .flex.flex-wrap > a {
-    width: 100% !important;
-    text-align: center !important;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis !important;
-    padding-left: 0.5rem !important;
-    padding-right: 0.5rem !important;
-    font-size: 0.68rem !important;
-  }
-  div[class*="h-[70vh]"] {
-    height: auto !important;
-    margin-bottom: 1.25rem !important;
-  }
-  div[class*="h-[70vh]"] > .sticky {
-    position: relative !important;
-    top: 0 !important;
-  }
-  section, [id] {
-    scroll-margin-top: 5.5rem !important;
-  }
-  ul.space-y-2\.5 {
-    display: grid !important;
-    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
-    gap: 0.5rem !important;
-    space-y: 0 !important;
-  }
-}
-
-
-/* --- TICKER PILLS: lift on hover without colliding with the row above --- */
-.iv-ticker-track { padding-top: 0.45rem; padding-bottom: 0.45rem; }
-.iv-ticker-track .glass-pill:hover { z-index: 5; position: relative; box-shadow: 0 0 0 1px rgba(136,134,219,0.45), 0 0 26px -6px rgba(70,67,186,0.55); }
-
-/* ============================================================
-   BUILT WITH — horizontal auto-scrolling marquee of real outbound
-   brand links. See BuiltWithSection in site-shell.tsx. The track
-   renders the item list twice back-to-back and loops the first
-   half's width via translateX(-50%), the same seamless-marquee
-   technique .iv-ticker-track uses for the homepage category strip.
-   Edge mask fades items in/out at the container's left/right edge
-   instead of hard-cutting them mid-pill.
-   ============================================================ */
-.bbi-built-ticker {
-  overflow: hidden;
-  padding: 0.5rem 0;
-  -webkit-mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
-  mask-image: linear-gradient(90deg, transparent 0, #000 6%, #000 94%, transparent 100%);
-}
-.bbi-built-ticker-track {
-  display: flex;
-  width: max-content;
-  gap: 0.75rem;
-  animation-name: bbi-built-scroll;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-}
-.bbi-built-ticker:hover .bbi-built-ticker-track,
-.bbi-built-ticker:active .bbi-built-ticker-track {
-  animation-play-state: paused;
-}
-.bbi-built-ticker-track.bbi-built-ticker-static {
-  animation: none;
+  justify-content: space-between;
   flex-wrap: wrap;
-  width: auto;
-  justify-content: center;
-}
-@keyframes bbi-built-scroll {
-  from { transform: translateX(0); }
-  to { transform: translateX(-50%); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .bbi-built-ticker-track { animation: none; }
-}
-
-/* ============================================================
-   ORBIT DIAGRAM — visible rings, orbiting nodes, readable labels
-   ============================================================ */
-.bbi-orbit-wrap { width: clamp(15rem, 74vw, 21rem); margin: 1.5rem auto; }
-.bbi-orbit-ring {
-  border: 1.5px solid rgba(182, 181, 227, 0.55);
-  box-shadow:
-    0 0 22px -6px rgba(255, 255, 255, 0.55),
-    inset 0 0 26px -12px rgba(136, 134, 219, 0.6);
-}
-.bbi-orbit-ring-outer {
-  border-style: solid;
-  animation: bbi-ring-pulse 3.6s ease-in-out infinite;
-}
-.bbi-orbit-ring-inner {
-  border-style: dashed;
-  border-color: rgba(182, 181, 227, 0.7);
-  animation: bbi-orbit-spin 18s linear infinite;
-}
-@keyframes bbi-ring-pulse {
-  0%, 100% { transform: scale(1); opacity: 0.55; }
-  50%      { transform: scale(1.06); opacity: 1; }
-}
-.bbi-orbit-rotor {
-  position: absolute;
-  inset: 0;
-  animation: bbi-orbit-spin 26s linear infinite;
-}
-.bbi-orbit-node {
-  max-width: 6.8rem;
-  gap: 0.3rem;
-  opacity: 0;
-  transform: translate(-50%, -50%);
-}
-/* Idle bob lives on its own wrapper between .bbi-orbit-node (owns the
-   one-shot entry transform) and .bbi-orbit-node-inner (owns the continuous
-   counter-rotation transform) — two CSS animations can't cleanly share one
-   element's `transform` property, so each animated effect here gets its
-   own element instead of fighting over the same one. */
-.bbi-orbit-node-bob {
-  display: inline-flex;
-  animation: bbi-orbit-node-bob 3.4s ease-in-out infinite;
-}
-@keyframes bbi-orbit-node-bob {
-  0%, 100% { transform: translateY(0); }
-  50%      { transform: translateY(-5px); }
-}
-.bbi-orbit-node-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.3rem;
-  animation: bbi-orbit-spin-rev 26s linear infinite;
-}
-/* Hover-tilt: .bbi-orbit-node-label only animates opacity (bbi-label-fade),
-   so adding a static hover transform here doesn't fight a running
-   transform-animation the way it would on -inner or the outer node. */
-.bbi-orbit-node-label {
-  transition: transform 0.3s ease;
-}
-/* Was a perspective rotateX/rotateY tilt. Removed: it is the exact effect
-   the brief rules out. The label brightens instead. */
-.bbi-orbit-node:hover .bbi-orbit-node-label {
-  color: var(--accent);
-}
-.bbi-orbit-wrap.is-live .bbi-orbit-node {
-  animation: bbi-node-in 0.5s cubic-bezier(0.16, 1.15, 0.3, 1) both;
-}
-@keyframes bbi-node-in {
-  from { opacity: 0; transform: translate(calc(-50% - 34px), -50%) scale(0.8); }
-  to   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-}
-.bbi-orbit-dot {
-  width: 0.6rem;
-  height: 0.6rem;
-  background: #FFFFFF;
-  box-shadow: 0 0 14px 2px rgba(255, 255, 255, 0.9);
-  animation: bbi-dot-glow 2.4s ease-in-out infinite;
-}
-@keyframes bbi-dot-glow {
-  0%, 100% { opacity: 0.6; transform: scale(0.9); }
-  50%      { opacity: 1; transform: scale(1.25); }
-}
-.bbi-orbit-node-label {
-  font-size: 0.68rem;
-  font-weight: 700;
-  color: #FCFBFE;
-  background: rgba(12, 12, 37, 0.82);
-  border: 1px solid rgba(182, 181, 227, 0.4);
-  border-radius: 9999px;
-  padding: 0.2rem 0.5rem;
-  backdrop-filter: blur(10px);
-  animation: bbi-label-fade 4.5s ease-in-out infinite;
-}
-@keyframes bbi-label-fade {
-  0%, 100% { opacity: 0.72; }
-  50%      { opacity: 1; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .bbi-orbit-rotor, .bbi-orbit-node, .bbi-orbit-node-bob, .bbi-orbit-node-inner, .bbi-orbit-ring-inner,
-  .bbi-orbit-ring-outer, .bbi-orbit-dot, .bbi-orbit-node-label { animation: none !important; opacity: 1 !important; }
-}
-
-/* --- GOLDEN TREE: mobile nodes float over the artwork, not in a list ---
-   `width: max-content` matters here, not just cosmetic: these nodes are
-   `position: absolute` with only `left` set (no `right`), so an `auto`-width
-   box's shrink-to-fit sizing is bounded by "containing-block width minus
-   left offset" — for a node placed toward the right edge (e.g. x:70%) that
-   leaves very little room. A `white-space: nowrap` label (the pre-wrap-fix
-   CategoryBadge) was immune to this because nowrap forces min-content to
-   equal max-content, so shrink-to-fit always resolved to the label's full
-   natural width regardless. Once CategoryBadge's label became wrappable
-   (white-space: normal), min-content shrank to just its widest single word,
-   so the same squeeze now had room to actually apply — a short label like
-   "Work From Home" was getting force-wrapped one word per line. `width:
-   max-content` opts these standalone nodes out of that squeeze entirely,
-   since their labels are always short by design and were never meant to
-   wrap in the first place (unlike the header dropdown/footer pills, which
-   sit in normal flex flow and don't have this absolute-position quirk). */
-.bbi-tree-node-m {
-  position: absolute;
-  width: max-content;
-  transform: translate(-50%, -50%);
-  animation: bbi-tree-float 6s ease-in-out infinite;
-}
-@keyframes bbi-tree-float {
-  0%, 100% { transform: translate(-50%, -50%) translateY(0); }
-  50%      { transform: translate(-50%, -50%) translateY(-6px); }
-}
-/* --- GOLDEN TREE: desktop nodes drift gently instead of sitting static --- */
-.bbi-tree-node-d {
-  width: max-content;
-  transform: translate(-50%, -50%);
-  animation: bbi-tree-float-d 7s ease-in-out infinite;
-}
-@keyframes bbi-tree-float-d {
-  0%, 100%  { transform: translate(-50%, -50%) translate(0, 0); }
-  50%       { transform: translate(-50%, -50%) translate(3px, -8px); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .bbi-tree-node-m, .bbi-tree-node-d { animation: none !important; }
-}
-
-/* Orbit centre must stay legible over the glass layer. */
-.bbi-orbit-center {
-  background: linear-gradient(135deg, #DAD9F2 0%, #4643BA 100%) !important;
-  background-image: linear-gradient(135deg, #DAD9F2 0%, #4643BA 100%) !important;
-  border: 1px solid rgba(238, 236, 248, 0.7) !important;
-  box-shadow: 0 0 34px -8px rgba(255, 255, 255, 0.75) !important;
-}
-.bbi-orbit-center .bbi-orbit-center-label { color: #0C0C25 !important; }
-.bbi-orbit-center .bbi-orbit-center-sub { color: rgba(12, 12, 37, 0.8) !important; }
-
-/* ============================================================
-   SALT & PEPPER GLASS BUTTON SYSTEM
-   Reference: clear glossy capsule — high transparency, blurred
-   backdrop, specular top highlight, inner glow + soft shadow.
-   ============================================================ */
-@utility glass-btn {
-  position: relative;
-  isolation: isolate;
-  border-radius: 0.375rem;
-  color: #FCFBFE;
-  background:
-    linear-gradient(180deg, rgba(136, 134, 219, 0.30) 0%, rgba(43, 40, 113, 0.38) 52%, rgba(70, 67, 186, 0.30) 100%);
-  backdrop-filter: blur(18px) saturate(140%);
-  border: 1px solid rgba(255, 255, 255, 0.34);
-  box-shadow:
-    0 1px 0 0 rgba(255, 255, 255, 0.55) inset,
-    0 -1px 0 0 rgba(255, 255, 255, 0.22) inset,
-    0 0 18px -6px rgba(255, 255, 255, 0.4) inset,
-    0 10px 24px -10px rgba(0, 0, 0, 0.75),
-    0 2px 6px -2px rgba(0, 0, 0, 0.5);
-  /* transform is owned by the GSAP pill-interaction hook, not a CSS transition. */
-  transition:
-    box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-    background 0.35s cubic-bezier(0.16, 1, 0.3, 1),
-    border-color 0.35s ease;
-}
-
-.glass-btn,
-.glass-pill,
-.sheen,
-a[class*="from-primary"],
-button[class*="from-primary"],
-.iv-ticker-track a {
-  color: #FCFBFE !important;
-  border-radius: 0.375rem;
-  background:
-    linear-gradient(180deg, rgba(136, 134, 219, 0.30) 0%, rgba(43, 40, 113, 0.38) 52%, rgba(70, 67, 186, 0.30) 100%) !important;
-  backdrop-filter: blur(18px) saturate(140%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.34) !important;
-  box-shadow:
-    0 1px 0 0 rgba(255, 255, 255, 0.55) inset,
-    0 -1px 0 0 rgba(255, 255, 255, 0.2) inset,
-    0 0 18px -6px rgba(255, 255, 255, 0.4) inset,
-    0 10px 24px -10px rgba(0, 0, 0, 0.75),
-    0 2px 6px -2px rgba(0, 0, 0, 0.5) !important;
-  overflow: hidden;
-  position: relative;
-  isolation: isolate;
-}
-
-/* specular highlight sweeping the top-left curve of the capsule */
-.glass-btn::before,
-.glass-pill::before,
-.sheen::before,
-a[class*="from-primary"]::before,
-button[class*="from-primary"]::before,
-.iv-ticker-track a::before {
-  content: "";
-  position: absolute;
-  inset: 1px 1px auto 1px;
-  height: 46%;
-  border-radius: 9999px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.06) 100%);
-  opacity: 0.5;
-  pointer-events: none;
-  z-index: -1;
-}
-
-/* A disabled control has to look disabled. The pill treatment above is forced
-   with `!important`, so without this the `disabled` checkout CTA on /pricing
-   renders as a fully live primary capsule — the page says "Checkout not live
-   yet" while the button says "press me".
-
-   This rule sits AFTER the block it overrides on purpose. An earlier version
-   was spliced into the middle of that block's selector list, which silently
-   cut `.glass-btn`, `.glass-pill` and `.sheen` out of the pill styling and
-   dropped every primary control on the site to 45% opacity. */
-:where(button, a, [role="button"])[class*="from-primary"]:disabled,
-:where(button, a, [role="button"])[class*="from-primary"][aria-disabled="true"],
-.glass-btn:disabled,
-.glass-pill[aria-disabled="true"] {
-  cursor: not-allowed;
-  opacity: 0.45;
-  filter: saturate(0.35);
-  box-shadow: none !important;
-}
-
-.glass-btn:hover,
-.glass-pill:hover,
-.sheen:hover,
-a[class*="from-primary"]:hover,
-button[class*="from-primary"]:hover,
-.iv-ticker-track a:hover {
-  color: #FFFFFF !important;
-  /* transform is owned by the GSAP pill-interaction hook (see
-     src/hooks/use-pill-interaction.ts) so hover/press motion has one
-     source of truth instead of fighting a CSS transition. */
-  background:
-    linear-gradient(180deg, rgba(136, 134, 219, 0.46) 0%, rgba(70, 67, 186, 0.46) 52%, rgba(58, 54, 151, 0.42) 100%) !important;
-  border-color: rgba(255, 255, 255, 0.6) !important;
-  box-shadow:
-    0 1px 0 0 rgba(255, 255, 255, 0.7) inset,
-    0 0 26px -6px rgba(255, 255, 255, 0.55) inset,
-    0 16px 34px -12px rgba(0, 0, 0, 0.8),
-    0 0 26px -8px rgba(255, 255, 255, 0.35) !important;
-}
-
-/* :active transform is likewise owned by the GSAP pill-interaction hook. */
-
-/* ============================================================
-   LIGHT MODE — html.light overrides (flicker-free, set pre-hydration)
-   ============================================================ */
-html.light {
-  /* ------------------------------------------------------------
-     FIELD GUIDE — paper and ink.
-
-     The brand indigo is unchanged at #4643BA. What changed is its
-     JOB: it was a glow (gradient washes, blurred glass, coloured
-     shadow) and it is now ink (rules, plate numbers, marks). The
-     ground is paper the page is printed on, so cards are opaque
-     and structure is carried by rules rather than by shadows.
-
-     Deliberately NOT the warm cream (#F4F1EA) that this kind of
-     brief usually attracts: the ground is cooled toward the brand
-     violet so paper and ink belong to one family.
-     ------------------------------------------------------------ */
-  --background: #F7F6FB;
-  --background-2: #EFEDF7;
-  --foreground: #12122E;
-  --foreground-hover: #F7F6FB;
-  /* Opaque. A plate is printed, not frosted — this single value is
-     what stops every card in the site reading as glass. */
-  --card: #FFFFFF;
-  --card-foreground: #12122E;
-  --popover: #FFFFFF;
-  --popover-foreground: #12122E;
-  --primary: #4643BA;
-  --primary-foreground: #FFFFFF;
-  --secondary: #EFEDF7;
-  --secondary-foreground: #12122E;
-  --muted: rgba(70, 67, 186, 0.05);
-  --muted-foreground: #5B5892;
-  --accent: #4643BA;
-  --accent-foreground: #FFFFFF;
-  /* The plate rule. Structure is a drawn line at a readable weight,
-     not a soft edge. */
-  --border: rgba(70, 67, 186, 0.22);
-  --input: rgba(70, 67, 186, 0.28);
-  --ring: #4643BA;
-  --ember: #8886DB;
-  --warm: #5B5892;
-  --glass-border: rgba(70, 67, 186, 0.22);
-  --violet: #4643BA;
-  --violet-soft: #8886DB;
-
-  /* ============================================================
-     HIGHLIGHT PALETTE
-     ------------------------------------------------------------
-     Before this the live palette had exactly ONE hue. Every token
-     was either the ink #0C0C25 or a violet at a different
-     lightness, and `--accent` was byte-identical to `--primary`
-     (#4643BA) — so the token named "accent" could not accent
-     anything, because it was the same colour as the thing it was
-     meant to stand out from. `--ember`, `--warm` and
-     `--amber-glow` are named for warm colours and were all set to
-     violets.
-
-     These four are ADDITIVE. `--accent` itself is deliberately NOT
-     repurposed: it drives the page's ambient background gradients
-     (the radial-gradient stack further down this file) and the
-     hover background of every shadcn ghost button, toggle and
-     dialog close. Changing it would swing the whole site's
-     atmosphere to make an eyebrow gold. New tokens cost nothing
-     and break nothing.
-
-     Every value is measured, not picked by eye. Contrast against
-     the page ground #FCFBFE and against a white card:
-
-       gold  #8A5D00   5.59:1 / 5.76:1   white on it 5.76:1
-       green #0F6E44   6.11:1 / 6.30:1   white on it 6.30:1
-       coral #B0442C   5.49:1 / 5.66:1   white on it 5.66:1
-       teal  #10627A   6.68:1 / 6.88:1   white on it 6.88:1
-
-     All pass WCAG AA for normal text in both directions, so each
-     works as text on the page, as text on a card, and as a badge
-     background with white type.
-
-     What each one MEANS — a highlight colour that is used
-     decoratively stops being a signal:
-
-       gold   emphasis and labels: eyebrows, "free", what you get
-       green  a positive verdict: build it, included, live
-       coral  a cost or a risk: what hurts, what to watch
-       teal   data: trend scores, counts, measured figures
-     ============================================================ */
-  --hl-gold: #8A5D00;
-  --hl-green: #0F6E44;
-  --hl-coral: #B0442C;
-  --hl-teal: #10627A;
-}
-html.light body {
-  background-color: #F7F6FB !important;
-  color: #12122E;
-}
-/* The base body background is `!important` inside @layer base; important
-   declarations in a layer beat unlayered ones, so the light override must
-   live in the same layer to win. */
-@layer base {
-  html.light body {
-    background-color: #F7F6FB !important;
-    color: #12122E;
-  }
-}
-/* Paper has no atmosphere. `body::before` is a starfield on a 7s twinkle and
-   `body::after` a violet nebula wash — the deep-space backdrop this design is
-   leaving behind. The animation has to go with the opacity: a running
-   animation sets opacity every frame and would otherwise beat the static
-   value here, which is why the field survived an earlier `opacity: 0`. */
-html.light body::before,
-html.light body::after {
-  opacity: 0 !important;
-  animation: none !important;
-  background-image: none !important;
-}
-/* The glass system, reprinted as plates. Flat paper, one drawn rule, no blur
-   and no coloured shadow — the three things that made every surface read as
-   frosted violet. The class names stay so no component has to change. */
-html.light .glass,
-html.light .glass-nav,
-html.light .glass-btn,
-html.light .glass-pill {
-  background: #FFFFFF !important;
-  border-color: rgba(70, 67, 186, 0.22) !important;
-  color: #12122E;
-  -webkit-backdrop-filter: none !important;
-  backdrop-filter: none !important;
-  box-shadow: none !important;
-}
-/* The Aceternity hover signature, given to every legacy plate on the site in
-   one rule rather than at twenty-odd call sites: the border takes brand ink
-   and the plate rises a hair. It is the same gesture CardSpotlight and
-   BentoGridItem make, so a page that mixes new components with older markup
-   still reads as one set. */
-html.light .glass-hover {
-  transition:
-    border-color 260ms cubic-bezier(0.22, 1, 0.36, 1),
-    transform 260ms cubic-bezier(0.22, 1, 0.36, 1) !important;
-}
-html.light .glass-hover:hover {
-  border-color: color-mix(in oklab, var(--primary) 50%, transparent) !important;
-  transform: translateY(-2px);
-  box-shadow: none !important;
-}
-@media (prefers-reduced-motion: reduce) {
-  html.light .glass-hover:hover { transform: none; }
-}
-/* Light mode: keep every label inside a light glass surface dark enough to read. */
-html.light .glass-btn,
-html.light .glass-pill,
-html.light .glass-btn *,
-html.light .glass-pill * {
-  color: #0C0C25 !important;
-}
-html.light .sheen,
-html.light a[class*="from-primary"],
-html.light button[class*="from-primary"] {
-  color: #FFFFFF !important;
-}
-
-html,
-body {
-  transition: background-color 240ms ease;
-}
-
-/* ============================================================
-   CURSOR-FOLLOW SPOTLIGHT — see src/components/spotlight.tsx
-   --spot-x/--spot-y/--spot-o are written by GSAP quickTo (JS); this layer
-   is pure CSS so the animated property itself stays GPU-cheap.
-   ============================================================ */
-.bbi-spotlight {
-  --spot-x: 50%;
-  --spot-y: 50%;
-  --spot-o: 0;
-}
-.bbi-spotlight::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: -1;
-  pointer-events: none;
-  border-radius: inherit;
-  opacity: var(--spot-o);
-  transition: opacity 0.3s ease;
-  background: radial-gradient(
-    var(--spot-size, 220px) var(--spot-size, 220px) at var(--spot-x) var(--spot-y),
-    color-mix(in oklab, var(--primary) 55%, transparent) 0%,
-    transparent 70%
-  );
-}
-@media (prefers-reduced-motion: reduce) {
-  .bbi-spotlight::before {
-    display: none;
-  }
-}
-
-/* ============================================================
-   CARD FAN-REVEAL — see src/components/card-fan.tsx
-   ============================================================ */
-.bbi-fan-card {
-  transform-origin: center bottom;
-  will-change: transform;
-}
-.bbi-fan-card:focus-visible {
-  outline: 2px solid var(--ring);
-  outline-offset: 4px;
-}
-
-/* ============================================================
-   TYPEWRITER / FADE-IN BRANDING
-   ============================================================ */
-@keyframes iv-caret {
-  0%, 49% { opacity: 1; }
-  50%, 100% { opacity: 0; }
-}
-.iv-caret {
-  display: inline-block;
-  width: 0.06em;
-  margin-left: 0.08em;
-  background: currentColor;
-  animation: iv-caret 900ms steps(1, end) infinite;
-  align-self: stretch;
-}
-@keyframes iv-fade-up {
-  from { opacity: 0; transform: translateY(14px); filter: blur(6px); }
-  to { opacity: 1; transform: none; filter: blur(0); }
-}
-.iv-fade-up {
-  animation: iv-fade-up 700ms cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-/* ============================================================
-   SKELETON SHIMMER (AI audit streaming placeholder)
-   ============================================================ */
-@keyframes iv-shimmer {
-  from { background-position: -180% 0; }
-  to { background-position: 180% 0; }
-}
-.iv-skeleton {
-  border-radius: 0.9rem;
-  background-image: linear-gradient(
-    100deg,
-    rgba(182, 181, 227, 0.10) 20%,
-    rgba(218, 217, 242, 0.34) 42%,
-    rgba(182, 181, 227, 0.10) 64%
-  );
-  background-size: 220% 100%;
-  animation: iv-shimmer 1.4s linear infinite;
-}
-html.light .iv-skeleton {
-  background-image: linear-gradient(
-    100deg,
-    rgba(43, 40, 113, 0.08) 20%,
-    rgba(43, 40, 113, 0.18) 42%,
-    rgba(43, 40, 113, 0.08) 64%
-  );
-}
-
-/* ============================================================
-   THEME-AWARE NAV PANELS + LIGHT-MODE WINS
-   Tailwind utilities live in @layer utilities; an !important
-   declaration inside a layer beats an unlayered one, so these
-   light-mode overrides must sit in the same layer to apply.
-   ============================================================ */
-@layer utilities {
-  .iv-nav-panel {
-    background: rgba(10, 10, 32, 0.97) !important;
-    border: 1px solid rgba(182, 181, 227, 0.22) !important;
-    box-shadow: 0 26px 60px -24px rgba(0, 0, 0, 0.85) !important;
-  }
-  html.light .iv-nav-panel,
-  html.light .glass-nav {
-    background: rgba(255, 255, 255, 0.98) !important;
-    border-color: rgba(43, 40, 113, 0.14) !important;
-    color: #0C0C25 !important;
-    box-shadow: 0 24px 60px -30px rgba(12, 12, 37, 0.45) !important;
-  }
-  html.light .iv-nav-panel a,
-  html.light .iv-nav-panel button,
-  html.light .glass-nav a,
-  html.light .glass-nav button {
-    color: #0C0C25 !important;
-  }
-  html.light .iv-nav-panel a:hover,
-  html.light .glass-nav a:hover {
-    color: #2B2871 !important;
-  }
-  /* The plate. This rule is the one that decides how every legacy `glass`
-     surface on the site actually looks, and it has to live HERE, inside
-     @layer utilities: an !important declaration inside a layer beats an
-     unlayered one, so the flat reprint further up this file was being
-     overruled by the frosted-lavender gradient that used to sit at these
-     three selectors. That is why the redesign reached the hero and the
-     cards but stopped at every mid-page section. */
-  html.light .glass,
-  html.light .glass-btn,
-  html.light .glass-pill {
-    background: var(--card) !important;
-    border: 1px solid var(--border) !important;
-    color: var(--foreground) !important;
-    box-shadow: none !important;
-    -webkit-backdrop-filter: none !important;
-    backdrop-filter: none !important;
-  }
-  html.light .glass-btn,
-  html.light .glass-pill {
-    transition:
-      border-color 240ms cubic-bezier(0.22, 1, 0.36, 1),
-      color 240ms cubic-bezier(0.22, 1, 0.36, 1),
-      background-color 240ms cubic-bezier(0.22, 1, 0.36, 1) !important;
-  }
-  html.light .glass-btn:hover,
-  html.light .glass-pill:hover {
-    background: var(--primary) !important;
-    border-color: var(--primary) !important;
-    color: var(--primary-foreground) !important;
-  }
-  /* The label inside a pill is coloured by its own rule further up, which
-     would otherwise keep it near-black against the filled hover state. */
-  html.light .glass-btn:hover *,
-  html.light .glass-pill:hover * {
-    color: var(--primary-foreground) !important;
-  }
-}
-  /* THE HOUSING, inside the layer that demonstrably wins.
-     Rules appended at the end of this file were not reaching the compiled
-     sheet — a DOM query for rules matching the header's links came back
-     empty while `.bbi-instrument`'s own background applied fine. Declaring
-     the overrides here, in the same @layer utilities block as the light-mode
-     rules they have to beat and printed after them, is the shape that works. */
-  html.light .bbi-instrument,
-  html.light .bbi-instrument header,
-  html.light .bbi-instrument footer,
-  html.light .bbi-instrument main {
-    color: var(--ins-read) !important;
-  }
-  /* :not(.ins-action) — an element that sets its own colour inline must be
-     left alone. This rule carries !important, and !important beats an inline
-     style, so without the exclusion it silently overrode the actions' own
-     hover state: the inline style read `color: var(--ins-void…)` while the
-     computed value stayed at --ins-read. That is what "white on white" was. */
-  html.light .bbi-instrument header a:not(.ins-action),
-  html.light .bbi-instrument header button:not(.ins-action),
-  html.light .bbi-instrument header span:not(.ins-action),
-  html.light .bbi-instrument .glass-nav a,
-  html.light .bbi-instrument .glass-nav button,
-  html.light .bbi-instrument .iv-nav-panel a,
-  html.light .bbi-instrument .iv-nav-panel button {
-    color: var(--ins-read) !important;
-  }
-  html.light .bbi-instrument header a:hover,
-  html.light .bbi-instrument .iv-nav-panel a:hover {
-    color: var(--ins-signal-hot) !important;
-  }
-  /* The logo stamp is the one inversion: signal ground, housing ink. */
-  html.light .bbi-instrument header a > span[class*="bg-primary"] {
-    color: var(--ins-void) !important;
-  }
-  html.light .bbi-instrument .glass,
-  html.light .bbi-instrument .glass-nav,
-  html.light .bbi-instrument .glass-btn,
-  html.light .bbi-instrument .glass-pill,
-  html.light .bbi-instrument .iv-nav-panel,
-  html.light .bbi-instrument [role="combobox"],
-  html.light .bbi-instrument input,
-  html.light .bbi-instrument select {
-    background: var(--ins-face) !important;
-    border-color: var(--ins-rule) !important;
-    color: var(--ins-read) !important;
-    box-shadow: none !important;
-  }
-  html.light .bbi-instrument [role="combobox"] *,
-  html.light .bbi-instrument .glass-pill *,
-  html.light .bbi-instrument .glass-btn * {
-    color: var(--ins-read) !important;
-  }
-  html.light .bbi-instrument input::placeholder {
-    color: var(--ins-dim) !important;
-  }
-  html.light .bbi-instrument .text-muted-foreground {
-    color: var(--ins-dim) !important;
-  }
-
-
-/* ============================================================
-   CATEGORY HEADING GLOW — breathing brand-color halo behind
-   category-name headings (browse page cards, category page H1).
-
-   Perf note (real regression, found and fixed same session): the first
-   version of this animated the `text-shadow` property itself between two
-   states with different blur radii. Animating shadow blur is NOT
-   compositor-only — the browser has to recompute and repaint the blurred
-   shadow bitmap every frame, on every heading, for as long as the page is
-   open. Stacked three layers deep and repeated per category card, that is
-   real, continuous main-thread cost, worst on exactly the low-end/low-
-   power devices where it matters most. Fixed by making the text-shadow
-   itself STATIC (computed once) and animating `opacity` instead, which is
-   compositor-only and effectively free. Same visual "breathing" glow,
-   without the per-frame repaint.
-   ============================================================ */
-@keyframes bbi-heading-glow-pulse {
-  0%, 100% { opacity: 0.7; }
-  50%      { opacity: 1; }
-}
-/* Ink does not glow. The halo and its pulse are gone; the class stays so the
-   call sites do not have to change. */
-.bbi-heading-glow {
-  text-shadow: none;
-  animation: none;
-}
-@media (prefers-reduced-motion: reduce) {
-  .bbi-heading-glow {
-    animation: none;
-    opacity: 1;
-  }
-}
-
-/* Hero slider frame: the Golden Tree artwork is a transparent PNG that needs a
-   dark plate behind it in both themes. */
-@layer utilities {
-  .iv-hero-frame,
-  html.light .iv-hero-frame {
-    background:
-      radial-gradient(ellipse at 50% 45%, rgba(24, 22, 68, 0.98) 0%, rgba(10, 10, 32, 0.98) 70%),
-      #0A0A20 !important;
-  }
-  .iv-hero-frame img {
-    filter: brightness(1.12) contrast(1.06);
-  }
-}
-
-/* ============================================================
-   TAG CLOUD — fluid flex-wrap pill rows (no rigid grids)
-   Sizing is driven purely by label length. Short labels stay on
-   one line at their natural width; a label too long for the row
-   wraps onto a second line inside its own pill instead of being
-   clipped — .glass-pill centers its content (justify-content:
-   center), and text-overflow:ellipsis does not reliably fire on
-   a centered flex child, so a long label was rendering with
-   characters silently cut from BOTH ends and no "…" shown. Full
-   label text must always stay intact and visible.
-   ============================================================ */
-.iv-tag-cloud {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  align-items: flex-start;
-}
-.iv-tag-cloud .iv-tag {
-  flex: 0 1 auto;
-  width: auto;
-  max-width: 100%;
-  white-space: normal;
-  overflow: visible;
-  text-align: center;
-  display: inline-flex;
-}
-/* Footer column is narrow — keep the gap tighter there. */
-footer .iv-tag-cloud { gap: 0.5rem; }
-
-/* Light mode: footer/cloud pills get a soft light-grey/blue fill + dark text. */
-html.light .iv-tag-cloud .iv-tag {
-  background: var(--card) !important;
-  border-color: var(--border) !important;
-  color: #0C0C25 !important;
-  box-shadow:
-    0 1px 0 0 rgba(255, 255, 255, 0.95) inset,
-    0 10px 22px -18px rgba(12, 12, 37, 0.55) !important;
-}
-html.light .iv-tag-cloud .iv-tag:hover {
-  background: linear-gradient(180deg, rgba(238, 236, 248, 1) 0%, rgba(218, 217, 242, 0.98) 100%) !important;
-  border-color: rgba(70, 67, 186, 0.42) !important;
-  color: #2B2871 !important;
-}
-
-/* ============================================================
-   CATEGORY BADGE — every `CategoryBadge` pill (component:
-   src/components/category-badge.tsx) wraps long labels onto a second
-   line instead of truncating, using the component's own baked-in
-   `.category-badge`/`.category-badge-label` classes (Tailwind's
-   `whitespace-normal`/`break-words` on the label already do the actual
-   wrapping — see the component). This block only adds the visual
-   polish so a wrapped pill still reads as intentional rather than
-   cramped: a floor height so short single-line labels keep their
-   original proportions, and enough line-height for a readable second
-   line. Scoped to `.category-badge` itself (not just `.iv-tag-cloud
-   .iv-tag` above) because CategoryBadge also renders standalone pills
-   that never sit inside a tag-cloud wrapper — the Golden Tree's
-   absolutely-positioned nodes on the homepage.
-   ============================================================ */
-.category-badge.cb-sm {
-  min-height: 1.75rem;
-}
-.category-badge.cb-md {
-  min-height: 2.25rem;
-}
-.category-badge-label {
-  text-wrap: balance;
-}
-
-/* ============================================================
-   ORBIT DIAGRAM — light-mode visibility (rings washed out on white)
-   ============================================================ */
-html.light .bbi-orbit-ring {
-  border-color: rgba(180, 120, 40, 0.55) !important;
-  opacity: 0.7;
-  box-shadow:
-    0 0 26px -6px rgba(200, 140, 60, 0.45),
-    inset 0 0 30px -12px rgba(180, 120, 40, 0.4) !important;
-}
-html.light .bbi-orbit-ring-inner {
-  border-color: rgba(160, 105, 35, 0.6) !important;
-}
-html.light .bbi-orbit-dot {
-  background: #B4782A;
-  box-shadow: 0 0 12px 2px rgba(180, 120, 40, 0.75);
-}
-/* Bubbles need a real shadow in light mode so they detach from the background. */
-html.light .bbi-orbit-node-inner,
-html.light .bbi-tree-node-m {
-  filter: drop-shadow(0 10px 18px rgba(12, 12, 37, 0.18));
-}
-html.light .bbi-orbit-node-label {
-  color: #0C0C25 !important;
-  background: rgba(255, 255, 255, 0.94) !important;
-  border-color: rgba(43, 40, 113, 0.22) !important;
-  box-shadow: 0 8px 18px -10px rgba(12, 12, 37, 0.45);
-}
-
-/* ============================================================
-   IDEA PAGE — refresh variation (PROJECT_BRIEF Sections 6.1 + 12.2)
-   Four gradient treatments drawn from the SAME brand family (indigo →
-   violet → pale violet). Section 12.2 is explicit: a gradient shift, never
-   an unrelated colour theme, never bright or loud. One is chosen per render
-   on the server and applied via a data attribute on the article.
-   ============================================================ */
-.idea-shell { position: relative; }
-.idea-shell::before {
-  content: "";
-  position: absolute;
-  inset: -10% -20% auto -20%;
-  height: 42rem;
-  z-index: -1;
-  pointer-events: none;
-  opacity: 0.5;
-  transition: opacity 0.6s var(--ease-glass, cubic-bezier(0.16, 1, 0.3, 1));
-}
-html.light .idea-shell::before { opacity: 0.42; }
-
-.idea-shell[data-gradient="dawn"]::before {
-  background:
-    radial-gradient(60% 55% at 18% 12%, color-mix(in oklab, var(--primary) 26%, transparent), transparent 70%),
-    radial-gradient(50% 45% at 82% 6%, color-mix(in oklab, var(--accent) 22%, transparent), transparent 72%);
-}
-.idea-shell[data-gradient="dusk"]::before {
-  background:
-    radial-gradient(55% 50% at 78% 14%, color-mix(in oklab, var(--violet, var(--primary)) 28%, transparent), transparent 70%),
-    radial-gradient(45% 40% at 12% 4%, color-mix(in oklab, var(--warm, var(--accent)) 20%, transparent), transparent 74%);
-}
-.idea-shell[data-gradient="ember"]::before {
-  background:
-    radial-gradient(65% 50% at 50% 0%, color-mix(in oklab, var(--ember, var(--accent)) 26%, transparent), transparent 68%),
-    radial-gradient(40% 40% at 88% 22%, color-mix(in oklab, var(--primary) 18%, transparent), transparent 72%);
-}
-.idea-shell[data-gradient="deep"]::before {
-  background:
-    radial-gradient(70% 55% at 30% 8%, color-mix(in oklab, var(--primary) 22%, transparent), transparent 66%),
-    radial-gradient(45% 45% at 70% 18%, color-mix(in oklab, var(--violet-soft, var(--accent)) 24%, transparent), transparent 70%);
-}
-
-/* Layout variants — real structural differences, not just spacing tweaks. */
-.idea-hero { display: grid; gap: 1.5rem; }
-.idea-shell[data-variant="hero-left"] .idea-hero { grid-template-columns: 1fr; }
-@media (min-width: 900px) {
-  .idea-shell[data-variant="hero-left"] .idea-hero { grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr); align-items: start; }
-}
-.idea-shell[data-variant="hero-banner"] .idea-hero { text-align: center; }
-.idea-shell[data-variant="hero-banner"] .idea-hero .idea-hero-meta { justify-content: center; }
-.idea-shell[data-variant="hero-banner"] .idea-hero-aside { margin-inline: auto; max-width: 34rem; width: 100%; }
-.idea-shell[data-variant="stat-forward"] .idea-hero { grid-template-columns: 1fr; }
-@media (min-width: 900px) {
-  .idea-shell[data-variant="stat-forward"] .idea-hero { grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr); }
-  .idea-shell[data-variant="stat-forward"] .idea-hero-aside { order: -1; }
-}
-.idea-shell[data-variant="editorial"] .idea-hero { grid-template-columns: 1fr; max-width: 46rem; }
-.idea-shell[data-variant="editorial"] .idea-hero-aside { max-width: none; }
-
-/* Demand gauge (Section 6.1 item 3). The fill is a composited scaleX driven
-   from the idea's real `trend_score` by useScrollProgress — see
-   idea.$slug.tsx — so the only rule needed here is the track it runs in.
-
-   What used to live here and is deliberately gone: `.demand-bars`, a
-   twelve-bar chart whose heights came from `Math.sin(i*0.9)*12 +
-   Math.cos(i*0.5)*8` and represented nothing, and `.demand-gauge-fill`,
-   which animated `width` — not compositable, and forbidden by MOTION_SPEC
-   rule 8. There is no per-period demand history in the schema, so there is
-   no chart; there is one real score, so there is one gauge. */
-.demand-gauge-track {
-  height: 0.5rem;
-  border-radius: 9999px;
-  background: color-mix(in oklab, var(--foreground) 10%, transparent);
-  overflow: hidden;
-}
-
-/* ==================================================================
-   SCROLL-DEVICE FLOOR — scrollcraft principles, no literal engine
-   (2026-08-23, see PENDING.md same date)
-
-   Everything below is .sc-*-scoped and additive only. Zero new colors —
-   every value here is var(--primary)/var(--accent)/var(--foreground)/
-   var(--border) via color-mix, i.e. the real html.light tokens above.
-   Paired with src/lib/scroll-devices.ts. Motion rule throughout, per
-   taste.md: transform + opacity for anything continuous, clip-path for
-   wipes only, never width/height/top/left, never transition: all.
-   ================================================================== */
-
-:root {
-  --sc-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
-  --sc-e1: 0 1px 2px color-mix(in oklab, var(--foreground) 6%, transparent);
-  --sc-e2: 0 8px 24px -12px color-mix(in oklab, var(--foreground) 22%, transparent);
-  --sc-e3: 0 24px 56px -20px color-mix(in oklab, var(--foreground) 32%, transparent);
-  --sc-edge: inset 0 1px 0 color-mix(in oklab, white 60%, transparent);
-}
-
-/* ---- flow + in: reveal on entry (see useStaggerReveal) ---------- */
-.sc-flow-item {
-  opacity: 0;
-  transform: translateY(18px);
-  transition:
-    opacity 520ms var(--sc-ease-out),
-    transform 520ms var(--sc-ease-out);
-}
-.sc-flow-item.sc-in { opacity: 1; transform: translateY(0); }
-
-/* ---- kinetic type: masked line reveal (see useKineticLines) ----- */
-.sc-kinetic-mask { display: block; overflow: hidden; padding-bottom: 0.08em; }
-.sc-kinetic-line { display: inline-block; will-change: transform; }
-
-/* ---- depth: edge light + grain (taste.md "Depth") ---------------- */
-.sc-edge-lit { box-shadow: var(--sc-edge), var(--sc-e2); }
-.sc-elevate-1 { box-shadow: var(--sc-e1); }
-.sc-elevate-2 { box-shadow: var(--sc-e2); }
-.sc-elevate-3 { box-shadow: var(--sc-e3); }
-
-.sc-grain { position: relative; isolation: isolate; }
-.sc-grain::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  opacity: 0.045;
-  mix-blend-mode: overlay;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-/* ---- text-over-media scrims (taste.md "Text over media") -------- */
-/* Sibling of the copy block, never a child — see scroll-devices.ts note. */
-.sc-scrim { position: absolute; inset: 0; pointer-events: none; z-index: 0; }
-.sc-scrim--lead {
-  background: radial-gradient(
-    ellipse 60% 70% at 18% 82%,
-    color-mix(in oklab, var(--foreground) 55%, transparent) 0%,
-    transparent 70%
-  );
-}
-.sc-scrim--trail {
-  background: radial-gradient(
-    ellipse 60% 70% at 82% 82%,
-    color-mix(in oklab, var(--foreground) 55%, transparent) 0%,
-    transparent 70%
-  );
-}
-.sc-scrim--band {
-  background: linear-gradient(
-    to top,
-    color-mix(in oklab, var(--foreground) 58%, transparent) 0%,
-    transparent 58%
-  );
-}
-@media (max-width: 860px) {
-  .sc-scrim--lead,
-  .sc-scrim--trail { background: none; }
-  .sc-scrim--lead::before,
-  .sc-scrim--trail::before { content: none; }
-}
-
-/* ---- rail (see useRail) ------------------------------------------ */
-.sc-rail-wrap { overflow: hidden; }
-.sc-rail-wrap[style*="overflow-x: auto"] {
-  -webkit-overflow-scrolling: touch;
-  scroll-padding-inline: 1rem;
-}
-.sc-rail { display: flex; will-change: transform; }
-.sc-rail > * { scroll-snap-align: start; }
-
-/* ---- pointer devices: press feedback (taste.md "Motion") --------- */
-.sc-press { transition: transform 140ms var(--sc-ease-out); }
-.sc-press:active { transform: scale(0.97); }
-
-/* ---- gallery/catalog: museum-label schema, shared across cards --- */
-.sc-spec-label {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.35rem 0.6rem;
-  font-size: 0.7rem;
-  letter-spacing: 0.02em;
+  gap: 12px;
+  padding-top: 24px;
+  margin-top: 26px;
+  border-top: 1px solid var(--border);
   color: var(--muted-foreground);
-}
-.sc-spec-label dt { font-weight: 600; color: var(--foreground); }
-.sc-spec-label dt::after { content: ":"; margin-right: 0.2rem; }
-.sc-spec-label dd { margin: 0; }
-.sc-spec-label dd:not(:last-child)::after { content: "·"; margin-left: 0.6rem; color: var(--border); }
-
-/* ---- chaptered editorial: folio + hard-cut chapter ground --------- */
-.sc-chapter { position: relative; }
-.sc-folio {
-  position: sticky;
-  top: 5.5rem;
-  float: left;
-  width: 3.25rem;
-  margin-left: -3.75rem;
   font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--muted-foreground);
-  writing-mode: vertical-rl;
 }
-@media (max-width: 1100px) {
-  .sc-folio { display: none; }
+.footer-bottom-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
 }
-
-/* ---- split stage: divider carries the argument -------------------- */
-.sc-split { display: grid; grid-template-columns: 1fr; position: relative; }
-@media (min-width: 900px) {
-  .sc-split { grid-template-columns: 1fr auto 1fr; align-items: stretch; }
+.primitive-card {
+  padding: 24px;
 }
-.sc-split-divider {
+.primitive-accordion {
+  border-bottom: 1px solid var(--border);
+}
+.primitive-accordion summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 18px 0;
+  font-weight: 550;
+}
+.primitive-accordion summary::-webkit-details-marker {
   display: none;
 }
-@media (min-width: 900px) {
-  .sc-split-divider {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    width: 2px;
-    background: var(--border);
-    position: relative;
-  }
-  .sc-split-divider > span {
-    position: absolute;
-    white-space: nowrap;
-    font-size: 0.68rem;
-    font-weight: 700;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted-foreground);
-    background: var(--background);
-    padding: 0.35rem 0.6rem;
-    border: 1px solid var(--border);
-    border-radius: 999px;
-  }
+.primitive-accordion[open] summary svg {
+  transform: rotate(180deg);
 }
-
-@media (prefers-reduced-motion: reduce) {
-  .sc-flow-item { transition: opacity 300ms ease; transform: none; }
-  .sc-grain::after { display: none; }
-}
-
-/* ==================================================================
-   POINTER RESPONSE — what actually reads the channel
-
-   `PointerChannelProvider` has been publishing --ptr-x, --ptr-y, --ptr-v
-   and --scroll-v on :root every frame since the motion system landed, and
-   until this block NOTHING on the site read any of them. The plumbing was
-   there and no page drank from it, which is exactly why the site felt dead
-   to the cursor everywhere except the small sheen inside `.mo-card`.
-
-   Everything below is deliberately DIFFERENT per surface rather than one
-   effect repeated. A single shared response applied everywhere is the
-   "template animation" problem in another costume.
-
-   All of it uses `translate` and `rotate` as INDEPENDENT properties, not
-   `transform`. That matters: the twin rings and the orbit rotor are driven
-   by CSS keyframe animations that own `transform` at animation priority,
-   so a `transform` here would simply lose. `translate` composes with them
-   instead of fighting them.
-
-   Guarded to fine pointers, because on touch --ptr-* never leaves its
-   neutral 0.5 and these would all sit frozen at centre.
-   ================================================================== */
-
-/* The brand-arc CSS that main still carries is intentionally absent here:
-   1749512 deleted the arc component, and no .tsx references .bbi-arc any
-   more. Re-adding it in this merge would ship styling for markup that
-   does not exist. */
-@media (hover: hover) and (pointer: fine) {
-  /* -- Hero, section 12.1's mandatory two rings -------------------
-     The rings are the personal brand element and must stay exactly two.
-     They now drift AGAINST the cursor, at two different depths, so the
-     hero has parallax the moment the mouse moves — before any scrolling
-     happens at all. The larger ring moves less, which is what reads as
-     depth rather than as two things sliding.                        */
-  .bbi-twin-ring.ring-1 {
-    translate: calc((var(--ptr-x, 0.5) - 0.5) * -26px) calc((var(--ptr-y, 0.5) - 0.5) * -18px);
-    transition: translate 900ms cubic-bezier(0.16, 1, 0.3, 1);
-  }
-  .bbi-twin-ring.ring-2 {
-    translate: calc((var(--ptr-x, 0.5) - 0.5) * 42px) calc((var(--ptr-y, 0.5) - 0.5) * 30px);
-    transition: translate 700ms cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  /* -- Ambient background orbs ------------------------------------
-     A third depth, moving WITH the cursor rather than against it, so the
-     background and the rings separate instead of moving as one plane. */
-  .orb {
-    translate: calc((var(--ptr-x, 0.5) - 0.5) * 16px) calc((var(--ptr-y, 0.5) - 0.5) * 12px);
-    transition: translate 1200ms cubic-bezier(0.16, 1, 0.3, 1);
-  }
-
-  /* -- Orbit diagram ---------------------------------------------
-     Its own grammar: a slight tilt toward the cursor rather than a
-     slide. `rotate` is an independent property too, so the rotor's
-     keyframe spin is untouched.                                    */
-  .bbi-orbit-rotor {
-    rotate: calc((var(--ptr-x, 0.5) - 0.5) * 4deg);
-    transition: rotate 800ms cubic-bezier(0.16, 1, 0.3, 1);
-  }
-}
-
-/* -- Scroll velocity, everywhere, touch included -------------------
-   --scroll-v runs on phones too (the pointer half does not), so this is
-   the one response that is genuinely sitewide.
-
-   The rings ease apart slightly while the page is moving fast and settle
-   when it stops. It is not a decoration you notice on its own; it is what
-   makes fast scrolling feel like it has weight instead of teleporting.  */
-.bbi-twin-ring.ring-1 {
-  scale: calc(1 + var(--scroll-v, 0) * 0.05);
-  transition: scale 500ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-.bbi-twin-ring.ring-2 {
-  scale: calc(1 - var(--scroll-v, 0) * 0.04);
-  transition: scale 500ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .bbi-twin-ring.ring-1,
-  .bbi-twin-ring.ring-2,
-  .orb,
-  .bbi-orbit-rotor {
-    translate: none;
-    rotate: none;
-    scale: none;
-    transition: none;
-  }
-}
-
-/* ==================================================================
-   FOOTER — built to the reference the founder supplied.
-
-   A light card, four columns of plain link lists with a newsletter
-   block, a hairline, then a thin bottom bar. Quiet.
-
-   What this replaced was a dark full-bleed band with display type and a
-   row of large statistics. That was my invention, not the brief's.
-
-   Every colour is an existing token. The only motion is a colour change
-   on hover and a 1px lift on the Subscribe button.
-   ================================================================== */
-
-.bbi-footer {
-  background: var(--card);
-  border: 1px solid var(--border);
-  box-shadow: 0 24px 60px -40px color-mix(in oklab, var(--foreground) 40%, transparent);
-}
-
-.bbi-footer-heading {
-  font-family: var(--font-display);
-  font-size: 0.9375rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  color: var(--foreground);
-}
-
-.bbi-footer-link {
-  font-size: 0.875rem;
-  color: var(--muted-foreground);
-  transition: color var(--mo-dur-2, 240ms) ease;
-}
-@media (hover: hover) and (pointer: fine) {
-  .bbi-footer-link:hover {
-    color: var(--accent);
-  }
-}
-.bbi-footer-link:focus-visible {
-  color: var(--accent);
-  outline: 2px solid var(--ring);
-  outline-offset: 3px;
-  border-radius: 0.25rem;
-}
-
-.bbi-footer-more {
-  font-weight: 600;
-  color: var(--accent);
-}
-
-.bbi-footer-input {
-  width: 100%;
-  border-radius: 0.75rem;
-  border: 1px solid var(--input);
-  background: var(--popover);
-  padding: 0.7rem 0.9rem;
-  font-size: 0.875rem;
-  color: var(--foreground);
-  transition:
-    border-color var(--mo-dur-2, 240ms) ease,
-    box-shadow var(--mo-dur-2, 240ms) ease;
-}
-.bbi-footer-input::placeholder {
-  color: color-mix(in oklab, var(--muted-foreground) 70%, transparent);
-}
-.bbi-footer-input:focus {
-  outline: none;
-  border-color: var(--ring);
-  box-shadow: 0 0 0 3px color-mix(in oklab, var(--ring) 18%, transparent);
-}
-
-.bbi-footer-subscribe {
-  width: 100%;
-  border-radius: 0.75rem;
-  padding: 0.7rem 1rem;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--primary-foreground);
-  background: linear-gradient(90deg, var(--primary), var(--ember));
-  transition:
-    transform var(--mo-dur-2, 240ms) cubic-bezier(0.16, 1, 0.3, 1),
-    filter var(--mo-dur-2, 240ms) ease;
-}
-@media (hover: hover) and (pointer: fine) {
-  .bbi-footer-subscribe:hover:not(:disabled) {
-    transform: translate3d(0, -1px, 0);
-    filter: brightness(1.06);
-  }
-}
-.bbi-footer-subscribe:disabled {
-  cursor: progress;
-  opacity: 0.6;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .bbi-footer-subscribe,
-  .bbi-footer-subscribe:hover:not(:disabled) {
-    transform: none;
-  }
-}
-
-/* ==================================================================
-   STICKY-ASIDE EDITORIAL — the "Why this exists" section.
-
-   A third grammar, deliberately unlike the other two on this page: not the
-   stagger reveal, and not the pinned chapter above. The sidebar holds its
-   position while the long-form prose beside it scrolls past.
-
-   WHAT IS DELIBERATELY NOT HERE, and why it was removed rather than left
-   half-working: the four aside rows were meant to illuminate in turn as the
-   reader moved down. Three implementations were tried and measured, and all
-   three failed for the same reason.
-
-     1. ScrollTrigger on the containing section — progress reached 1.0 while
-        the section was still 3,582px below the fold, so the sequence was
-        over before any of it was visible.
-     2. ScrollTrigger moved onto the aside itself — progress read 1.0 the
-        instant the aside appeared. A debounced ScrollTrigger.refresh() did
-        not help.
-     3. Native `animation-timeline: view()` on the rows — supported in this
-        browser, confirmed, and still every row sat at full opacity from the
-        moment the aside entered.
-
-   The cause is the same each time and it is not fixable from this end: the
-   aside is `position: sticky`. Once it sticks, it and everything inside it
-   stop moving relative to the scrollport. A stuck element has no meaningful
-   scroll progress, so any timeline derived from its position completes
-   immediately and stays complete.
-
-   The sticky behaviour IS the distinct grammar here, and it works. The
-   illumination was fighting it from the start, so it is gone rather than
-   shipped as a effect that silently does nothing.
-   ================================================================== */
-
-@media (min-width: 1024px) {
-  .bbi-editorial-aside {
-    position: sticky;
-    /* Clears the sticky header plus the progress rail above it. */
-    top: 6.5rem;
-  }
-}
-
-/* A hairline down the left of each row, so the list reads as a sequence
-   rather than as four loose paragraphs. Static — see the note above. */
-.bbi-editorial-row {
-  position: relative;
-  padding-left: 0.9rem;
-}
-.bbi-editorial-row::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 1rem;
-  bottom: 1rem;
-  width: 2px;
-  border-radius: 2px;
-  background: color-mix(in oklab, var(--accent) 55%, transparent);
-}
-.bbi-editorial-row:first-child::before {
-  top: 0;
-}
-.bbi-editorial-row:last-child::before {
-  bottom: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .bbi-editorial-aside {
-    position: static;
-  }
-}
-
-/* ============================================================
-   PARALLAX DEPTH LAYER — scroll-driven depth planes
-   (main carries its own CINEMATIC LAYER further down; two blocks under one
-   name made the file unreadable, so this one is named for what it does.)
-   Transform/opacity only, GPU-composited, reduced-motion aware.
-   Nothing here is hover-driven: motion belongs to the scroll position,
-   so a section reads as one moving thing rather than as parts that
-   react when the cursor touches them.
-   ============================================================ */
-
-/* ---- Parallax depth layers -------------------------------------------
-   Scroll-driven, not pointer-driven. Nothing here reacts to hover: the
-   choreography belongs to the scroll position, so the page reads as one
-   moving thing rather than as a grid of cards that wobble when touched.
-
-   All three read `--sc-p` (0 -> 1), published on the section by
-   `useScrollProgress` as it crosses the viewport. With no JS `--sc-p`
-   falls back to 0.5 — the mid-point — so every layer sits at its resting
-   offset and the section is simply static, never mis-stacked.
-
-   The offsets are deliberately unequal. Equal offsets are not parallax;
-   the depth cue is entirely in the *difference* in rate between planes. */
-.bbi-depth {
-  --sc-depth: calc((var(--sc-p, 0.5) - 0.5) * 2); /* -1 .. 1, 0 at centre */
-}
-
-.bbi-depth-back,
-.bbi-depth-mid,
-.bbi-depth-front {
-  will-change: transform;
-  backface-visibility: hidden;
-}
-
-/* All three travel the SAME direction, at different magnitudes. That is what
-   parallax is — depth comes from the difference in rate, not from planes
-   moving against each other.
-
-   An earlier version had `front` travelling the opposite way. It looked like
-   more motion and it was a bug: back +28px against front -10px closes 38px,
-   and the stacked heading/grid gap in ComparisonSection is `mt-8` = 32px, so
-   the cards drove straight through the second line of the headline at the
-   scroll-in extreme. Same-sign travel cannot collide, however far it runs.
-
-   Worst-case convergence is now back minus front = 16px against that 32px
-   gap, which leaves 16px of air at the tightest point. */
-.bbi-depth-back {
-  transform: translate3d(0, calc(var(--sc-depth, 0) * -22px), 0);
-}
-
-.bbi-depth-mid {
-  transform: translate3d(0, calc(var(--sc-depth, 0) * -14px), 0);
-}
-
-.bbi-depth-front {
-  transform: translate3d(0, calc(var(--sc-depth, 0) * -6px), 0);
-}
-
-/* ---- Morphing silhouette ---------------------------------------------
-   A real shape morph, not a border-radius tween: five polygon vertices
-   each travel a different distance as `--sc-p` runs 0 -> 1, so the
-   outline itself changes rather than the same outline being scaled or
-   rotated.
-
-   It rides on a decorative layer behind the copy — never on a text
-   container — because clip-path forces a repaint of what it clips, and
-   repainting a gradient is cheap where repainting a paragraph is not.
-
-   With no JS `--sc-p` resolves to its 0.5 fallback, which is a valid
-   mid-morph silhouette, so the shape is simply static rather than
-   collapsed. */
-.bbi-morph-shape {
-  --sc-morph: var(--sc-p, 0.5);
-  position: absolute;
-  inset: -10%;
-  pointer-events: none;
-  z-index: 0;
-  /* Was a radial wash of brand ink at 34% — the diagonal lavender smear
-     across the banner. Ambient colour fields are the language this redesign
-     replaced; the shape stays (it still clips the layer) but paints nothing. */
-  background: none;
-  clip-path: polygon(
-    calc(6% + var(--sc-morph) * 24%) 0%,
-    calc(94% - var(--sc-morph) * 18%) calc(2% + var(--sc-morph) * 16%),
-    100% calc(72% + var(--sc-morph) * 14%),
-    calc(20% + var(--sc-morph) * 30%) 100%,
-    0% calc(72% - var(--sc-morph) * 28%)
-  );
-}
-
-.bbi-morph-host > *:not(.bbi-morph-shape) {
-  position: relative;
-  z-index: 1;
-}
-
-/* `glass::before` is the 1px neon rim-light on the panel edge. It is a
-   pseudo-element, so the `> *` rule above cannot reach it, and at z-index auto
-   it paints BEFORE the shape — which reaches the border, and would cover the
-   rim wherever a polygon vertex touches an edge. Lifting it above both layers
-   restores the edge. It is pointer-events:none and 1px wide, so nothing else
-   is affected by it being on top. */
-.bbi-morph-host::before {
-  z-index: 2;
-}
-
-.bbi-nav-morph {
-  position: relative;
-  will-change: transform;
-}
-
-.bbi-nav-morph::before {
-  content: "";
-  position: absolute;
-  inset: -0.25rem -0.5rem;
-  border-radius: var(--radius-md);
-  background: color-mix(in oklab, var(--accent) 12%, transparent);
-  opacity: 0;
-  transform: scaleX(0.85);
-  transform-origin: center;
-  transition:
-    opacity 200ms var(--ease-glass),
-    transform 200ms var(--ease-glass);
-  pointer-events: none;
-  z-index: -1;
-}
-
-.bbi-nav-morph:hover::before,
-.bbi-nav-morph:focus-visible::before {
-  opacity: 1;
-  transform: scaleX(1);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .bbi-depth-back,
-  .bbi-depth-mid,
-  .bbi-depth-front {
-    transform: none;
-    will-change: auto;
-  }
-
-  /* The pill still appears on hover — it is the affordance, not the motion.
-     Only the scale-in and the fade are dropped. */
-  .bbi-nav-morph::before {
-    transition: none;
-    transform: none;
-  }
-}
-
-/* ============================================================
-   CINEMATIC LAYER — BBI homepage
-   Camera-move reveals, ambient float, magnetic/luminous hover.
-   transform + opacity + filter only. No lift, no tilt, no scale-up hover.
-   ============================================================ */
-:root {
-  --cine-ease: cubic-bezier(0.22, 1, 0.36, 1);
-  --cine-ease-soft: cubic-bezier(0.33, 1, 0.68, 1);
-  --cine-fast: 420ms;
-  --cine-base: 900ms;
-  --cine-slow: 1400ms;
-}
-
-/* --- Headline word reveal: blur-to-sharp, staggered --------------- */
-@keyframes cine-word-in {
-  from { opacity: 0; transform: translate3d(0, 0.42em, 0); filter: blur(10px); }
-  to   { opacity: 1; transform: none; filter: blur(0); }
-}
-.cine-word {
-  display: inline-block;
-  will-change: transform, opacity, filter;
-  animation: cine-word-in 1s var(--cine-ease) both;
-}
-
-/* --- Ambient float: continuous, never static --------------------- */
-@keyframes cine-float {
-  0%, 100% { transform: translate3d(0, 0, 0); }
-  50%      { transform: translate3d(0, -6px, 0); }
-}
-.cine-float { animation: cine-float 9s var(--cine-ease-soft) infinite; }
-.cine-float-slow { animation: cine-float 14s var(--cine-ease-soft) infinite; }
-
-/* --- Magnetic / luminous interactive response -------------------- */
-.cine-magnet {
-  transition:
-    transform 520ms var(--cine-ease),
-    box-shadow 520ms var(--cine-ease),
-    border-color 520ms var(--cine-ease);
-}
-.cine-magnet:hover,
-.cine-magnet:focus-visible {
-  box-shadow:
-    0 0 0 1px color-mix(in oklab, var(--primary) 42%, transparent),
-    0 0 30px -6px color-mix(in oklab, var(--primary) 55%, transparent);
-}
-.cine-magnet:focus-visible { outline: 2px solid var(--ring); outline-offset: 3px; }
-
-/* --- Hero canvas / atmosphere ------------------------------------ */
-.cine-hero-atmos {
-  position: absolute;
-  inset: -20%;
-  pointer-events: none;
-  background:
-    radial-gradient(38% 40% at 22% 28%, color-mix(in oklab, var(--primary) 16%, transparent), transparent 70%),
-    radial-gradient(34% 36% at 78% 66%, color-mix(in oklab, var(--ember) 22%, transparent), transparent 72%);
-  filter: blur(28px);
-  animation: cine-atmos 22s ease-in-out infinite alternate;
-}
-@keyframes cine-atmos {
-  from { transform: translate3d(-2%, -1%, 0) scale(1); opacity: 0.75; }
-  to   { transform: translate3d(3%, 2%, 0) scale(1.08); opacity: 1; }
-}
-
-/* --- Section reveal grammar: one language per section type -------- */
-[data-cine] { will-change: transform, opacity, filter; }
-[data-cine="depth"]   { opacity: 0; transform: translate3d(0, 34px, 0) scale(0.985); filter: blur(8px); }
-[data-cine="sweep"]   { opacity: 0; clip-path: inset(0 0 100% 0); }
-[data-cine="assemble"]{ opacity: 0; transform: translate3d(0, 18px, 0) scale(0.94); filter: blur(6px); }
-[data-cine="drift"]   { opacity: 0; transform: translate3d(-40px, 0, 0); filter: blur(7px); }
-[data-cine="focus"]   { opacity: 0; filter: blur(14px); transform: scale(1.02); }
-
-[data-cine].cine-in {
-  opacity: 1;
-  transform: none;
-  filter: blur(0);
-  clip-path: inset(0 0 0 0);
-  transition:
-    opacity var(--cine-base) var(--cine-ease),
-    transform var(--cine-base) var(--cine-ease),
-    filter var(--cine-base) var(--cine-ease),
-    clip-path var(--cine-slow) var(--cine-ease);
-}
-[data-cine="assemble"].cine-in {
-  transition:
-    opacity 620ms var(--cine-ease),
-    transform 720ms cubic-bezier(0.2, 1.25, 0.3, 1),
-    filter 620ms var(--cine-ease);
-}
-
-/* --- Vignette for the tense problem section ---------------------- */
-.cine-vignette::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  border-radius: inherit;
-  background: radial-gradient(120% 90% at 50% 40%, transparent 40%, rgba(12, 12, 37, 0.16) 100%);
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .cine-word,
-  .cine-float,
-  .cine-float-slow,
-  .cine-hero-atmos { animation: none; }
-  [data-cine] { opacity: 1; transform: none; filter: none; clip-path: none; }
-}
-
-/* ============================================================================
-   HERO FIELD, POINTER, AND THE SERIF HEADING SCALE
-   These rules are deliberately UNLAYERED. Tailwind v4 puts its utilities in
-   @layer utilities, and an unlayered rule outranks every layer — which is the
-   only way `font-extrabold` on 70 existing headings stops synthesising a fake
-   bold out of Instrument Serif, without editing all 70 call sites.
-   ========================================================================= */
-
-/* --font-display is Geist, which ships the full weight range, so hierarchy
-   comes from WEIGHT again and the sizes come back down. The previous numbers
-   (up to 5rem for an h1) existed to compensate for Instrument Serif's single
-   400 weight; with a real 700 available they only made headlines shout.
-
-   These MUST sit in @layer base. An earlier version used `:where()` outside
-   any layer on the theory that zero specificity would let a call site win.
-   It does not: layer order is resolved BEFORE specificity, and unlayered CSS
-   beats every layer — so these rules were still overriding `text-sm` on every
-   small uppercase <h2> label on the site, which is why "Demand signal" and
-   "Why it works" were rendering at 2.25rem. Inside @layer base they are a
-   genuine default, and Tailwind's utilities layer, declared after base, wins
-   wherever a call site states a size. */
-@layer base {
-  h1,
-  h2 {
-    font-family: var(--font-display);
-    font-weight: 700;
-    letter-spacing: -0.028em;
-    line-height: 1.05;
-    text-wrap: balance;
-  }
-  /* Up a step. With the trailing rules gone, a section heading is the only
-     mark opening a region, so it has to carry that weight on its own. */
-  h1 {
-    font-size: clamp(2.6rem, 6vw, 4.25rem);
-  }
-  h2 {
-    font-size: clamp(1.95rem, 3.9vw, 2.9rem);
-    line-height: 1.12;
-  }
-}
-
-/* ============================================================================
-   THE TYPE SCALE — seven roles, not two
-   ----------------------------------------------------------------------------
-   The site had exactly two type roles below h2: one eyebrow
-   (`text-[11px] uppercase tracking-[0.3em]`) and one body
-   (`text-sm text-muted-foreground`). So a CARD TITLE and a SECTION LABEL were
-   rendered as the same object -- which is why "What you get" came out as 11px
-   all-caps Inter while every other title on the page is sentence-case
-   Instrument Serif at 2xl. Same slot, different font, different case. And
-   every paragraph under every heading was byte-identical to every other
-   paragraph on the site, so nothing had a first line that read as a first line.
-
-   Seven roles now, each with one job:
-
-     h1        display        Instrument Serif   the page's one big statement
-     h2        section        Instrument Serif   a section opener
-     h3/.t-card card title    Inter 600          sentence case, never all-caps
-     .t-eyebrow eyebrow       Inter 700          ONLY above an h2, never a title
-     .t-lead   lead paragraph Inter 400          the first line after a heading
-     p         body           Inter 400          everything else
-     .t-meta   meta           Inter 500          small print, captions, counts
-
-   `h3` deliberately sets family/weight/tracking/leading but NOT font-size.
-   These rules are unlayered, so a size here would outrank the `text-base` /
-   `text-lg` utilities on every h3 in the codebase and resize the whole site.
-   Size stays where the call site put it; only the treatment is unified.
-   ========================================================================= */
-@layer base {
-  /* Treatment only — deliberately no font-size, so every h3's own size
-     utility stands. Same layer reasoning as h1/h2 above. */
-  h3,
-  h4 {
-    font-family: var(--font-sans);
-    font-weight: 600;
-    letter-spacing: -0.014em;
-    line-height: 1.3;
-  }
-}
-
-/* A card's own title. Sentence case, sans, sized between body and h2 -- the
-   thing the eyebrow style was wrongly standing in for. */
-.t-card {
-  font-family: var(--font-sans);
-  font-size: 1.0625rem;
-  font-weight: 600;
-  letter-spacing: -0.012em;
-  line-height: 1.3;
-  color: var(--foreground);
-}
-@media (min-width: 640px) {
-  .t-card {
-    font-size: 1.1875rem;
-  }
-}
-
-/* An eyebrow labels the section BELOW it. It is never the title itself, and
-   it never carries the sentence's punctuation -- an eyebrow ending in a
-   question mark directly above a heading reads as two stacked questions. */
-.t-eyebrow {
-  font-family: var(--font-sans);
-  font-size: 0.6875rem;
-  font-weight: 700;
-  letter-spacing: 0.26em;
-  line-height: 1;
-  text-transform: uppercase;
-  /* The site's second hue. An eyebrow is a label, which is exactly what a
-     highlight colour is for -- and until now every eyebrow was the same
-     violet as the heading it sat above, so it read as part of the heading
-     rather than as a label on it. */
-  color: var(--hl-gold);
-}
-/* Semantic variants. These are classes rather than Tailwind `text-hl-*`
-   utilities on purpose: `.t-eyebrow` is UNLAYERED, and an unlayered rule
-   beats every `@layer` including Tailwind's utilities regardless of
-   specificity -- so `text-hl-coral` on a `.t-eyebrow` silently rendered gold.
-   Same-file, higher-specificity modifiers are predictable. */
-.t-eyebrow.hl-gold {
-  color: var(--hl-gold);
-}
-.t-eyebrow.hl-green {
-  color: var(--hl-green);
-}
-.t-eyebrow.hl-coral {
-  color: var(--hl-coral);
-}
-.t-eyebrow.hl-teal {
-  color: var(--hl-teal);
-}
-
-/* The first paragraph after a heading. Larger, darker and looser than body,
-   so a section opens instead of just continuing. */
-.t-lead {
-  font-family: var(--font-sans);
-  font-size: 1.0625rem;
-  font-weight: 400;
-  line-height: 1.62;
-  letter-spacing: -0.003em;
-  color: color-mix(in oklab, var(--foreground) 86%, transparent);
-}
-@media (min-width: 640px) {
-  .t-lead {
-    font-size: 1.125rem;
-  }
-}
-
-/* Small print: captions, counts, timestamps, source lines. */
-.t-meta {
-  font-family: var(--font-sans);
-  font-size: 0.8125rem;
-  font-weight: 500;
-  letter-spacing: 0.01em;
-  line-height: 1.5;
+.primitive-accordion > div {
+  padding-bottom: 20px;
   color: var(--muted-foreground);
 }
-
-/* ---- the hero field is the BACKGROUND, not decoration around a card ----
-   `.glass` carries `backdrop-filter: blur(24px)`, which blurs whatever is
-   behind it into mush — that is what made 2px particles vanish and left the
-   field visible only in a thin strip. The hero panel keeps its rounded frame
-   and loses the blur, so the copy sits on the field the way it does in the
-   approved design. */
-/* This MUST live in @layer base, not unlayered. For `!important` declarations
-   the cascade reverses layer order and unlayered is the WEAKEST — so an
-   unlayered `!important` loses to `@utility glass`'s important, which is what
-   left backdrop-filter: blur(24px) in place and the field invisible. base is
-   earlier than utilities, so it wins for important. */
-@layer base {
-  #hero .glass.bbi-hero-open {
-    background: transparent !important;
-    backdrop-filter: none !important;
-    border-color: color-mix(in oklab, var(--primary) 16%, transparent) !important;
-    box-shadow: none !important;
-  }
-}
-
-/* ---- wave text reveal: words arrive on a rolling rhythm, not a flat ramp -- */
-.rv {
-  display: inline-block;
-  transition:
-    opacity 0.52s cubic-bezier(0.165, 0.84, 0.44, 1),
-    filter 0.52s cubic-bezier(0.165, 0.84, 0.44, 1),
-    translate 0.58s cubic-bezier(0.2, 1.25, 0.3, 1);
-}
-/* The hidden state is gated on `html.bbi-motion`, which only SiteTextMotion
-   sets. Before this it was unconditional, so a failed hydration or a bundle
-   that never arrived left every heading on the site at opacity 0 forever.
-   No JS now means everything is simply visible. */
-html.bbi-motion .rv {
-  opacity: 0;
-  filter: blur(5px);
-  translate: 0 var(--rv-y, 0.22em);
-}
-/* MUST carry `html.bbi-motion` too. Without it this scores (0,2,0) while the
-   hidden rule above scores (0,2,1), so the hidden state wins and the text
-   stays invisible even with `.revealed` applied. Gating a hidden state raises
-   its specificity; the visible state has to be raised with it. */
-html.bbi-motion .revealed .rv {
-  opacity: 1;
-  filter: blur(0);
-  translate: 0 0;
-}
-p .rv,
-li .rv {
-  filter: blur(3px);
-  transition-duration: 0.44s, 0.44s, 0.5s;
-}
-
-/* Headings that are not word-split still get an entry reveal — same easing, one
-   unit instead of many. `:not(:has(.rv))` keeps it off anything WaveText owns,
-   so the two never double up. */
-html.bbi-motion h1:not(:has(.rv)),
-html.bbi-motion h2:not(:has(.rv)),
-html.bbi-motion h3:not(:has(.rv)),
-html.bbi-motion [data-wave]:not(:has(.rv)) {
-  opacity: 0;
-  filter: blur(5px);
-  translate: 0 0.22em;
-}
-h1:not(:has(.rv)),
-h2:not(:has(.rv)),
-h3:not(:has(.rv)),
-[data-wave]:not(:has(.rv)) {
-  transition:
-    opacity 0.52s cubic-bezier(0.165, 0.84, 0.44, 1),
-    filter 0.52s cubic-bezier(0.165, 0.84, 0.44, 1),
-    translate 0.58s cubic-bezier(0.2, 1.25, 0.3, 1);
-}
-/* Same specificity trap as above: the hidden rule is
-   `html.bbi-motion h2:not(:has(.rv))` at (0,2,2), so an unprefixed
-   `h2.revealed:not(:has(.rv))` at (0,2,1) loses and the heading never
-   appears. */
-html.bbi-motion h1.revealed:not(:has(.rv)),
-html.bbi-motion h2.revealed:not(:has(.rv)),
-html.bbi-motion h3.revealed:not(:has(.rv)),
-html.bbi-motion [data-wave].revealed:not(:has(.rv)) {
-  opacity: 1;
-  filter: blur(0);
-  translate: 0 0;
-}
-
-/* `.mo-card` deliberately has NO opacity/translate rule here.
-
-   GSAP's `useStaggerReveal` writes `opacity` and `transform` INLINE on every
-   one of these cards, and an inline style beats any stylesheet rule. A CSS
-   reveal on `.mo-card` therefore cannot ever win -- it would be two owners
-   for one property, with the loser silently dropped, which is the exact trap
-   BUTTERFLY_EFFECT.md warns about. The two-way behaviour lives in the hook
-   instead, where the single owner already is. */
-
-/* ---- card motion, two-way ------------------------------------------------
-   A view() timeline is scrubbed by scroll position, so it un-plays on the way
-   back up as well as playing on the way down. */
-@supports (animation-timeline: view()) {
-  @keyframes bbi-card-rise {
-    from {
-      scale: 0.93;
-      translate: 0 26px;
-      opacity: 0.42;
-    }
-    to {
-      scale: 1;
-      translate: 0 0;
-      opacity: 1;
-    }
-  }
-  .bbi-card-motion {
-    animation: bbi-card-rise linear both;
-    animation-timeline: view();
-    animation-range: entry 6% cover 36%;
-  }
-}
-@keyframes bbi-card-float {
-  from {
-    translate: 0 -6px;
-  }
-  to {
-    translate: 0 6px;
-  }
-}
-.bbi-card-float {
-  animation: bbi-card-float 6s ease-in-out infinite alternate;
-}
-
-/* ---- business icon row --------------------------------------------------- */
-.bbi-icons {
+.primitive-tabs {
   display: flex;
-  gap: 0.6rem;
-  align-items: center;
-  overflow-x: clip;
-  height: max(10em, 19vh);
-  mask-image: linear-gradient(90deg, transparent, #000 9%, #000 91%, transparent);
-}
-.bbi-icons .bbi-icon {
-  flex: 0 0 clamp(3.4rem, 8.5vw, 5rem);
-  aspect-ratio: 1;
-  border-radius: 50%;
-  background: color-mix(in oklab, var(--card) 90%, transparent);
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 5px;
   border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--secondary);
+}
+.primitive-tabs button {
+  min-height: 42px;
+  padding: 8px 15px;
+  font-size: 0.8rem;
+  border: 1px solid transparent;
+  border-radius: 9px;
+  background: transparent;
+}
+.primitive-tabs button[aria-selected="true"] {
+  background: var(--surface-solid);
+  border-color: var(--border);
+  box-shadow: var(--shadow);
+}
+.empty-state {
+  padding: 42px 22px;
+  text-align: center;
   display: grid;
-  place-content: center;
-  color: var(--primary);
-  animation: bbi-icon-wobble 4s ease infinite alternate;
+  justify-items: center;
+  gap: 15px;
 }
-.bbi-icons .bbi-icon svg {
-  width: clamp(20px, 3vw, 26px);
-  height: auto;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.5;
-  stroke-linecap: round;
-  stroke-linejoin: round;
+.empty-state h2 {
+  font-size: 1.5rem;
 }
-.bbi-icons .bbi-icon:nth-child(5n + 1) { animation-delay: 0s; }
-.bbi-icons .bbi-icon:nth-child(5n + 2) { animation-delay: -1s; }
-.bbi-icons .bbi-icon:nth-child(5n + 3) { animation-delay: -2s; }
-.bbi-icons .bbi-icon:nth-child(5n + 4) { animation-delay: -3s; }
-.bbi-icons .bbi-icon:nth-child(5n + 5) { animation-delay: -4s; }
-@keyframes bbi-icon-wobble {
-  from { translate: 0 52%; }
-  to { translate: 0 -52%; }
+.empty-state p {
+  max-width: 45ch;
 }
-
-@media (prefers-reduced-motion: reduce) {
-  .rv,
-  h1:not(:has(.rv)),
-  h2:not(:has(.rv)),
-  h3:not(:has(.rv)),
-  [data-wave]:not(:has(.rv)) { opacity: 1; filter: none; translate: none; }
-  .bbi-card-motion,
-  .bbi-card-float,
-  .bbi-icons .bbi-icon { animation: none; }
-}
-
-
-
-
-/* ============================================================
-   ACETERNITY LAYER
-   The motion primitives behind src/components/aceternity/*.
-   Two keyframe sets, both compositor-only, both silent under
-   prefers-reduced-motion. Everything else in that folder animates
-   through Framer Motion, which respects the same preference in JS.
-   ============================================================ */
-
-/* InfiniteMovingCards: the track is duplicated once, so translating it
-   exactly -50% lands the copy where the original began — a seam-free loop
-   at any item count. */
-@keyframes ac-marquee {
-  from { transform: translate3d(0, 0, 0); }
-  to   { transform: translate3d(-50%, 0, 0); }
-}
-.ac-marquee-track {
-  animation-name: ac-marquee;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
-  will-change: transform;
-}
-.ac-marquee:hover .ac-marquee-track,
-.ac-marquee:focus-within .ac-marquee-track { animation-play-state: paused; }
-
-/* MovingBorder: one point of ink running the perimeter. The conic gradient
-   is painted on the 1px padding box of the wrapper and rotated, which the
-   compositor handles without repainting the button face inside it. */
-@keyframes ac-orbit {
-  to { transform: rotate(1turn); }
-}
-.ac-orbit::before {
-  content: "";
-  position: absolute;
-  inset: -140%;
-  background: conic-gradient(
-    from 0deg,
-    transparent 0deg,
-    transparent 300deg,
-    var(--primary) 348deg,
-    transparent 360deg
-  );
-  animation: ac-orbit 5.5s linear infinite;
-  z-index: 0;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .ac-marquee-track { animation: none; }
-  .ac-orbit::before { animation: none; background: var(--border); }
-}
-
-/* The solid form of the site's action, for the places a HoverBorderGradient
-   would be too loud: sign-in, the paywall's confirm, the locked-content
-   prompt. Same plate radius and brand ink as every other control — no
-   gradient between two nearly identical colours, no glow, no scale-up. */
-.ac-cta {
-  display: inline-flex;
-  align-items: center;
+.error-state {
+  min-height: 60svh;
+  display: flex;
+  flex-direction: column;
   justify-content: center;
-  gap: 0.5rem;
-  border-radius: var(--radius);
-  background: var(--primary);
-  color: var(--primary-foreground);
-  font-weight: 600;
-  border: 1px solid var(--primary);
-  transition:
-    background-color 240ms cubic-bezier(0.22, 1, 0.36, 1),
-    color 240ms cubic-bezier(0.22, 1, 0.36, 1);
+  align-items: flex-start;
+  gap: 20px;
 }
-.ac-cta:hover:not(:disabled) {
-  background: color-mix(in oklab, var(--primary) 86%, #000000);
+.home-page {
+  padding-top: 0;
 }
-.ac-cta:disabled { opacity: 0.6; }
-
-/* ============================================================
-   THE INSTRUMENT
-   ------------------------------------------------------------
-   BBI's one committed idea: the library is a measuring
-   instrument, not a brochure about one. Scoped to `.bbi-instrument`
-   so a template that has not been redesigned yet keeps the light
-   treatment rather than half-inheriting this one.
-
-   The trap this has to avoid is well known — "near-black ground
-   plus one bright accent" is the second-commonest generated-page
-   look there is. Darkness is not what makes this an instrument.
-   DENSITY is: real readings, tabular numerals, rules that divide
-   two actual things, and more legible information per screen than
-   a marketing page would dare. If a section here ends up airy,
-   with big padding and a glow, it has become the cliché and
-   should be rebuilt tighter.
-   ============================================================ */
-html.light .bbi-instrument,
-.bbi-instrument {
-  /* THE ETHEREAL DREAM PALETTE — the founder's brand colours, and the only
-     colours allowed anywhere in this scope, animations included:
-       #FFFFFF  #E0E0E0  #B2B2B2  #757575  #000000
-     The ground is dark but deliberately NOT black (#000000 is reserved for
-     contrast, not for the page), so the housing sits a few steps up from it.
-     No indigo, no teal, no accent hues — every one of those has been removed
-     rather than dimmed. */
-  --ins-black: #000000;
-  --ins-void: #141414;   /* the housing: dark, not black */
-  --ins-face: #1e1e1e;   /* a module face, one step up from the ground */
-  --ins-face-2: #262626;
-  --ins-rule: rgb(224 224 224 / 0.14);
-  --ins-rule-strong: rgb(224 224 224 / 0.32);
-  /* Signal is pure white. In a five-value greyscale the only thing left to
-     carry emphasis is contrast itself, so the loudest element is the lightest. */
-  --ins-signal: #ffffff;
-  --ins-signal-hot: #ffffff;
-  /* Readout. #E0E0E0 for body, #B2B2B2 for secondary, #757575 only for marks
-     that are not load-bearing — at 3.4:1 on this ground it is not body text. */
-  --ins-read: #e0e0e0;
-  --ins-bright: #ffffff;
-  --ins-dim: #b2b2b2;
-  --ins-faint: #757575;
-
-  background: var(--ins-void);
-  color: var(--ins-read);
-  font-family: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
-
-  --background: var(--ins-void);
-  --foreground: var(--ins-read);
-  --card: var(--ins-face);
-  --card-foreground: var(--ins-read);
-  --muted-foreground: var(--ins-dim);
-  --border: var(--ins-rule);
-  --primary: var(--ins-signal);
-  --primary-foreground: var(--ins-void);
-  --accent: var(--ins-signal-hot);
-  --ring: var(--ins-signal);
-  /* The highlight hues are neutralised in this scope. They are still defined
-     globally for the light templates; here they resolve to the greyscale. */
-  --hl-gold: var(--ins-dim);
-  --hl-green: var(--ins-read);
-  --hl-coral: var(--ins-faint);
-  --hl-teal: var(--ins-bright);
-  --radius: 0;
-
-  /* And the @theme aliases, which is the part that actually reaches a Tailwind
-     utility. `--color-foreground: var(--foreground)` is declared once on :root,
-     so it resolves THERE and descendants inherit the already-substituted value
-     — redefining `--foreground` further down the tree never reaches
-     `text-foreground`. Both halves have to be written. (CLAUDE.md, cascade
-     fact 2, arrived at the hard way: the header rendered #0C0C25 on #0F0F24.) */
-  --color-background: var(--ins-void);
-  --color-foreground: var(--ins-read);
-  --color-card: var(--ins-face);
-  --color-card-foreground: var(--ins-read);
-  --color-muted-foreground: var(--ins-dim);
-  --color-border: var(--ins-rule);
-  --color-input: var(--ins-rule);
-  --color-primary: var(--ins-signal);
-  --color-primary-foreground: var(--ins-void);
-  --color-accent: var(--ins-signal-hot);
-  --color-accent-foreground: var(--ins-void);
-  --color-ring: var(--ins-signal);
+.home-topline {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  padding-block: 22px 0;
 }
-
-/* Display is condensed. That is the density signal, and it gives the
-   page real typographic contrast against the text face — which the
-   previous version did not have, because its display and text faces
-   were the same family. */
-.bbi-instrument h1,
-.bbi-instrument h2 {
-  font-family: "IBM Plex Sans Condensed", "IBM Plex Sans", sans-serif;
-  font-weight: 700;
-  letter-spacing: -0.012em;
-  line-height: 1.02;
+.home-topline > span:last-child {
+  font-size: 0.66rem;
+  color: var(--muted-foreground);
 }
-.bbi-instrument h3,
-.bbi-instrument h4 {
-  font-family: "IBM Plex Sans", sans-serif;
-  font-weight: 600;
+.home-hero {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 25px;
+  min-height: 530px;
 }
-
-/* Every number on this page is mono and tabular, so columns of figures
-   line up on the decimal the way an instrument's do. */
-.ins-num {
-  font-family: "IBM Plex Mono", ui-monospace, monospace;
-  font-variant-numeric: tabular-nums;
-  font-feature-settings: "tnum" 1;
+.hero-copy {
+  position: relative;
+  z-index: 2;
+  padding-block: 35px;
 }
-
-/* A legend sits ON the rule that opens a module, not stacked above the
-   heading as a tracked-out all-caps label. Same words, and it now marks
-   where a region begins instead of decorating it. */
-.ins-legend {
-  /* `inline-flex`, not `flex`: as a block-level flex row it stretched the
-     full width so the removed rule had somewhere to go. It now takes exactly
-     the width of its own words. */
+.hero-kicker {
+  margin-bottom: 22px;
+}
+.hero-kicker .pill {
+  color: var(--primary);
+  background: color-mix(in srgb, var(--surface-solid) 60%, transparent);
+  font-size: 0.65rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.home-title {
+  font-size: clamp(2.9rem, 5.15vw, 4.65rem);
+  line-height: 1.04;
+  letter-spacing: -0.065em;
+  font-weight: 500;
+  max-width: 640px;
+}
+.home-title .accent-line {
+  color: var(--primary);
+  display: block;
+}
+.hero-description {
+  max-width: 430px;
+  color: var(--muted-foreground);
+  margin-top: 24px;
+  font-size: 0.95rem;
+  line-height: 1.8;
+}
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 27px;
+}
+.hero-assurances {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 16px;
+  margin-top: 23px;
+  color: var(--muted-foreground);
+  font-size: 0.68rem;
+}
+.hero-assurances span {
   display: inline-flex;
   align-items: center;
-  gap: 0.85rem;
-  font-family: "IBM Plex Mono", ui-monospace, monospace;
-  /* Was 0.6875rem in --ins-dim: too small to read and too dim to notice.
-     A legend that labels a whole region has to be legible from a scan. */
-  /* This is what the founder calls the section heading, so it is sized like
-     one rather than like a label — twice now it has come back as too small
-     to read. */
-  font-size: 1.375rem;
-  font-weight: 600;
-  letter-spacing: 0.005em;
-  color: var(--ins-bright);
-  text-transform: none;
+  gap: 5px;
 }
-/* The trailing hairline is gone. It ran the full width of the page after
-   every legend on the site — one long line under each section heading,
-   pointing at nothing, and the founder counted them as the page's most
-   visible piece of noise. A legend is a label; it does not need a rule to
-   prove where the section starts, because the section's own top border
-   already does. */
-.ins-legend .ins-read {
-  color: var(--ins-signal);
-}
-
-/* Modules share their rules instead of floating apart with gaps and
-   radii. One 1px grid line, drawn once, between two real regions. */
-.ins-module {
-  border-top: 1px solid var(--ins-rule);
-}
-.ins-grid {
-  display: grid;
-  gap: 1px;
-  background: var(--ins-rule);
-}
-.ins-cell {
-  background: var(--ins-void);
-  padding: 1.5rem;
-}
-.ins-cell--lit {
-  background: var(--ins-face);
-}
-
-/* Controls are the only rounded things here: if it has a radius, you
-   can press it. */
-.bbi-instrument a[class*="rounded"],
-.bbi-instrument button[class*="rounded"] {
-  border-radius: 2px;
-}
-
-/* The housing has no starfield, no nebula and no glow. An instrument is
-   lit by its own readings. */
-.bbi-instrument::before,
-.bbi-instrument::after {
-  display: none !important;
-}
-
-/* The shell adopts the housing. These are unlayered with !important
-   deliberately: the light-mode plate rules live in @layer utilities and
-   carry !important themselves, and unlayered !important is the only
-   thing that outranks that — the same cascade fact that bit this
-   redesign twice already, used on purpose this time. */
-.bbi-instrument .glass,
-.bbi-instrument .glass-nav,
-.bbi-instrument .glass-btn,
-.bbi-instrument .glass-pill,
-.bbi-instrument .iv-nav-panel {
-  background: var(--ins-face) !important;
-  border-color: var(--ins-rule) !important;
-  color: var(--ins-read) !important;
-  box-shadow: none !important;
-}
-.bbi-instrument .glass *,
-.bbi-instrument .glass-nav *,
-.bbi-instrument .glass-btn *,
-.bbi-instrument .glass-pill *,
-.bbi-instrument .iv-nav-panel * {
-  color: inherit !important;
-}
-/* The hover plate. It used to fill white and set the label to housing ink,
-   including on every descendant — and `background` on a descendant `span` is
-   what produced the white-on-white label that survived four earlier attempts
-   at this, because the fix kept being applied to a DIFFERENT rule further down
-   the file. The plate now stays dark and brightens; nothing here paints a
-   descendant's background at all. `.ins-action` opts out: those controls set
-   their colours imperatively. */
-.bbi-instrument .glass-btn:not(.ins-action):hover,
-.bbi-instrument .glass-pill:not(.ins-action):hover {
-  background: var(--ins-face-2) !important;
-  border-color: var(--ins-rule-strong) !important;
-}
-.bbi-instrument .glass-btn:not(.ins-action):hover,
-.bbi-instrument .glass-pill:not(.ins-action):hover,
-.bbi-instrument .glass-btn:not(.ins-action):hover *,
-.bbi-instrument .glass-pill:not(.ins-action):hover * {
-  color: var(--ins-bright) !important;
-}
-.bbi-instrument .ac-cta {
-  background: var(--ins-signal);
-  border-color: var(--ins-signal);
-  color: var(--ins-void);
-}
-/* The page rail and the nav's own hairline. */
-.bbi-instrument header .bg-border {
-  background: var(--ins-rule) !important;
-}
-/* Inputs are housing too, not white boxes punched into it. */
-.bbi-instrument input,
-.bbi-instrument [role="combobox"] {
-  background: var(--ins-face) !important;
-  border-color: var(--ins-rule) !important;
-  color: var(--ins-read) !important;
-}
-.bbi-instrument input::placeholder {
-  color: var(--ins-dim) !important;
-}
-
-/* The light-mode nav rules are written as `html.light .glass-nav a`, which
-   is more specific than `.bbi-instrument .glass-nav *`. Matching that shape
-   and going one class deeper is what actually wins — `color: inherit` did
-   not, and the header rendered #0C0C25 text on the #07070F housing. */
-html.light .bbi-instrument .glass-nav a,
-html.light .bbi-instrument .glass-nav button,
-html.light .bbi-instrument .glass-nav span,
-html.light .bbi-instrument .iv-nav-panel a,
-html.light .bbi-instrument .iv-nav-panel button,
-html.light .bbi-instrument .glass a,
-html.light .bbi-instrument .glass button,
-html.light .bbi-instrument .glass span,
-html.light .bbi-instrument .glass p,
-html.light .bbi-instrument .glass li {
-  color: var(--ins-read) !important;
-}
-html.light .bbi-instrument .glass-nav a:hover,
-html.light .bbi-instrument .iv-nav-panel a:hover {
-  color: var(--ins-signal-hot) !important;
-}
-/* The logo stamp keeps its inverted relationship: signal ground, housing ink. */
-html.light .bbi-instrument header a span[class*="bg-primary"] {
-  color: var(--ins-void) !important;
-}
-/* Footer and any remaining muted text inside the housing. */
-html.light .bbi-instrument .text-muted-foreground {
-  color: var(--ins-dim) !important;
-}
-
-/* `@theme inline` means Tailwind bakes the RESOLVED value into each utility at
-   build time — `text-foreground` compiles to a literal colour, not
-   `var(--color-foreground)`. So repointing tokens, base or alias, can never
-   reach a utility. The utilities themselves have to be restated inside the
-   housing. This is the third distinct cascade trap in this stylesheet; the
-   other two are written up in CLAUDE.md. */
-html.light .bbi-instrument .text-foreground { color: var(--ins-read) !important; }
-html.light .bbi-instrument .text-muted-foreground { color: var(--ins-dim) !important; }
-html.light .bbi-instrument .text-primary { color: var(--ins-signal) !important; }
-html.light .bbi-instrument .text-accent { color: var(--ins-signal-hot) !important; }
-html.light .bbi-instrument .bg-card { background-color: var(--ins-face) !important; }
-html.light .bbi-instrument .bg-background { background-color: var(--ins-void) !important; }
-html.light .bbi-instrument .bg-primary { background-color: var(--ins-signal) !important; }
-html.light .bbi-instrument .text-primary-foreground { color: var(--ins-void) !important; }
-html.light .bbi-instrument .border-border,
-html.light .bbi-instrument .divide-border > * { border-color: var(--ins-rule) !important; }
-
-/* CLAUDE.md's cascade fact 3 says unlayered rules beat every @layer. That is
-   true for NORMAL declarations and exactly BACKWARDS for !important ones:
-   for important declarations layer precedence is reversed, so an important
-   rule inside @layer utilities beats an important rule outside it. That is
-   why `html.light .glass-nav a { color:#0C0C25 !important }` kept winning
-   against unlayered overrides, against repointed base tokens, against the
-   @theme aliases, and even against an inline style — !important beats inline.
-   The override has to live in the same layer, printed after. */
-@layer utilities {
-  html.light .bbi-instrument,
-  html.light .bbi-instrument header,
-  html.light .bbi-instrument main,
-  html.light .bbi-instrument footer {
-    color: var(--ins-read) !important;
-  }
-  /* NOT a blanket `a, button` rule any more. That version carried
-     !important, so it beat every `hover:text-*` utility in the tree: a button
-     whose hover fills the plate white kept its label at --ins-read, i.e. white
-     on white. Links with no colour of their own inherit --ins-read from the
-     shell; the ones named here are the ones that genuinely need forcing,
-     because a light-mode rule is aimed at them. */
-  html.light .bbi-instrument .glass-nav a:not(:hover),
-  html.light .bbi-instrument .glass-nav button:not(:hover),
-  html.light .bbi-instrument .glass-btn:not(:hover),
-  html.light .bbi-instrument .glass-pill:not(:hover),
-  html.light .bbi-instrument .glass-btn:not(:hover) *,
-  html.light .bbi-instrument .glass-pill:not(:hover) *,
-  html.light .bbi-instrument .iv-nav-panel a:not(:hover) {
-    color: var(--ins-read) !important;
-  }
-  html.light .bbi-instrument .text-muted-foreground {
-    color: var(--ins-dim) !important;
-  }
-  /* The legend labels a whole region and has to read from a scan, so it takes
-     the brightest value. It was being pulled back down to --ins-dim here,
-     which is why enlarging it in the unlayered rule changed nothing. */
-  html.light .bbi-instrument .ins-legend {
-    color: var(--ins-bright) !important;
-    font-size: 1.375rem !important;
-  }
-
-
-
-  /* PORTALS. Radix mounts select, dialog and tooltip content on document.body,
-     so nothing scoped to .bbi-instrument can reach it — that is why the open
-     category dropdown kept a white panel, dark labels and an indigo tick. The
-     flag lives on <html>, which portal content does inherit. */
-  html[data-tone="instrument"] [role="listbox"],
-  html[data-tone="instrument"] [data-radix-select-content],
-  html[data-tone="instrument"] [data-radix-popper-content-wrapper] > * {
-    background: #1e1e1e !important;
-    background-image: none !important;
-    border: 1px solid rgb(224 224 224 / 0.14) !important;
-    color: #e0e0e0 !important;
-    box-shadow: none !important;
-  }
-  html[data-tone="instrument"] [role="option"],
-  html[data-tone="instrument"] [role="option"] *,
-  html[data-tone="instrument"] [data-radix-select-content] * {
-    color: #e0e0e0 !important;
-  }
-  html[data-tone="instrument"] [role="option"][data-highlighted],
-  html[data-tone="instrument"] [role="option"][data-state="checked"] {
-    background: #262626 !important;
-    color: #ffffff !important;
-    outline: none !important;
-  }
-  html[data-tone="instrument"] [role="option"] svg {
-    color: #ffffff !important;
-  }
-
-  /* A plate does NOT invert on hover in this scope. Inverting it was the source
-     of two opposite unreadable states in a row: first white label on a white
-     plate, then — once a later, equally specific rule kept the plate dark —
-     housing ink on a dark plate. A plate that stays dark and simply brightens
-     its readout and its rule cannot produce either. `.ins-action` is excluded
-     because those controls set their own colours imperatively. */
-  html.light .bbi-instrument .glass-pill:not(.ins-action):hover,
-  html.light .bbi-instrument .glass-btn:not(.ins-action):hover,
-  html.light .bbi-instrument .glass-pill:not(.ins-action)[data-state="open"] {
-    background-color: var(--ins-face-2) !important;
-    border-color: var(--ins-rule-strong) !important;
-  }
-  html.light .bbi-instrument .glass-pill:not(.ins-action):hover,
-  html.light .bbi-instrument .glass-btn:not(.ins-action):hover,
-  html.light .bbi-instrument .glass-pill:not(.ins-action):hover *,
-  html.light .bbi-instrument .glass-btn:not(.ins-action):hover *,
-  html.light .bbi-instrument .glass-pill:not(.ins-action)[data-state="open"],
-  html.light .bbi-instrument .glass-pill:not(.ins-action)[data-state="open"] * {
-    color: var(--ins-bright) !important;
-  }
-
-  /* The Golden Tree's leaf labels: white on the housing, ink when lit. */
-  html.light .bbi-instrument .tree-node,
-  html.light .bbi-instrument .tree-node *,
-  html.light .bbi-instrument [class*="leaf"],
-  html.light .bbi-instrument [class*="leaf"] * {
-    color: var(--ins-bright) !important;
-  }
-  html.light .bbi-instrument .tree-node:hover,
-  html.light .bbi-instrument .tree-node:hover * {
-    background-color: var(--ins-signal) !important;
-    color: var(--ins-void) !important;
-  }
-  /* A filled plate inverts: white ground, housing ink. Without this the
-     ContainerTextFlip rendered as a solid white box with white text in it. */
-  html.light .bbi-instrument .bg-primary,
-  html.light .bbi-instrument .bg-primary * {
-    background-color: var(--ins-signal) !important;
-    color: var(--ins-void) !important;
-  }
-  /* The Radix select trigger kept its light-mode gradient and dark label. */
-  html.light .bbi-instrument [data-slot="select-trigger"]:not(:hover),
-  html.light .bbi-instrument button[role="combobox"]:not(:hover),
-  html.light .bbi-instrument [role="listbox"],
-  html.light .bbi-instrument [data-radix-select-content] {
-    background: var(--ins-face) !important;
-    background-image: none !important;
-    border-color: var(--ins-rule) !important;
-    color: var(--ins-read) !important;
-    box-shadow: none !important;
-  }
-  /* `:not(:hover)` again — printed after the hover block, so without it the
-     resting readout colour would apply on hover as well. */
-  html.light .bbi-instrument [data-slot="select-trigger"]:not(:hover) *,
-  html.light .bbi-instrument button[role="combobox"]:not(:hover) *,
-  html.light .bbi-instrument [role="option"],
-  html.light .bbi-instrument [role="option"] * {
-    color: var(--ins-read) !important;
-  }
-  html.light .bbi-instrument [role="option"][data-highlighted] {
-    background: var(--ins-face-2) !important;
-    color: var(--ins-bright) !important;
-  }
-  html.light .bbi-instrument .text-primary,
-  html.light .bbi-instrument .ins-legend .ins-read {
-    color: var(--ins-signal) !important;
-  }
-  /* Links brighten on hover. A `.glass-pill` must NOT be in this list: its
-     hover state fills the plate white, so brightening the label too printed
-     white on white. That rule is printed above and this one used to undo it
-     at equal specificity purely by coming later. */
-  html.light .bbi-instrument a:not(.glass-pill):hover {
-    color: var(--ins-signal-hot) !important;
-  }
-  /* The logo stamp inverts: signal ground, housing ink. */
-  html.light .bbi-instrument header a > span[class*="bg-primary"] {
-    color: var(--ins-void) !important;
-  }
-  /* The resting plate. `:not(:hover)` matters: this rule is printed AFTER the
-     hover block above and carries the same specificity, so without it the
-     resting background wins on hover too and the hover state silently does
-     nothing. */
-  html.light .bbi-instrument .glass:not(.ins-action):not(:hover),
-  html.light .bbi-instrument .glass-nav:not(.ins-action),
-  html.light .bbi-instrument .glass-btn:not(.ins-action):not(:hover),
-  html.light .bbi-instrument .glass-pill:not(.ins-action):not(:hover),
-  html.light .bbi-instrument .iv-nav-panel,
-  html.light .bbi-instrument [role="combobox"]:not(:hover),
-  html.light .bbi-instrument input {
-    background: var(--ins-face) !important;
-    border-color: var(--ins-rule) !important;
-    box-shadow: none !important;
-  }
-}
-
-
-/* Every direct child of the instrument shell sits above the background field.
-   Without this the field paints over the content instead of behind it, since
-   the field is fixed and the sections are static. */
-.bbi-instrument > *:not(.bbi-overlay) {
+.home-library {
   position: relative;
-  z-index: 1;
-}
-/* A full-screen overlay is the ONE thing this rule must not touch. It is
-   unlayered, so `position: relative` beat Tailwind's `fixed` utility outright,
-   and the mobile menu — a direct child of the shell — stopped being fixed at
-   all: a zero-height relative block wedged between the header and main, with
-   its z-50 capped at 1 by the same rule. It rendered, and could not be seen or
-   tapped. Overlays sit above the header, which is at 50. */
-.bbi-instrument > .bbi-overlay {
-  position: fixed;
-  z-index: 80;
-}
-/* Everything below the hero gets a solid ground. The page has to be readable
-   before it is atmospheric. */
-.bbi-instrument > main {
-  background: var(--ins-void);
-}
-/* The header and its dropdowns must sit above every section. Without this the
-   blanket z-index:1 above put the header in the same layer as the content, and
-   a section carrying its own z-index painted straight over the open menu —
-   the menu was visible but unclickable. */
-/* `:not(.bbi-overlay)` above raised the blanket rule's specificity from one
-   class to two, which quietly overtook this one at (0,1,1) — so the header
-   dropped to z-index 1, the same layer as <main>, and <main> comes later in
-   the document. The mega menu rendered and was painted straight over by the
-   hero. Matching the blanket rule's shape puts this back at (0,2,1).
-   `position` is restored here too: the blanket rule's `relative` had been
-   overriding Tailwind's `sticky` on the header for as long as it has
-   existed. */
-.bbi-instrument > header:not(.bbi-overlay) {
-  position: sticky;
-  z-index: 50;
-}
-.bbi-instrument .iv-nav-panel {
-  z-index: 60;
-}
-
-
-/* Type contrast inside the housing. Headings take the brightest value in the
-   palette, body text the next one down. The background field sits behind a
-   scrim, but a heading still has to win against it outright. */
-html.light .bbi-instrument h1,
-html.light .bbi-instrument h2,
-html.light .bbi-instrument h3,
-html.light .bbi-instrument h4 {
-  color: var(--ins-bright) !important;
-}
-html.light .bbi-instrument p,
-html.light .bbi-instrument li,
-html.light .bbi-instrument dd,
-html.light .bbi-instrument dt {
-  color: var(--ins-read);
-}
-
-/* The Golden Tree's node labels are dark-on-dark in this world. */
-html.light .bbi-instrument .bbi-orbit-center-label,
-html.light .bbi-instrument [class*="tree"] span,
-html.light .bbi-instrument [class*="node"] span {
-  color: var(--ins-bright) !important;
-}
-
-
-
-
-/* The document ground follows the tone. Without this the light body colour
-   sat behind the shell and showed wherever the shell did not reach — and on
-   an interior page shorter than the viewport, that is most of the screen. */
-html[data-tone="instrument"],
-html[data-tone="instrument"] body {
-  background-color: #141414 !important;
-}
-
-/* ---- TextGenerateEffect ------------------------------------------------
-   One keyframe, no library, no blur. `.tg` alone paints nothing: the hidden
-   state hangs off `[data-tg="armed"]`, which only JavaScript sets, so a
-   server-rendered paragraph and a browser with scripting off both show the
-   finished text. */
-.tg-w {
-  display: inline-block;
-  white-space: pre;
-}
-.tg[data-tg="armed"] .tg-w {
-  opacity: 0;
-  transform: translateY(2px);
-}
-.tg[data-tg="in"] .tg-w {
-  animation: tg-word 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-@keyframes tg-word {
-  from {
-    opacity: 0;
-    transform: translateY(2px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  .tg .tg-w {
-    opacity: 1 !important;
-    transform: none !important;
-    animation: none !important;
-  }
-}
-
-/* ---- the inverted pricing band ----------------------------------------
-   The one white ground on the homepage. The glow cursor is white, so over
-   this band it disappeared entirely; `--glow-cursor` is the hook the cursor
-   reads to recolour itself, and here it takes the gold of the Golden Tree.
-   Nothing else on the site sets it, so the trail stays white everywhere the
-   ground is dark. */
-.bbi-instrument .bg-primary {
-  /* Black on the white ground. Gold was asked for first and then changed —
-     on a #FFFFFF band the trail has to be the darkest value there is or it
-     disappears the same way the white one did. */
-  --glow-cursor: #000000;
-  --glow-cursor-2: #757575;
-  /* `multiply` is what makes a black trail visible at all — see the blend
-     note in glow-cursor.tsx. Stated here rather than left to the luminance
-     inference so the band's intent is readable from the band. */
-  --glow-cursor-blend: multiply;
-}
-
-/* ---- the filled action on a plate --------------------------------------
-   This block used to force a WHITE ground and HOUSING INK on `.ac-cta` at
-   rest. The action treatment further down then overrode the ground with its
-   own `background` shorthand — a shorthand beats a longhand printed earlier,
-   and both carry !important — but it sets no resting `color`, so the dark ink
-   from here survived on a dark plate. "Continue with Google" was dark on dark
-   until the pointer touched it.
-   `.ac-cta` is simply tier 1 of the shared treatment now: the same plate and
-   the same readout ink as every other button, inverting on hover. It states
-   no ground of its own, so there is nothing left to disagree with. */
-html.light .bbi-instrument .ac-cta:not(:hover):not(:disabled),
-html.light .bbi-instrument .ac-cta:not(:hover):not(:disabled) *,
-html.light .bbi-instrument .glass .ac-cta:not(:hover):not(:disabled),
-html.light .bbi-instrument .glass .ac-cta:not(:hover):not(:disabled) * {
-  color: var(--ins-read) !important;
-}
-
-/* ---- breadcrumbs -------------------------------------------------------
-   They were two pills: a light chip with lighter text on it, unreadable, and
-   a second chip that read as a button next to it. A breadcrumb is a path,
-   not a control — plain marks on the ground, the current page brighter than
-   the ones behind it. */
-html.light .bbi-instrument nav[aria-label="Breadcrumb"] a {
-  color: var(--ins-faint) !important;
-  background: none !important;
-  border: 0 !important;
-  padding: 0 !important;
-}
-html.light .bbi-instrument nav[aria-label="Breadcrumb"] a:hover {
-  color: var(--ins-read) !important;
-}
-html.light .bbi-instrument nav[aria-label="Breadcrumb"] > span > span:not(:has(a)) {
-  color: var(--ins-read) !important;
-  background: none !important;
-  border: 0 !important;
-  padding: 0 !important;
-}
-
-/* =======================================================================
-   MOBILE
-   Everything below is scoped to a phone. The desktop layout is unchanged.
-   Measured on a 390x844 touch viewport before any of it was written:
-   185 tap targets under 40px, 105 pieces of body copy at 11px, one gutter
-   at 12px next to another at 24px, and a page 17,381px tall with one-way
-   reveals that a reader travelling it twice only ever sees once.
-   ======================================================================= */
-
-/* ---- two-way scroll reveal --------------------------------------------
-   `data-reveal` is set only by useTwoWayReveal, so no-JS and
-   prefers-reduced-motion render every section in place. `data-reveal-from`
-   carries the direction the reader was travelling, so a section rises into
-   view going down and drops into view coming back up — the motion always
-   runs against the thumb. */
-@media (max-width: 1023px) {
-  [data-reveal] {
-    transition:
-      opacity 480ms cubic-bezier(0.16, 1, 0.3, 1),
-      transform 520ms cubic-bezier(0.16, 1, 0.3, 1);
-    will-change: opacity, transform;
-  }
-  [data-reveal="out"][data-reveal-from="down"] {
-    opacity: 0;
-    transform: translate3d(0, 22px, 0);
-  }
-  [data-reveal="out"][data-reveal-from="up"] {
-    opacity: 0;
-    transform: translate3d(0, -22px, 0);
-  }
-  [data-reveal="in"] {
-    opacity: 1;
-    transform: none;
-  }
-}
-@media (prefers-reduced-motion: reduce) {
-  [data-reveal] {
-    opacity: 1 !important;
-    transform: none !important;
-    transition: none !important;
-  }
-}
-
-@media (max-width: 767px) {
-  /* ---- type floor ----------------------------------------------------
-     11px was the single most common size in the body copy. On a phone held
-     at arm's length that is not reading, it is squinting. Nothing that
-     carries words drops below 12.5px, and the legends that label a whole
-     region hold their size. */
-  /* NOT `max(0.8125rem, 1em)`: `1em` is the INHERITED size, so an 11px label
-     inside a 16px section resolves to 16px and every small mark on the page
-     jumps a size. The floor has to be applied to the classes that actually
-     set the small sizes, which is what the block below does. */
-  html.light .bbi-instrument figcaption {
-    font-size: 0.8125rem;
-  }
-  /* `.ins-num` at 0.6875rem is 11px, and it is the single most common size in
-     the page's body copy — 70 elements of it on the homepage alone, all of
-     them labels next to a figure. Measured, not guessed. */
-  html.light .bbi-instrument .ins-num,
-  html.light .bbi-instrument .text-\[0\.6875rem\],
-  html.light .bbi-instrument .text-\[11px\],
-  html.light .bbi-instrument .text-xs {
-    font-size: 0.8125rem !important;
-  }
-  html.light .bbi-instrument .text-\[10px\] {
-    font-size: 0.78125rem !important;
-  }
-  /* The odometer figure itself must not be dragged down with its label. */
-  html.light .bbi-instrument .ins-num.text-3xl {
-    font-size: 1.875rem !important;
-  }
-  html.light .bbi-instrument .ins-legend {
-    font-size: 1.1875rem !important;
-  }
-  /* Headings come down a step so a long one stops taking six lines. */
-  html.light .bbi-instrument h1 {
-    font-size: clamp(2.05rem, 9vw, 2.75rem) !important;
-    line-height: 1.08;
-  }
-  html.light .bbi-instrument h2 {
-    font-size: clamp(1.7rem, 7.2vw, 2.2rem) !important;
-    line-height: 1.12;
-  }
-
-  /* ---- one gutter ----------------------------------------------------
-     The hero sat at 24px and every section under it at 12px, so the page
-     had two left edges. One value, and it is the wider of the two. */
-  .bbi-instrument .px-3,
-  .bbi-instrument .px-6 {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-
-  /* ---- vertical rhythm ------------------------------------------------
-     Sections arrived at 0, 40 and 64px above their headings. One step. */
-  .bbi-instrument main > section + section,
-  .bbi-instrument main section.mt-16,
-  .bbi-instrument main section.mt-10 {
-    margin-top: 3rem;
-  }
-
-  /* ---- tap targets ----------------------------------------------------
-     Both platform guidelines put the floor at 44px and 185 targets on this
-     page were under 40. The padding is applied to the row, not the label,
-     so nothing reflows. */
-  .bbi-instrument a[class*="rounded"],
-  .bbi-instrument button:not([aria-label="Open navigation menu"]),
-  .bbi-instrument [role="combobox"],
-  .bbi-instrument [role="option"] {
-    min-height: 44px;
-  }
-  .bbi-instrument a[class*="rounded"],
-  .bbi-instrument button:not([aria-label="Open navigation menu"]) {
-    display: inline-flex;
-    align-items: center;
-  }
-  .bbi-instrument nav a,
-  .bbi-instrument footer a {
-    padding-top: 0.35rem;
-    padding-bottom: 0.35rem;
-  }
-
-  /* ---- decoration that costs more than it gives ----------------------
-     The floating icon cluster is aria-hidden decoration. On a phone it takes
-     160px of vertical space to show a row of circles clipped at both edges,
-     and it runs 36 infinite wobble animations to do it. It is the only thing
-     on the page that overflowed the viewport. Gone below 768px; unchanged on
-     a desktop, where it has the width to read as a row. */
-  .bbi-instrument .bbi-icons {
-    display: none;
-  }
-
-  /* ---- image slots ----------------------------------------------------
-     A 16:10 frame on a 390px screen is 244px of picture above the words.
-     5:3 on the cards, 3:2 for a standalone frame, and every one of them
-     goes full-bleed to the gutter rather than sitting in a second inset. */
-  .bbi-instrument figure.mo-media {
-    aspect-ratio: 3 / 2;
-  }
-  .bbi-instrument .aspect-\[21\/9\] {
-    aspect-ratio: 16 / 9;
-  }
-}
-
-/* ---- press feedback ----------------------------------------------------
-   A phone has no hover, so every hover state this site has is dead weight
-   there and a tap gets no acknowledgement at all. On a coarse pointer the
-   press itself answers: the plate sinks a hair and its rule brightens, for
-   as long as the thumb is down. Transform and border only — no layout, no
-   repaint of anything underneath. */
-@media (hover: none) and (pointer: coarse) {
-  .bbi-instrument a,
-  .bbi-instrument button,
-  .bbi-instrument [role="button"],
-  .bbi-instrument .mo-card,
-  .bbi-instrument [role="combobox"] {
-    -webkit-tap-highlight-color: transparent;
-    transition:
-      transform 140ms cubic-bezier(0.16, 1, 0.3, 1),
-      border-color 140ms ease;
-  }
-  .bbi-instrument a:active,
-  .bbi-instrument button:active,
-  .bbi-instrument [role="button"]:active,
-  .bbi-instrument .mo-card:active,
-  .bbi-instrument [role="combobox"]:active {
-    transform: scale(0.972);
-    border-color: var(--ins-rule-strong);
-  }
-  /* A card is a bigger object, so it moves less. */
-  .bbi-instrument .mo-card:active {
-    transform: scale(0.988);
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .bbi-instrument a:active,
-    .bbi-instrument button:active,
-    .bbi-instrument [role="button"]:active,
-    .bbi-instrument .mo-card:active,
-    .bbi-instrument [role="combobox"]:active {
-      transform: none;
-    }
-  }
-}
-
-/* ---- SpotlightCard -----------------------------------------------------
-   The site's one card. A flat plate in the housing's face colour with a
-   single drawn rule, and a soft white light that follows the pointer across
-   it. No colour but the brand greyscale: in a five-value palette the only
-   thing left to carry emphasis is light.
-
-   The pointer position arrives as --spot-x / --spot-y, written straight to
-   the element by the component, so moving the cursor across thirty of these
-   re-renders nothing. */
-.bbi-spot {
-  position: relative;
-  overflow: hidden;
-  background: var(--ins-face, #1e1e1e);
-  border: 1px solid var(--ins-rule, rgb(224 224 224 / 0.14));
-  border-radius: 0;
-  transition:
-    border-color 260ms cubic-bezier(0.22, 1, 0.36, 1),
-    background-color 260ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-.bbi-spot[data-lit="on"] {
-  border-color: var(--ins-rule-strong, rgb(224 224 224 / 0.32));
-  background: var(--ins-face-2, #262626);
-}
-.bbi-spot-light {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 420ms ease-in-out;
-  background: radial-gradient(
-    circle at var(--spot-x, 50%) var(--spot-y, 50%),
-    var(--spot-color, rgb(255 255 255 / 0.09)),
-    transparent 72%
+  padding: 25px;
+  border-radius: 25px;
+  background: linear-gradient(
+    115deg,
+    color-mix(in srgb, var(--surface-solid) 90%, transparent),
+    color-mix(in srgb, var(--secondary) 75%, transparent)
   );
+  border: 1px solid var(--border);
+  box-shadow:
+    0 20px 50px -35px #2d67bf88,
+    inset 0 2px 0 var(--glass-edge);
 }
-.bbi-spot[data-lit="on"] .bbi-spot-light {
-  opacity: 1;
+.library-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 20px;
 }
-/* No pointer, no spotlight — and no wasted paint chasing one. The press
-   state in the mobile block answers the tap instead. */
-@media (hover: none) {
-  .bbi-spot-light {
-    display: none;
-  }
+.library-toolbar .section-heading {
+  font-size: 1.7rem;
 }
-@media (prefers-reduced-motion: reduce) {
-  .bbi-spot,
-  .bbi-spot-light {
-    transition: none;
-  }
+.library-toolbar .eyebrow {
+  margin-bottom: 7px;
 }
-
-/* ---- the site's action treatment ---------------------------------------
-   The founder asked for the "Surprise Me" button's effect on every clickable
-   button on the site: a band of light travelling the border at rest, and a
-   filled plate with inverted ink under the pointer.
-
-   It is CSS here, not the HoverBorderGradient component. That component is
-   right for one or two hero actions and wrong for forty: each instance runs
-   its own setInterval, cycling an edge every 1.1s forever and driving a
-   framer animation of a background gradient off it. Forty timers is the
-   thing this page has spent a week getting rid of. One conic gradient on a
-   custom property does the same job with no JavaScript at all.
-
-   `@property` is what makes the angle animatable; without the registration
-   a custom property is a string and cannot be interpolated. Browsers that do
-   not register it simply show the static plate, which is the same plate the
-   button had before. */
-@property --bbi-edge {
-  syntax: "<angle>";
-  initial-value: 0deg;
-  inherits: false;
+.home-search {
+  display: flex;
+  gap: 9px;
+  align-items: center;
+  min-width: 280px;
+  padding: 5px 5px 5px 13px;
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  border-radius: 11px;
 }
-
-@keyframes bbi-edge-travel {
-  to {
-    --bbi-edge: 360deg;
-  }
+.home-search input {
+  background: transparent;
+  min-width: 0;
+  width: 220px;
+  border: 0;
+  font-size: 0.8rem;
+  color: var(--foreground);
+  padding: 7px 0;
 }
-
-/* THREE TIERS, one rule set. The palette has no second hue to differentiate
-   with, so the tiers differentiate by VALUE instead: the band that travels
-   the border and the plate it resolves into step down the greyscale.
-
-     tier 1  primary actions   band #FFFFFF  fills #FFFFFF, ink #141414
-     tier 2  search-term tags  band #B2B2B2  fills #E0E0E0, ink #141414
-     tier 3  footer actions    band #757575  fills #B2B2B2, ink #141414
-
-   Every tier is the same gesture at a different weight, so a reader can tell
-   a primary action from a tag from a footer link without a colour being
-   invented for any of them. */
-.bbi-instrument .ac-action,
-.bbi-instrument button:not(.bbi-bare):not([aria-label="Open navigation menu"]),
-.bbi-instrument a.ac-cta,
-.bbi-instrument .glass-btn,
-.bbi-instrument .glass-pill {
-  --act-band: var(--ins-signal);
-  --act-fill: var(--ins-signal);
-  --act-ink: var(--ins-void);
+.home-search button {
+  min-height: 34px;
+  width: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 7px;
+  background: var(--secondary);
+  color: var(--primary);
+  display: grid;
+  place-items: center;
+}
+.home-library-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-block: 24px 18px;
+}
+.home-library-filters > span {
+  margin-right: 5px;
+  font-size: 0.73rem;
+  color: var(--muted-foreground);
+}
+.home-filter {
+  min-height: 38px;
+  padding: 7px 13px;
+  border: 1px solid var(--border);
+  border-radius: 100px;
+  background: var(--card);
+  font-size: 0.74rem;
+}
+.home-filter[aria-pressed="true"] {
+  background: var(--foreground);
+  color: var(--background);
+  border-color: var(--foreground);
+}
+.home-category-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 13px;
+}
+.home-category {
   position: relative;
-  border: 1px solid transparent !important;
-  border-radius: 0.375rem;
-  background:
-    linear-gradient(var(--ins-face), var(--ins-face)) padding-box,
-    conic-gradient(
-        from var(--bbi-edge),
-        transparent 0deg,
-        var(--act-band) 40deg,
-        transparent 90deg,
-        transparent 360deg
-      )
-      border-box !important;
-  animation: bbi-edge-travel 4.4s linear infinite;
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  overflow: hidden;
+  border-radius: 15px;
+  background: var(--surface-solid);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
   transition:
-    color 220ms cubic-bezier(0.22, 1, 0.36, 1),
-    background 220ms cubic-bezier(0.22, 1, 0.36, 1);
+    transform var(--motion-normal),
+    box-shadow var(--motion-normal);
 }
-
-/* TIER 2 — the search-term tags. They are Links, not buttons, so they never
-   picked the treatment up; and they are a long row of equal options, which is
-   why they take the quieter band rather than the signal. */
-.bbi-instrument .ac-tag {
-  --act-band: var(--ins-dim);
-  --act-fill: var(--ins-read);
-  --act-ink: var(--ins-void);
+.home-category:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 14px 25px -15px #246bfd77;
+}
+.home-category-image {
   position: relative;
-  border: 1px solid transparent !important;
-  border-radius: 0.375rem;
-  background:
-    linear-gradient(var(--ins-face), var(--ins-face)) padding-box,
-    conic-gradient(
-        from var(--bbi-edge),
-        transparent 0deg,
-        var(--act-band) 40deg,
-        transparent 90deg,
-        transparent 360deg
-      )
-      border-box !important;
-  animation: bbi-edge-travel 5.6s linear infinite;
-  color: var(--ins-read) !important;
-  transition:
-    color 220ms cubic-bezier(0.22, 1, 0.36, 1),
-    background 220ms cubic-bezier(0.22, 1, 0.36, 1);
+  height: 136px;
+  background: #141624;
+  overflow: hidden;
 }
-
-/* TIER 3 — the footer. Quietest band of the three, because a footer is the
-   last thing on the page and should not compete with the actions above it. */
-.bbi-instrument .bbi-footer .ac-action,
-.bbi-instrument .bbi-footer button:not(.bbi-bare),
-.bbi-instrument .bbi-footer a[class*="rounded"],
-.bbi-instrument .bbi-footer .bbi-footer-more {
-  --act-band: var(--ins-faint);
-  --act-fill: var(--ins-dim);
-  --act-ink: var(--ins-void);
-  animation-duration: 6.4s;
-}
-
-/* Under the pointer the travelling band resolves into a solid plate and the
-   ink inverts — the label reads as ink on signal, never signal on signal.
-   The animation stops: there is nothing left to travel. */
-.bbi-instrument .ac-action:hover,
-.bbi-instrument button:not(.bbi-bare):not([aria-label="Open navigation menu"]):hover,
-.bbi-instrument a.ac-cta:hover,
-.bbi-instrument .glass-btn:hover,
-.bbi-instrument .glass-pill:hover,
-.bbi-instrument .glass-pill[data-state="open"],
-.bbi-instrument .ac-tag:hover {
-  animation: none;
-  background:
-    linear-gradient(var(--act-fill), var(--act-fill)) padding-box,
-    linear-gradient(var(--act-fill), var(--act-fill)) border-box !important;
-  color: var(--act-ink) !important;
-}
-.bbi-instrument .ac-action:hover *,
-.bbi-instrument button:not(.bbi-bare):not([aria-label="Open navigation menu"]):hover *,
-.bbi-instrument a.ac-cta:hover *,
-.bbi-instrument .glass-btn:hover *,
-.bbi-instrument .glass-pill:hover *,
-.bbi-instrument .glass-pill[data-state="open"] *,
-.bbi-instrument .ac-tag:hover * {
-  color: var(--act-ink) !important;
-  background-color: transparent !important;
-}
-
-/* Keyboard focus gets the same answer as the pointer, so the treatment is not
-   pointer-only decoration. */
-.bbi-instrument button:not(.bbi-bare):focus-visible,
-.bbi-instrument a.ac-cta:focus-visible,
-.bbi-instrument .glass-btn:focus-visible,
-.bbi-instrument .glass-pill:focus-visible {
-  animation: none;
-  outline: 2px solid var(--ins-signal);
-  outline-offset: 2px;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .bbi-instrument .ac-action,
-  .bbi-instrument .ac-tag,
-  .bbi-instrument button,
-  .bbi-instrument a.ac-cta,
-  .bbi-instrument .glass-btn,
-  .bbi-instrument .glass-pill {
-    animation: none !important;
-  }
-}
-/* No pointer, no travel. A phone shows the plate and answers the tap with the
-   press state in the mobile block above; a border animating forever on a
-   screen nobody is hovering is pure battery. */
-@media (hover: none) {
-  .bbi-instrument .ac-action,
-  .bbi-instrument .ac-tag,
-  .bbi-instrument button,
-  .bbi-instrument a.ac-cta,
-  .bbi-instrument .glass-btn,
-  .bbi-instrument .glass-pill {
-    animation: none !important;
-    border-color: var(--ins-rule) !important;
-    background: var(--ins-face) !important;
-  }
-}
-
-/* ---- the orbit diagram, in brand colours -------------------------------
-   Measured inside the "Built by hand" section before this was written: an
-   indigo gradient disc (#DAD9F2 to #4643BA) at the centre, gold rings at
-   rgba(180,120,40,.55) and rgba(160,105,35,.6), four amber dots at
-   rgb(180,120,42), and node labels whose plate and whose ink were BOTH near
-   white — "Real research", "Direct accountability", "No fake team page" and
-   "Always improving" were white on white and could not be read at all.
-
-   The orbit's own rules are spread across four blocks earlier in this file,
-   several of them already carrying !important. One scoped block printed last
-   is the only way to be sure none of them is missed — the same approach the
-   rest of the instrument world uses. */
-html.light .bbi-instrument .bbi-orbit-ring,
-html.light .bbi-instrument .bbi-orbit-ring-inner,
-html.light .bbi-instrument .bbi-orbit-ring-outer {
-  border-color: var(--ins-rule) !important;
-  box-shadow: none !important;
-}
-html.light .bbi-instrument .bbi-orbit-ring-outer {
-  border-color: var(--ins-rule-strong) !important;
-}
-html.light .bbi-instrument .bbi-orbit-dot {
-  background: var(--ins-dim) !important;
-  box-shadow: none !important;
-}
-/* The centre inverts — it is the one filled element in the diagram, so it
-   takes the signal and its ink drops to the housing. */
-html.light .bbi-instrument .bbi-orbit-center {
-  background: var(--ins-signal) !important;
-  background-image: none !important;
-  border-color: var(--ins-signal) !important;
-  box-shadow: none !important;
-}
-html.light .bbi-instrument .bbi-orbit-center .bbi-orbit-center-label,
-html.light .bbi-instrument .bbi-orbit-center .bbi-orbit-center-sub {
-  color: var(--ins-void) !important;
-}
-/* The labels were the actual bug: a white plate carrying white text. Dark
-   plate, drawn rule, readout ink. */
-html.light .bbi-instrument .bbi-orbit-node-label {
-  background: var(--ins-face) !important;
-  background-image: none !important;
-  border: 1px solid var(--ins-rule) !important;
-  color: var(--ins-read) !important;
-  box-shadow: none !important;
-  text-shadow: none !important;
-}
-html.light .bbi-instrument .bbi-orbit-node:hover .bbi-orbit-node-label {
-  background: var(--ins-face-2) !important;
-  border-color: var(--ins-rule-strong) !important;
-  color: var(--ins-bright) !important;
-}
-
-/* ---- FAQ disclosure rows ----------------------------------------------
-   Opted out of the action treatment with `.bbi-bare`, and given the answer a
-   row should give: the plate lifts one step and the question brightens. No
-   travelling border, no white fill — measured on the page before this, the
-   band read as a light streak crossing each question at rest, and hovering
-   turned the whole row into a solid white bar. */
-html.light .bbi-instrument .bbi-faq-row {
-  color: var(--ins-read) !important;
-  background: transparent !important;
-  border: 0 !important;
-  border-radius: 0 !important;
-  animation: none !important;
-  transition:
-    background-color 200ms cubic-bezier(0.22, 1, 0.36, 1),
-    color 200ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-html.light .bbi-instrument .bbi-faq-row:hover,
-html.light .bbi-instrument .bbi-faq-row[aria-expanded="true"] {
-  background: var(--ins-face) !important;
-  color: var(--ins-bright) !important;
-}
-html.light .bbi-instrument .bbi-faq-row:focus-visible {
-  outline: 2px solid var(--ins-signal);
-  outline-offset: -2px;
-}
-html.light .bbi-instrument .bbi-faq-mark {
-  color: var(--ins-faint) !important;
-}
-html.light .bbi-instrument .bbi-faq-row:hover .bbi-faq-mark,
-html.light .bbi-instrument .bbi-faq-row[aria-expanded="true"] .bbi-faq-mark {
-  color: var(--ins-bright) !important;
-}
-
-/* ---- the footer plate --------------------------------------------------
-   The footer's own surface used a colour-mixed drop shadow off --foreground,
-   which in this scope is a white glow under the plate. A footer is a plate
-   like every other plate here: face colour, one drawn rule, no shadow. Its
-   links take the tier-3 ink so the whole block reads as one weight. */
-html.light .bbi-instrument .bbi-footer {
-  background: var(--ins-face) !important;
-  border: 1px solid var(--ins-rule) !important;
-  box-shadow: none !important;
-}
-html.light .bbi-instrument .bbi-footer-link {
-  color: var(--ins-dim) !important;
-}
-html.light .bbi-instrument .bbi-footer-link:hover,
-html.light .bbi-instrument .bbi-footer-link:focus-visible {
-  color: var(--ins-bright) !important;
-}
-html.light .bbi-instrument .bbi-footer-heading {
-  color: var(--ins-bright) !important;
-}
-
-/* ---- card flip ---------------------------------------------------------
-   Front carries the query, back carries the answer and the way in. Both
-   faces are always in the DOM — nothing is hidden from a crawler or a screen
-   reader — and the back is only rotated out of sight, never removed.
-
-   Below `hover: hover` the card does not flip: the two faces stack and both
-   read at once, because a flip on a touch screen is a piece of content you
-   cannot reach. */
-.bbi-flip {
-  position: relative;
-  min-height: 11.5rem;
-  perspective: 900px;
-}
-.bbi-flip-inner {
-  position: relative;
-  display: block;
+.home-category-image img {
   width: 100%;
   height: 100%;
-  min-height: inherit;
-  transition: transform 620ms cubic-bezier(0.22, 1, 0.36, 1);
-  transform-style: preserve-3d;
+  object-fit: cover;
+  transition: transform var(--motion-slow);
 }
-.bbi-flip-face {
-  display: block;
-  padding: 1.25rem;
-  backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
+.home-category:hover img {
+  transform: scale(1.05);
 }
-.bbi-flip-back {
+.home-category-image::after {
+  content: "";
   position: absolute;
-  inset: 0;
-  transform: rotateY(180deg);
-  background: var(--ins-face);
+  inset: 50% 0 0;
+  background: linear-gradient(transparent, #08152a99);
+}
+.home-category-count {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 1;
+  background: #0d1e35d9;
+  border: 1px solid #ffffff44;
+  border-radius: 6px;
+  color: #fff;
+  padding: 3px 7px;
+  font-family: var(--font-mono);
+  font-size: 0.58rem;
+}
+.home-category-body {
+  padding: 15px 13px 16px;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 12px;
+}
+.home-category-body h3 {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  letter-spacing: -0.02em;
+  min-height: 2.8em;
+}
+.home-category-body > span {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  color: var(--muted-foreground);
+  font-size: 0.67rem;
+  margin-top: auto;
+}
+.home-category-body svg {
+  color: var(--primary);
+}
+.library-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-top: 21px;
+  font-size: 0.75rem;
+}
+.library-bottom a {
+  display: flex;
+  gap: 7px;
+  align-items: center;
+}
+.home-editorial {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  margin-top: 28px;
+}
+.founder-note {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  align-items: center;
+  gap: 20px;
+  padding: 23px;
+}
+.founder-note img {
+  width: 110px;
+  height: 125px;
+  object-fit: cover;
+  border-radius: 16px;
+}
+.founder-note h2 {
+  font-size: 1.4rem;
+  letter-spacing: -0.035em;
+  margin-block: 8px;
+}
+.founder-note p {
+  font-size: 0.79rem;
+  color: var(--muted-foreground);
+}
+.founder-note a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 13px;
+  font-size: 0.74rem;
+}
+.verdict-note {
+  padding: 23px;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
-@media (hover: hover) and (pointer: fine) {
-  .bbi-flip:hover .bbi-flip-inner,
-  .bbi-flip:focus-visible .bbi-flip-inner {
-    transform: rotateY(180deg);
+.verdict-note h2 {
+  font-size: 1.4rem;
+  letter-spacing: -0.035em;
+  margin: 8px 0 12px;
+}
+.verdict-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.verdict-options .badge {
+  padding: 8px 12px;
+}
+.verdict-note > p:last-child {
+  margin-top: 12px;
+  color: var(--muted-foreground);
+  font-size: 0.76rem;
+}
+@media (min-width: 700px) {
+  .content-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
-/* No pointer: no flip. Both faces stack and read at once. */
-@media (hover: none) {
-  .bbi-flip {
-    perspective: none;
-    min-height: 0;
+@media (min-width: 1000px) {
+  .content-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
-  .bbi-flip-inner {
-    transform: none !important;
-    transform-style: flat;
+}
+@media (max-width: 1050px) {
+  .header-status {
+    display: none;
   }
-  .bbi-flip-back {
-    position: static;
-    transform: none;
-    background: transparent;
+  .header-navigation {
+    gap: 18px;
+  }
+  .home-category-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .home-category-image {
+    height: 175px;
+  }
+  .home-hero {
+    min-height: 490px;
+    gap: 0;
+  }
+  .founder-note {
+    grid-template-columns: 75px 1fr;
+    gap: 14px;
+  }
+  .founder-note img {
+    width: 75px;
+    height: 110px;
+  }
+}
+@media (max-width: 700px) {
+  .bbi-page {
+    width: calc(100% - 32px);
+    padding-block: 30px 42px;
+  }
+  .header-inner {
+    height: 68px;
+    width: calc(100% - 32px);
+    gap: 14px;
+  }
+  .brand-mark {
+    width: 33px;
+    height: 36px;
+    border-radius: 10px;
+  }
+  .brand-name {
+    font-size: 1.35rem;
+  }
+  .brand-domain {
+    font-size: 0.48rem;
+  }
+  .header-navigation {
+    order: 3;
+    margin: 0;
+  }
+  .header-actions {
+    margin-left: auto;
+  }
+  .header-navigation > a,
+  .desktop-label,
+  .header-search-link {
+    display: none;
+  }
+  .mobile-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .browse-menu > summary {
+    min-height: 42px;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 8px 10px;
+    background: var(--card);
+  }
+  .browse-menu > summary > svg {
+    display: none;
+  }
+  .menu-panel {
+    left: 16px;
+    right: 16px;
+    padding: 20px;
+    max-height: calc(100svh - 92px);
+  }
+  .menu-groups {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+  .menu-groups a {
+    font-size: 0.85rem;
+    min-height: 44px;
+  }
+  .mobile-menu-links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px 22px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+    margin-top: 20px;
+  }
+  .mobile-menu-links a {
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+  }
+  .footer-inner {
+    width: calc(100% - 32px);
+    padding-top: 28px;
+  }
+  .footer-main {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 26px 20px;
+  }
+  .footer-brand {
+    grid-column: 1/-1;
+  }
+  .footer-brand > p {
+    max-width: 100%;
+  }
+  .home-page {
     padding-top: 0;
   }
-  .bbi-flip-face {
-    backface-visibility: visible;
+  .home-topline {
+    padding-top: 18px;
+  }
+  .home-topline > span:last-child {
+    display: none;
+  }
+  .home-topline .eyebrow {
+    font-size: 0.59rem;
+  }
+  .home-hero {
+    grid-template-columns: 1fr;
+    min-height: 0;
+  }
+  .hero-copy {
+    padding: 30px 0 0;
+  }
+  .hero-kicker {
+    margin-bottom: 17px;
+  }
+  .home-title {
+    font-size: clamp(2.45rem, 10.8vw, 4rem);
+    max-width: 500px;
+  }
+  .hero-description {
+    font-size: 0.86rem;
+    margin-top: 19px;
+    max-width: 440px;
+  }
+  .hero-actions {
+    gap: 9px;
+    margin-top: 22px;
+  }
+  .hero-actions .button {
+    padding-inline: 15px;
+    font-size: 0.78rem;
+  }
+  .hero-assurances {
+    gap: 12px;
+    font-size: 0.59rem;
+    margin-top: 18px;
+  }
+  .home-library {
+    padding: 17px 13px;
+    border-radius: 19px;
+    margin-top: 5px;
+  }
+  .library-toolbar {
+    gap: 17px;
+  }
+  .library-toolbar .section-heading {
+    font-size: 1.45rem;
+  }
+  .home-search {
+    width: 100%;
+    min-width: 0;
+  }
+  .home-search input {
+    flex: 1;
+    width: 100%;
+  }
+  .home-library-filters {
+    gap: 6px;
+    margin-block: 18px 14px;
+  }
+  .home-library-filters > span {
+    display: none;
+  }
+  .home-filter {
+    font-size: 0.64rem;
+    padding: 6px 10px;
+    min-height: 36px;
+  }
+  .home-category-grid {
+    gap: 10px;
+  }
+  .home-category-image {
+    height: 118px;
+  }
+  .home-category-body {
+    padding: 12px 10px;
+  }
+  .home-category-body h3 {
+    font-size: 0.76rem;
+    min-height: 4.2em;
+  }
+  .home-category-body > span {
+    font-size: 0.57rem;
+  }
+  .home-category-count {
+    font-size: 0.54rem;
+    left: 7px;
+    top: 7px;
+  }
+  .library-bottom {
+    font-size: 0.68rem;
+  }
+  .library-bottom > span {
+    max-width: 115px;
+  }
+  .home-editorial {
+    grid-template-columns: 1fr;
+    margin-top: 20px;
+    gap: 13px;
+  }
+  .founder-note,
+  .verdict-note {
+    padding: 20px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .bbi-flip-inner {
-    transition: none;
+  html {
+    scroll-behavior: auto;
   }
-}
-
-/* The last row of an accordion block had nothing under it: the row owns its
-   own padding now, so the block ended flush with the final question and the
-   next section's heading — which is large — read as sitting on top of it. */
-.bbi-faq-item:last-child {
-  padding-bottom: 1rem;
-}
-
-/* ---- disabled actions --------------------------------------------------
-   A disabled button still has to be READ — "Checkout not live yet" is the
-   whole message. It was near-invisible: the action treatment's plate plus a
-   blanket opacity-60 on top of a label that was already the dimmest value.
-
-   No travelling band (there is nothing to travel to), a face plate, and the
-   label at --ins-dim in full opacity. 7.9:1 on the housing — it reads as
-   unavailable because of the cursor and the flat plate, not because it has
-   been faded until it cannot be seen. */
-html.light .bbi-instrument button:disabled,
-html.light .bbi-instrument button[disabled],
-html.light .bbi-instrument .ac-cta:disabled,
-html.light .bbi-instrument .ac-action:disabled {
-  animation: none !important;
-  background: var(--ins-face) !important;
-  border: 1px solid var(--ins-rule) !important;
-  color: var(--ins-dim) !important;
-  opacity: 1 !important;
-  cursor: not-allowed;
-}
-html.light .bbi-instrument button:disabled *,
-html.light .bbi-instrument .ac-cta:disabled * {
-  color: var(--ins-dim) !important;
-}
-/* It must not light up on hover either — a plate that inverts under the
-   pointer reads as clickable, and this one is not. */
-html.light .bbi-instrument button:disabled:hover,
-html.light .bbi-instrument .ac-cta:disabled:hover,
-html.light .bbi-instrument .ac-action:disabled:hover {
-  background: var(--ins-face) !important;
-  color: var(--ins-dim) !important;
-  border-color: var(--ins-rule) !important;
-}
-
-/* The dock travels with the reader. See floating-dock.tsx for why the class
-   is needed at all; this only raises it above the header's 50 so it is never
-   covered on a page scrolled to the bottom. */
-.bbi-instrument > .bbi-overlay {
-  position: fixed;
-  z-index: 80;
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+  .button:hover,
+  .home-category:hover,
+  .home-category:hover img {
+    transform: none;
+  }
 }

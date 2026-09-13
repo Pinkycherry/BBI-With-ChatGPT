@@ -1,59 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
-import { z } from "zod";
-
-import { ContentPage, metaFor } from "@/components/page-layout";
-import { signInWithGoogle } from "@/lib/auth-client";
+import { SignInPage, secondaryMeta } from "@/components/bbi/secondary";
 
 export const Route = createFileRoute("/sign-in")({
-  validateSearch: z.object({ redirect: z.string().optional() }),
-  head: () => metaFor("Sign In | BBI", "Sign in with Google to read full idea blueprints on BBI."),
+  head: () => secondaryMeta("Account access", "An account is never required to read the BBI library."),
   component: SignInPage,
 });
-
-function SignInPage() {
-  const { redirect } = Route.useSearch();
-  const [pending, setPending] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  const handleSignIn = async () => {
-    setPending(true);
-    setError(null);
-    // Google must drop the user back where they actually were, not on
-    // /sign-in itself — that was the bug that made login look like it did
-    // nothing.
-    const destination =
-      window.location.origin + (redirect && redirect.startsWith("/") ? redirect : "/");
-    const { error: signInError } = await signInWithGoogle(destination);
-    if (signInError) {
-      setError(signInError.message);
-      setPending(false);
-    }
-    // On success the browser is redirected to Google, so nothing else to do here.
-  };
-
-  return (
-    <ContentPage
-      tone="focus"
-      eyebrow="Sign in"
-      title="One tap,"
-      highlight="with Google"
-      intro="Sign in to read the full library. No email, no password to remember — just your Google account."
-    >
-      <div className="glass rounded-2xl px-6 py-8 text-center">
-        <button
-          type="button"
-          onClick={handleSignIn}
-          disabled={pending}
-          className="ac-cta mx-auto px-6 py-3 text-sm disabled:cursor-wait"
-        >
-          {pending ? "Redirecting…" : "Continue with Google"}
-        </button>
-        {error && <p className="mt-4 text-sm text-destructive">{error}</p>}
-        <p className="mt-4 text-xs text-muted-foreground">
-          We only ever offer Google sign-in — no other login method exists on this site.
-        </p>
-      </div>
-    </ContentPage>
-  );
-}
