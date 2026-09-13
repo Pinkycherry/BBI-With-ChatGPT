@@ -197,7 +197,11 @@
   background: linear-gradient(145deg, #f5f0ff, #e9e2ff);
 }
 .bbi-tree-label-research {
-  left: 0;
+  /* Inset rather than flush to the edge. The container is perspective: 950px
+     and clips its overflow, so a card lifted on Z is magnified by
+     950 / (950 - z) about the centre: at z=54 that is 1.06, which throws a
+     flush-left edge ~20px outside the box and shears the card off. */
+  left: 4%;
   top: 29%;
   transform: translateZ(54px) rotate(-4deg);
 }
@@ -216,7 +220,10 @@
   box-shadow: 0 0 0 4px #246bfd0c;
 }
 .bbi-tree-label-verdict {
-  right: 0;
+  /* Same correction as -research, and this one sits higher on Z (1.067), so it
+     needs the larger inset: flush right clipped "Before you take the leap"
+     clean off at 1440px. */
+  right: 5%;
   top: 61%;
   transform: translateZ(60px) rotate(3deg);
 }
