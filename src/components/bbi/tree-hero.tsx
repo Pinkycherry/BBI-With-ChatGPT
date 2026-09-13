@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useId, useRef, useState } from "react";
 import type { PointerEvent } from "react";
 import { motion, useMotionValue, useReducedMotion, useSpring } from "framer-motion";
 import {
@@ -15,6 +15,7 @@ import {
 import "./tree-hero.css";
 
 const TREE_IMAGE = "/images/home/golden-tree-business-ideas-growth-research.jpg";
+const TreeGlowCanvas = lazy(() => import("./tree-glow-canvas"));
 
 /** The original, self-hosted BBI artwork is always rendered by the server. */
 export function TreeHero({ className = "" }: { className?: string }) {
@@ -97,6 +98,9 @@ export function TreeHero({ className = "" }: { className?: string }) {
           </filter>
         </defs>
       </svg>
+      <Suspense fallback={null}>
+        <TreeGlowCanvas />
+      </Suspense>
       <div className="bbi-tree-atmosphere" aria-hidden="true" />
       <motion.div
         className="bbi-tree-stage"

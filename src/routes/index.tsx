@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
+import { motion, useReducedMotion } from "framer-motion";
+import { useRef, useState } from "react";
 import {
   ArrowRight,
   ArrowUpRight,
@@ -13,12 +14,16 @@ import {
 } from "lucide-react";
 import { CATEGORIES, CATEGORY_GROUPS } from "@/components/bbi/catalog";
 import { TreeHero, BlueprintScroll } from "@/components/bbi/tree-hero";
+import { useHomeMotion } from "@/components/bbi/home-motion";
 import { Badge } from "@/components/bbi/primitives";
 
 export const Route = createFileRoute("/")({ component: HomePage });
 
 // PLACEHOLDER: Editorial interface copy below can be replaced with the founder’s final copy.
 function HomePage() {
+  const homeRef = useRef<HTMLDivElement>(null);
+  const reducedMotion = useReducedMotion();
+  useHomeMotion(homeRef);
   const [group, setGroup] = useState("Start here");
   const categories =
     group === "Start here"
@@ -32,7 +37,7 @@ function HomePage() {
         )
       : CATEGORIES.filter((category) => category.group === group);
   return (
-    <div className="bbi-page home-page">
+    <div ref={homeRef} className="bbi-page home-page">
       <div className="home-topline">
         <span className="eyebrow">
           <span className="status-dot" />
@@ -60,14 +65,26 @@ function HomePage() {
             honest answer to: <strong>is this right for you?</strong>
           </p>
           <div className="hero-actions">
-            <a className="button button-primary" href="/browse">
+            <motion.a
+              className="button button-primary"
+              href="/browse"
+              whileHover={reducedMotion ? {} : { y: -3, scale: 1.015 }}
+              whileTap={reducedMotion ? {} : { scale: 0.98 }}
+              transition={{ type: "spring", stiffness: 420, damping: 24, mass: 0.6 }}
+            >
               Find your starting point
               <ArrowUpRight size={17} aria-hidden="true" />
-            </a>
-            <a className="button button-secondary" href="#inside-blueprint">
+            </motion.a>
+            <motion.a
+              className="button button-secondary"
+              href="#inside-blueprint"
+              whileHover={reducedMotion ? {} : { y: -3, scale: 1.015 }}
+              whileTap={reducedMotion ? {} : { scale: 0.98 }}
+              transition={{ type: "spring", stiffness: 420, damping: 24, mass: 0.6 }}
+            >
               Inside a blueprint
               <ArrowRight size={15} aria-hidden="true" />
-            </a>
+            </motion.a>
           </div>
           <div className="hero-assurances">
             <span>

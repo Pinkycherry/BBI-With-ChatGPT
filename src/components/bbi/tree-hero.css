@@ -34,6 +34,18 @@
   position: absolute;
   inset: 0;
   transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.bbi-tree-glow {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  opacity: 0.86;
 }
 
 .bbi-tree-orbit {
@@ -570,3 +582,58 @@
 :root[data-theme="dark"] .bbi-answer-progress {
   background: #334863;
 }
+
+/* The hero keeps its 3D composition, while its stage and callouts join the
+   same translucent, refractive material as the rest of the site. */
+.bbi-tree-atmosphere {
+  background:
+    radial-gradient(ellipse at 48% 50%, rgba(255, 219, 126, 0.18), transparent 45%),
+    radial-gradient(ellipse at 63% 53%, rgba(92, 201, 255, 0.24), rgba(119, 82, 212, 0.16) 46%, transparent 74%);
+  filter: blur(2px) saturate(135%);
+}
+.bbi-tree-orbit { border-color: rgba(168, 224, 255, 0.42); box-shadow: inset 1px 1px 1px rgba(255,255,255,.55), 0 0 28px rgba(80,191,255,.2); }
+.bbi-tree-orbit-front { border-color: rgba(128, 216, 255, 0.32); }
+.bbi-tree-constellation path { stroke: rgba(158, 220, 255, 0.7); }
+.bbi-tree-constellation circle { fill: rgba(224, 249, 255, 0.92); stroke: #76d9ff; }
+.bbi-tree-plinth {
+  border-color: rgba(220, 247, 255, 0.68);
+  background: linear-gradient(125deg, rgba(181, 230, 255, 0.28), rgba(87, 157, 224, 0.16) 46%, rgba(161, 126, 234, 0.24));
+  box-shadow: 0 3px 0 rgba(134, 202, 255, 0.38), 0 9px 0 rgba(20, 58, 113, 0.7), 0 0 36px rgba(43, 205, 255, 0.22), 10px 25px 40px rgba(0, 11, 38, 0.42);
+  backdrop-filter: blur(18px) saturate(155%);
+  -webkit-backdrop-filter: blur(18px) saturate(155%);
+}
+.bbi-tree-plinth-bottom { background: linear-gradient(100deg, rgba(75, 149, 215, 0.24), rgba(88, 210, 255, 0.17)); }
+.bbi-tree-plinth-middle { background: linear-gradient(100deg, rgba(176, 231, 255, 0.24), rgba(112, 148, 238, 0.2)); }
+.bbi-tree-plinth-top::before { border-color: rgba(139, 220, 255, 0.5); box-shadow: 0 0 0 9px rgba(124, 200, 255, 0.13), 0 0 0 10px rgba(172, 137, 255, 0.16), 0 0 28px rgba(85, 206, 255, 0.35); }
+.bbi-tree-plinth-top span { background: radial-gradient(ellipse, rgba(255, 220, 126, 0.52), rgba(255,255,255,.2) 65%, transparent 70%); }
+.bbi-tree-label {
+  border-color: rgba(223, 247, 255, 0.64);
+  outline-color: rgba(148, 211, 255, 0.18);
+  color: var(--foreground);
+  background: linear-gradient(120deg, rgba(44, 86, 153, 0.62), rgba(57, 48, 115, 0.58));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.48), 0 14px 34px -18px rgba(18, 35, 81, .95), 0 0 24px rgba(89, 195, 255, .22);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+}
+.bbi-tree-label small { color: rgba(205, 224, 246, .8); }
+.bbi-tree-label-icon { color: #9eeeff; background: linear-gradient(145deg, rgba(91, 208, 255, .28), rgba(81, 118, 218, .3)); border-color: rgba(220, 248, 255, .52); }
+.bbi-tree-label-icon-lilac { color: #dac8ff; background: linear-gradient(145deg, rgba(181, 144, 255, .32), rgba(84, 68, 159, .38)); }
+.bbi-tree-tiny-dot { background: #6ce2ff; box-shadow: 0 0 0 4px rgba(74, 212, 255, .14), 0 0 14px rgba(74, 212, 255, .8); }
+.bbi-tree-satellite { background: radial-gradient(circle at 30% 20%, #fff, #9ae9ff 40%, #586fd4); border-color: rgba(232, 251, 255, .86); box-shadow: 2px 4px 10px rgba(63, 179, 255, .44); }
+.bbi-tree-caption { color: rgba(192, 216, 244, .78); }
+.bbi-tree-caption > span { background: rgba(133, 204, 255, .62); }
+.bbi-answer-progress { background: rgba(157, 204, 255, .22); }
+.bbi-answer-progress-fill { background: linear-gradient(90deg, #4bdcff, #718cff, #e1b66e, #b895ff); box-shadow: 0 0 13px rgba(83, 209, 255, .8); }
+.bbi-answer-card {
+  border-color: rgba(181, 226, 255, .3);
+  background: linear-gradient(130deg, rgba(126, 185, 255, .16), rgba(28, 49, 99, .36));
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.32), 0 20px 52px -28px rgba(0,8,28,.9), 0 0 24px -18px rgba(76,190,255,.5);
+  backdrop-filter: blur(20px) saturate(155%);
+  -webkit-backdrop-filter: blur(20px) saturate(155%);
+}
+.bbi-answer-icon { background: rgba(88, 189, 255, .2); color: #9cecff; }
+.bbi-answer-cyan .bbi-answer-icon { background: rgba(74, 222, 239, .2); color: #8ff5ff; }
+.bbi-answer-amber .bbi-answer-icon { background: rgba(238, 187, 89, .2); color: #ffd98d; }
+.bbi-answer-lilac { background: linear-gradient(130deg, rgba(179, 144, 255, .21), rgba(50, 39, 107, .4)); border-color: rgba(205, 177, 255, .36); }
+.bbi-answer-lilac .bbi-answer-icon { color: #dfc8ff; background: rgba(179, 135, 255, .24); }
+.bbi-answer-verdict-icon { color: #d8c3ff; }

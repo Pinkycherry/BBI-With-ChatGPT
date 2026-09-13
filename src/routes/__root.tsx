@@ -10,6 +10,7 @@ import type { ReactNode } from "react";
 import { ArrowLeft, RefreshCw } from "lucide-react";
 import { Header } from "@/components/bbi/header";
 import { Footer } from "@/components/bbi/footer";
+import { useElementPointerGroup } from "@/motion";
 import "../styles.css";
 
 function NotFoundComponent() {
@@ -95,9 +96,10 @@ function RootShell({ children }: { children: ReactNode }) {
 
 function RootComponent() {
   const { queryClient } = Route.useRouteContext();
+  const glassPointerRef = useElementPointerGroup<HTMLDivElement>(".glass-panel, .home-library, .home-category");
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="site-frame">
+      <div ref={glassPointerRef} className="site-frame">
         <a href="#main-content" className="skip-link">
           Skip to content
         </a>

@@ -18,11 +18,11 @@ export function Brand() {
 }
 
 function ThemeToggle() {
-  const [dark, setDark] = useState(false);
+  const [dark, setDark] = useState(true);
   useEffect(() => {
     try {
       const saved = localStorage.getItem("bbi-theme");
-      const isDark = saved === "dark";
+      const isDark = saved !== "light";
       document.documentElement.dataset["theme"] = isDark ? "dark" : "light";
       setDark(isDark);
     } catch {

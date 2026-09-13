@@ -46,26 +46,26 @@
   --animate-duration-slow: 700ms;
 }
 :root {
-  color-scheme: light;
-  --background: #f4f7fc;
-  --foreground: #172b4d;
-  --card: rgba(255, 255, 255, 0.68);
-  --surface-solid: #fff;
-  --primary: #246bfd;
-  --primary-foreground: #fff;
-  --secondary: #e9effb;
-  --muted: #e9eff7;
-  --muted-foreground: #52647e;
-  --accent: #c6f3ff;
-  --border: #cedaec;
-  --glass-edge: rgba(255, 255, 255, 0.95);
-  --positive: #197453;
-  --positive-soft: #e5f5ed;
-  --negative: #a23f55;
-  --negative-soft: #fcebf0;
-  --ice: #c6f3ff;
-  --lilac: #dad4fa;
-  --shadow: 0 12px 40px -24px #496dac66, inset 0 1px 0 var(--glass-edge);
+  color-scheme: dark;
+  --background: #07152d;
+  --foreground: #edf6ff;
+  --card: rgba(24, 49, 91, 0.42);
+  --surface-solid: #10294f;
+  --primary: #8ae9ff;
+  --primary-foreground: #07152d;
+  --secondary: rgba(93, 128, 201, 0.2);
+  --muted: rgba(92, 133, 208, 0.17);
+  --muted-foreground: #b7cbe7;
+  --accent: #a994ff;
+  --border: rgba(176, 224, 255, 0.28);
+  --glass-edge: rgba(255, 255, 255, 0.68);
+  --positive: #81e5c0;
+  --positive-soft: rgba(65, 186, 151, 0.2);
+  --negative: #ffb2cb;
+  --negative-soft: rgba(205, 74, 126, 0.2);
+  --ice: #39d8ff;
+  --lilac: #a994ff;
+  --shadow: 0 22px 70px -30px rgba(1, 8, 25, 0.9), inset 0 1px 0 var(--glass-edge);
   --motion-fast: 160ms;
   --motion-normal: 280ms;
   --motion-slow: 700ms;
@@ -73,25 +73,47 @@
 }
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --background: #101e35;
+  --background: #040d20;
   --foreground: #edf4ff;
-  --card: rgba(31, 51, 80, 0.86);
-  --surface-solid: #1d304d;
+  --card: rgba(18, 39, 78, 0.5);
+  --surface-solid: #0e2447;
   --primary: #94baff;
   --primary-foreground: #102342;
-  --secondary: #263e60;
-  --muted: #213652;
+  --secondary: rgba(48, 81, 140, 0.3);
+  --muted: rgba(40, 76, 137, 0.24);
   --muted-foreground: #b1c1d9;
-  --accent: #254f67;
-  --border: #435a7a;
-  --glass-edge: rgba(204, 226, 255, 0.22);
+  --accent: #735cf4;
+  --border: rgba(149, 195, 255, 0.3);
+  --glass-edge: rgba(224, 242, 255, 0.7);
   --positive: #93ddbb;
   --positive-soft: #1e453d;
   --negative: #ffb3c3;
   --negative-soft: #512b3c;
-  --ice: #234b65;
-  --lilac: #3a355e;
-  --shadow: 0 16px 40px -22px #0009, inset 0 1px 0 var(--glass-edge);
+  --ice: #187ba8;
+  --lilac: #46368d;
+  --shadow: 0 26px 80px -30px rgba(0, 0, 0, 0.96), inset 0 1px 0 var(--glass-edge);
+}
+:root[data-theme="light"] {
+  color-scheme: light;
+  --background: #0e2445;
+  --foreground: #f5f8ff;
+  --card: rgba(42, 74, 126, 0.42);
+  --surface-solid: #183766;
+  --primary: #9ceeff;
+  --primary-foreground: #092041;
+  --secondary: rgba(114, 149, 216, 0.23);
+  --muted: rgba(122, 158, 220, 0.18);
+  --muted-foreground: #c5d5ef;
+  --accent: #c0a7ff;
+  --border: rgba(193, 224, 255, 0.35);
+  --glass-edge: rgba(255, 255, 255, 0.76);
+  --positive: #8cf0ca;
+  --positive-soft: rgba(63, 190, 151, 0.24);
+  --negative: #ffb7d0;
+  --negative-soft: rgba(205, 74, 126, 0.24);
+  --ice: #48dfff;
+  --lilac: #bba5ff;
+  --shadow: 0 22px 65px -28px rgba(0, 8, 30, 0.85), inset 0 1px 0 var(--glass-edge);
 }
 @layer base {
   * {
@@ -1188,5 +1210,255 @@
   .home-category:hover,
   .home-category:hover img {
     transform: none;
+  }
+}
+
+/* LUMINOUS GLASS SURFACE
+   The layout stays the same; this layer gives it the deep field and refraction
+   that make translucent panels read as glass instead of white cards. */
+:where(body, .site-frame) {
+  background-color: var(--background);
+}
+
+.site-frame {
+  position: relative;
+  isolation: isolate;
+  background:
+    radial-gradient(ellipse 58% 42% at 12% 7%, rgba(47, 133, 255, 0.3), transparent 72%),
+    radial-gradient(ellipse 52% 44% at 87% 16%, rgba(142, 77, 255, 0.3), transparent 70%),
+    radial-gradient(ellipse 58% 46% at 50% 100%, rgba(0, 213, 255, 0.2), transparent 72%),
+    linear-gradient(145deg, #07152d 0%, #0a1f42 47%, #11113b 100%);
+}
+
+.site-frame::before,
+.site-frame::after {
+  content: "";
+  position: absolute;
+  inset: -18%;
+  pointer-events: none;
+}
+
+.site-frame::before {
+  z-index: 0;
+  background:
+    radial-gradient(circle at 22% 24%, rgba(59, 167, 255, 0.6), transparent 19%),
+    radial-gradient(circle at 78% 22%, rgba(181, 93, 255, 0.48), transparent 22%),
+    radial-gradient(circle at 57% 74%, rgba(27, 227, 255, 0.36), transparent 19%),
+    radial-gradient(circle at 8% 84%, rgba(83, 95, 255, 0.32), transparent 17%);
+  filter: blur(70px) saturate(145%);
+  opacity: 0.75;
+}
+
+.site-frame::after {
+  z-index: 0;
+  inset: 0;
+  background-image:
+    radial-gradient(rgba(206, 239, 255, 0.17) 0.7px, transparent 0.7px),
+    linear-gradient(120deg, transparent 0 42%, rgba(103, 219, 255, 0.08) 50%, transparent 58%);
+  background-size: 22px 22px, 100% 100%;
+  mix-blend-mode: screen;
+  opacity: 0.18;
+}
+
+/* Lifts page content above .site-frame's ::before/::after background layers.
+   Excludes .skip-link: forcing position: relative on it beat its own
+   position: fixed, and a non-fixed <a> falls back to display: inline, where
+   CSS transforms are ignored entirely -- so the translateY(-160%) that parks
+   the link off-screen stopped applying and it sat visible over the header. */
+.site-frame > *:not(.skip-link) {
+  position: relative;
+  z-index: 1;
+}
+
+.site-header,
+.site-footer {
+  background: rgba(7, 19, 45, 0.48) !important;
+  border-color: rgba(166, 220, 255, 0.24) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.22), 0 18px 50px -34px rgba(3, 9, 32, 0.95);
+  backdrop-filter: blur(26px) saturate(165%);
+  -webkit-backdrop-filter: blur(26px) saturate(165%);
+}
+
+.glass-panel,
+.home-library,
+.home-category,
+.founder-note,
+.verdict-note,
+.menu-panel,
+.primitive-tabs,
+.empty-state,
+.error-state {
+  background: linear-gradient(135deg, rgba(128, 184, 255, 0.17), rgba(26, 49, 99, 0.34)) !important;
+  border-color: rgba(180, 226, 255, 0.3) !important;
+  border-top-color: rgba(255, 255, 255, 0.72) !important;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.34),
+    inset 0 -1px 0 rgba(90, 178, 255, 0.18),
+    0 24px 70px -32px rgba(1, 9, 32, 0.95),
+    0 0 34px -22px rgba(68, 185, 255, 0.55) !important;
+  backdrop-filter: blur(24px) saturate(155%);
+  -webkit-backdrop-filter: blur(24px) saturate(155%);
+}
+
+.home-library,
+.founder-note,
+.verdict-note,
+.home-category {
+  position: relative;
+  overflow: hidden;
+}
+
+.home-library::before,
+.founder-note::before,
+.verdict-note::before,
+.home-category::before,
+.glass-panel::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  border-radius: inherit;
+  background: linear-gradient(120deg, rgba(255, 255, 255, 0.2), transparent 32%, rgba(117, 202, 255, 0.08) 68%, rgba(187, 128, 255, 0.13));
+  opacity: 0.8;
+}
+
+.home-library > *,
+.founder-note > *,
+.verdict-note > *,
+.home-category > *,
+.glass-panel > * {
+  position: relative;
+  z-index: 1;
+}
+
+.home-search,
+.input,
+.button-secondary,
+.icon-button,
+.pill,
+.badge,
+/* The glass chip is an emphasis state, not a resting one. Applied to
+   .browse-menu > summary unconditionally it drew a permanent panel around
+   "Browse ideas" while every sibling nav item stayed plain text, which reads
+   as a stuck hover. A selected tab does rest in this state, so it keeps it. */
+.browse-menu > summary:hover,
+.browse-menu > summary:focus-visible,
+.browse-menu[open] > summary,
+.primitive-tabs button[aria-selected="true"] {
+  background: rgba(137, 184, 244, 0.15) !important;
+  border-color: rgba(183, 228, 255, 0.34) !important;
+  color: var(--foreground);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.32), 0 8px 26px -18px rgba(27, 185, 255, 0.8);
+  backdrop-filter: blur(18px) saturate(160%);
+  -webkit-backdrop-filter: blur(18px) saturate(160%);
+}
+
+.home-search input,
+.input,
+.secondary-page input,
+.secondary-page textarea,
+.secondary-page select {
+  color: var(--foreground) !important;
+}
+
+.button-primary {
+  background: linear-gradient(110deg, #51d9ff, #5f8dff 48%, #ad7cff) !important;
+  color: #07152d !important;
+  border-color: rgba(221, 250, 255, 0.72) !important;
+  box-shadow: 0 12px 28px -12px rgba(62, 213, 255, 0.9), inset 0 1px 0 rgba(255, 255, 255, 0.65) !important;
+}
+
+.button-secondary:hover,
+.icon-button:hover,
+.pill:hover {
+  background: rgba(149, 208, 255, 0.28) !important;
+}
+
+.brand-mark {
+  background: linear-gradient(145deg, rgba(121, 208, 255, 0.3), rgba(170, 125, 255, 0.24)) !important;
+  border-color: rgba(204, 239, 255, 0.5) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.58), 0 10px 30px -18px rgba(77, 206, 255, 0.9) !important;
+}
+
+.menu-panel {
+  background: linear-gradient(140deg, rgba(24, 57, 111, 0.88), rgba(45, 34, 103, 0.82)) !important;
+}
+
+.menu-groups a:hover,
+.primitive-tabs button[aria-selected="true"] {
+  background: rgba(140, 202, 255, 0.25) !important;
+}
+
+.home-title,
+.page-heading,
+.section-heading,
+.library-category-copy h3,
+.blueprint-page h1,
+.blueprint-page h2,
+.secondary-page h2,
+.secondary-page h3 {
+  text-shadow: 0 3px 26px rgba(45, 154, 255, 0.2);
+}
+
+.home-category-image,
+.library-category-image,
+.library-placeholder-art,
+.secondary-category-art,
+.secondary-editorial-art,
+.secondary-article-cover,
+.secondary-seed-image {
+  background: linear-gradient(135deg, rgba(40, 111, 190, 0.4), rgba(109, 70, 178, 0.42)) !important;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.3), inset 0 0 36px rgba(91, 209, 255, 0.16);
+}
+
+.home-category img,
+.library-category-image img,
+.secondary-category-art img,
+.secondary-seed-image img {
+  mix-blend-mode: screen;
+  opacity: 0.86;
+}
+
+.badge-positive {
+  color: #9df4d4 !important;
+  background: rgba(45, 181, 142, 0.2) !important;
+}
+
+.badge-negative {
+  color: #ffb4cd !important;
+  background: rgba(200, 72, 126, 0.2) !important;
+}
+
+@media (max-width: 700px) {
+  .site-frame::before {
+    filter: blur(52px) saturate(145%);
+    opacity: 0.68;
+  }
+}
+
+/* Pointer light follows the shared spring-smoothed element coordinates. */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .glass-panel::before,
+  .home-library::before,
+  .founder-note::before,
+  .verdict-note::before,
+  .home-category::before {
+    background:
+      radial-gradient(
+        42% 120% at calc(50% + var(--el-ptr-x, 0) * 46%) calc(50% + var(--el-ptr-y, 0) * 46%),
+        rgba(112, 224, 255, 0.26),
+        transparent 72%
+      ),
+      linear-gradient(120deg, rgba(255, 255, 255, 0.2), transparent 32%, rgba(117, 202, 255, 0.08) 68%, rgba(187, 128, 255, 0.13));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glass-panel::before,
+  .home-library::before,
+  .founder-note::before,
+  .verdict-note::before,
+  .home-category::before {
+    background: linear-gradient(120deg, rgba(255, 255, 255, 0.16), transparent 38%, rgba(187, 128, 255, 0.1));
   }
 }
