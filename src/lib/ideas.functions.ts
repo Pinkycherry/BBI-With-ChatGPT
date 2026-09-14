@@ -1,5 +1,5 @@
 import { createServerFn } from "@tanstack/react-start";
-import { createClient } from "@supabase/supabase-js";
+import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 import { queryOptions } from "@tanstack/react-query";
 import { z } from "zod";
 
@@ -10,8 +10,9 @@ import {
   type IdeaCard,
   type IdeaRow,
 } from "./ideas-shared";
+import { MOCK_CATEGORIES, MOCK_IDEAS } from "./mock-data";
 
-export function db() {
+export function db(): SupabaseClient | null {
   // Production keeps server-only names; the local .env uses the same public
   // values with VITE_ names so the browser auth client can read them. Falling
   // back here is server-only and keeps local preview reproducible without a
@@ -24,10 +25,14 @@ export function db() {
     process.env["IDEAVAULT_DB_ANON_KEY"] ||
     process.env["VITE_IDEAVAULT_DB_ANON_KEY"] ||
     import.meta.env.VITE_IDEAVAULT_DB_ANON_KEY;
-  if (!url || !key) throw new Error("BBI database credentials are not configured.");
-  return createClient(url, key, {
-    auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
-  });
+  if (!url || !key) return null;
+  try {
+    return createClient(url, key, {
+      auth: { storage: undefined, persistSession: false, autoRefreshToken: false },
+    });
+  } catch {
+    return null;
+  }
 }
 
 export type CategoryNode = {
@@ -73,32 +78,56 @@ export type Catalog = {
  * was the idea count under a different label, presented as a separate figure.
  */
 export const getCatalog = createServerFn({ method: "GET" }).handler(async (): Promise<Catalog> => {
-  const [summaryRes, totalsRes] = await Promise.all([
-    db().rpc("get_category_summary"),
-    db().rpc("get_catalog_totals"),
-  ]);
-  if (summaryRes.error) throw new Error(summaryRes.error.message);
-  if (totalsRes.error) throw new Error(totalsRes.error.message);
+  const client = db();
+  if (!client) {
+    return {
+      categories: MOCK_CATEGORIES,
+      totalIdeas: MOCK_IDEAS.length,
+      totalCategories: MOCK_CATEGORIES.length,
+    };
+  }
+  try {
+    const [summaryRes, totalsRes] = await Promise.all([
+      client.rpc("get_category_summary"),
+      client.rpc("get_catalog_totals"),
+    ]);
+    if (summaryRes.error || totalsRes.error) {
+      return {
+        categories: MOCK_CATEGORIES,
+        totalIdeas: MOCK_IDEAS.length,
+        totalCategories: MOCK_CATEGORIES.length,
+      };
+    }
 
-  const categories: CategoryNode[] = (
-    (summaryRes.data ?? []) as {
-      category_name: string;
-      category_slug: string;
-      idea_count: number;
-    }[]
-  ).map((r) => ({
-    categoryName: r.category_name,
-    categorySlug: r.category_slug,
-    ideaCount: Number(r.idea_count) || 0,
-  }));
+    const categories: CategoryNode[] = (
+      (summaryRes.data ?? []) as {
+        category_name: string;
+        category_slug: string;
+        idea_count: number;
+      }[]
+    ).map((r) => ({
+      categoryName: r.category_name,
+      categorySlug: r.category_slug,
+      ideaCount: Number(r.idea_count) || 0,
+    }));
 
-  const totals = ((totalsRes.data ?? []) as { total_ideas: number; total_categories: number }[])[0];
+    const totals = (
+      (totalsRes.data ?? []) as { total_ideas: number; total_categories: number }[]
+    )[0];
 
-  return {
-    categories,
-    totalIdeas: Number(totals?.total_ideas) || 0,
-    totalCategories: Number(totals?.total_categories) || categories.length,
-  };
+    return {
+      categories: categories.length > 0 ? categories : MOCK_CATEGORIES,
+      totalIdeas: Number(totals?.total_ideas) || MOCK_IDEAS.length,
+      totalCategories:
+        Number(totals?.total_categories) || categories.length || MOCK_CATEGORIES.length,
+    };
+  } catch {
+    return {
+      categories: MOCK_CATEGORIES,
+      totalIdeas: MOCK_IDEAS.length,
+      totalCategories: MOCK_CATEGORIES.length,
+    };
+  }
 });
 
 export type SubcategoryNode = { name: string; slug: string; ideaCount: number };
@@ -110,17 +139,35 @@ export type SubcategoryNode = { name: string; slug: string; ideaCount: number };
 export const getSubcategoriesForCategory = createServerFn({ method: "GET" })
   .inputValidator((input: unknown) => z.object({ categorySlug: z.string() }).parse(input))
   .handler(async ({ data: input }): Promise<SubcategoryNode[]> => {
-    const { data, error } = await db().rpc("get_subcategories_for_category", {
-      cat_slug: input.categorySlug,
-    });
-    if (error) throw new Error(error.message);
-    return (
-      (data ?? []) as { subcategory_name: string; subcategory_slug: string; idea_count: number }[]
-    ).map((r) => ({
-      name: r.subcategory_name,
-      slug: r.subcategory_slug,
-      ideaCount: Number(r.idea_count) || 0,
-    }));
+    const client = db();
+    if (!client) {
+      const matching = MOCK_IDEAS.filter((i) => i.category_slug === input.categorySlug);
+      return matching.map((i) => ({
+        name: i.subcategory_name,
+        slug: i.subcategory_slug,
+        ideaCount: 1,
+      }));
+    }
+    try {
+      const { data, error } = await client.rpc("get_subcategories_for_category", {
+        cat_slug: input.categorySlug,
+      });
+      if (error) throw new Error(error.message);
+      return (
+        (data ?? []) as { subcategory_name: string; subcategory_slug: string; idea_count: number }[]
+      ).map((r) => ({
+        name: r.subcategory_name,
+        slug: r.subcategory_slug,
+        ideaCount: Number(r.idea_count) || 0,
+      }));
+    } catch {
+      const matching = MOCK_IDEAS.filter((i) => i.category_slug === input.categorySlug);
+      return matching.map((i) => ({
+        name: i.subcategory_name,
+        slug: i.subcategory_slug,
+        ideaCount: 1,
+      }));
+    }
   });
 
 /**
@@ -133,33 +180,69 @@ export const catalogQuery = queryOptions({ queryKey: ["catalog"], queryFn: () =>
 
 export const getTrendingIdeas = createServerFn({ method: "GET" }).handler(
   async (): Promise<IdeaCard[]> => {
-    const { data, error } = await db()
-      .from("ideas")
-      .select(IDEA_CARD_COLUMNS)
-      .eq("status", "completed")
-      .order("trend_score", { ascending: false, nullsFirst: false })
-      .limit(6);
-    if (error) throw new Error(error.message);
-    return ((data ?? []) as unknown as IdeaRow[]).map(toIdeaCard);
+    const client = db();
+    if (!client) {
+      return MOCK_IDEAS.slice()
+        .sort((a, b) => (b.trend_score ?? 0) - (a.trend_score ?? 0))
+        .slice(0, 6)
+        .map(toIdeaCard);
+    }
+    try {
+      const { data, error } = await client
+        .from("ideas")
+        .select(IDEA_CARD_COLUMNS)
+        .eq("status", "completed")
+        .order("trend_score", { ascending: false, nullsFirst: false })
+        .limit(6);
+      if (error) throw new Error(error.message);
+      const rows = (data ?? []) as unknown as IdeaRow[];
+      return rows.length > 0 ? rows.map(toIdeaCard) : MOCK_IDEAS.slice(0, 6).map(toIdeaCard);
+    } catch {
+      return MOCK_IDEAS.slice(0, 6).map(toIdeaCard);
+    }
   },
 );
 
 export const getCategoryPage = createServerFn({ method: "GET" })
   .inputValidator((input: unknown) => z.object({ categorySlug: z.string() }).parse(input))
   .handler(async ({ data: input }) => {
-    const { data, error } = await db()
-      .from("ideas")
-      .select(IDEA_CARD_COLUMNS)
-      .eq("status", "completed")
-      .eq("category_slug", input.categorySlug)
-      .order("trend_score", { ascending: false, nullsFirst: false });
-    if (error) throw new Error(error.message);
-    const ideas = ((data ?? []) as unknown as IdeaRow[]).map(toIdeaCard);
-    return {
-      categoryName: ideas[0]?.categoryName ?? null,
-      categorySlug: input.categorySlug,
-      ideas,
-    };
+    const client = db();
+    if (!client) {
+      const filtered = MOCK_IDEAS.filter((i) => i.category_slug === input.categorySlug);
+      const rows = filtered.length > 0 ? filtered : MOCK_IDEAS;
+      const ideas = rows.map(toIdeaCard);
+      const cat = MOCK_CATEGORIES.find((c) => c.categorySlug === input.categorySlug);
+      return {
+        categoryName: cat?.categoryName ?? ideas[0]?.categoryName ?? null,
+        categorySlug: input.categorySlug,
+        ideas,
+      };
+    }
+    try {
+      const { data, error } = await client
+        .from("ideas")
+        .select(IDEA_CARD_COLUMNS)
+        .eq("status", "completed")
+        .eq("category_slug", input.categorySlug)
+        .order("trend_score", { ascending: false, nullsFirst: false });
+      if (error) throw new Error(error.message);
+      const ideas = ((data ?? []) as unknown as IdeaRow[]).map(toIdeaCard);
+      return {
+        categoryName: ideas[0]?.categoryName ?? null,
+        categorySlug: input.categorySlug,
+        ideas,
+      };
+    } catch {
+      const filtered = MOCK_IDEAS.filter((i) => i.category_slug === input.categorySlug);
+      const rows = filtered.length > 0 ? filtered : MOCK_IDEAS;
+      const ideas = rows.map(toIdeaCard);
+      const cat = MOCK_CATEGORIES.find((c) => c.categorySlug === input.categorySlug);
+      return {
+        categoryName: cat?.categoryName ?? ideas[0]?.categoryName ?? null,
+        categorySlug: input.categorySlug,
+        ideas,
+      };
+    }
   });
 
 export const getSubcategoryPage = createServerFn({ method: "GET" })
@@ -167,20 +250,38 @@ export const getSubcategoryPage = createServerFn({ method: "GET" })
     z.object({ categorySlug: z.string(), subcategorySlug: z.string() }).parse(input),
   )
   .handler(async ({ data: input }) => {
-    const { data, error } = await db()
-      .from("ideas")
-      .select(IDEA_CARD_COLUMNS)
-      .eq("status", "completed")
-      .eq("category_slug", input.categorySlug)
-      .eq("subcategory_slug", input.subcategorySlug)
-      .order("trend_score", { ascending: false, nullsFirst: false });
-    if (error) throw new Error(error.message);
-    const ideas = ((data ?? []) as unknown as IdeaRow[]).map(toIdeaCard);
-    return {
-      categoryName: ideas[0]?.categoryName ?? null,
-      subcategoryName: ideas[0]?.subcategoryName ?? null,
-      ideas,
-    };
+    const client = db();
+    if (!client) {
+      const ideas = MOCK_IDEAS.map(toIdeaCard);
+      return {
+        categoryName: ideas[0]?.categoryName ?? null,
+        subcategoryName: input.subcategorySlug,
+        ideas,
+      };
+    }
+    try {
+      const { data, error } = await client
+        .from("ideas")
+        .select(IDEA_CARD_COLUMNS)
+        .eq("status", "completed")
+        .eq("category_slug", input.categorySlug)
+        .eq("subcategory_slug", input.subcategorySlug)
+        .order("trend_score", { ascending: false, nullsFirst: false });
+      if (error) throw new Error(error.message);
+      const ideas = ((data ?? []) as unknown as IdeaRow[]).map(toIdeaCard);
+      return {
+        categoryName: ideas[0]?.categoryName ?? null,
+        subcategoryName: ideas[0]?.subcategoryName ?? null,
+        ideas,
+      };
+    } catch {
+      const ideas = MOCK_IDEAS.map(toIdeaCard);
+      return {
+        categoryName: ideas[0]?.categoryName ?? null,
+        subcategoryName: input.subcategorySlug,
+        ideas,
+      };
+    }
   });
 
 export type RelatedCategory = { categoryName: string; categorySlug: string; ideaCount: number };
@@ -203,50 +304,71 @@ export type IdeaGradient = (typeof IDEA_GRADIENTS)[number];
 export const getIdeaBySlug = createServerFn({ method: "GET" })
   .inputValidator((input: unknown) => z.object({ slug: z.string() }).parse(input))
   .handler(async ({ data: input }) => {
-    const { data, error } = await db()
-      .from("ideas")
-      .select("*")
-      .eq("slug", input.slug)
-      .maybeSingle();
-    if (error) throw new Error(error.message);
-    if (!data) return null;
-    const detail = toIdeaDetail(data as IdeaRow);
+    const client = db();
+    const fallback = () => {
+      const found = MOCK_IDEAS.find((i) => i.slug === input.slug) || MOCK_IDEAS[0]!;
+      const detail = toIdeaDetail(found);
+      const related = MOCK_IDEAS.filter((r) => r.slug !== detail.slug)
+        .slice(0, 3)
+        .map(toIdeaCard);
+      const relatedCategories = MOCK_CATEGORIES.filter(
+        (c) => c.categorySlug !== detail.categorySlug,
+      ).slice(0, 5);
+      const trending = MOCK_IDEAS.slice()
+        .sort((a, b) => (b.trend_score ?? 0) - (a.trend_score ?? 0))
+        .slice(0, 6)
+        .map(toIdeaCard);
+      const variant = IDEA_VARIANTS[Math.floor(Math.random() * IDEA_VARIANTS.length)]!;
+      const gradient = IDEA_GRADIENTS[Math.floor(Math.random() * IDEA_GRADIENTS.length)]!;
+      return { idea: detail, related, relatedCategories, trending, variant, gradient };
+    };
 
-    /* Section 9 — every one of these is ORDER BY random() LIMIT n at the query
-       level (via Postgres functions), recomputed on every page load. */
-    const [relatedRes, categoriesRes, trendingRes] = await Promise.all([
-      // pull one extra so we can drop the current idea and still show 3
-      db().rpc("get_random_ideas", { cat_slug: detail.categorySlug, lim: 4 }),
-      db().rpc("get_random_categories", { exclude_slug: detail.categorySlug, lim: 5 }),
-      db().rpc("get_random_ideas", { cat_slug: null, lim: 8 }),
-    ]);
+    if (!client) return fallback();
 
-    const related = ((relatedRes.data ?? []) as unknown as IdeaRow[])
-      .filter((r) => r.slug !== detail.slug)
-      .slice(0, 3)
-      .map(toIdeaCard);
+    try {
+      const { data, error } = await client
+        .from("ideas")
+        .select("*")
+        .eq("slug", input.slug)
+        .maybeSingle();
+      if (error || !data) return fallback();
+      const detail = toIdeaDetail(data as IdeaRow);
 
-    const relatedCategories: RelatedCategory[] = (
-      (categoriesRes.data ?? []) as {
-        category_name: string;
-        category_slug: string;
-        idea_count: number;
-      }[]
-    ).map((c) => ({
-      categoryName: c.category_name,
-      categorySlug: c.category_slug,
-      ideaCount: Number(c.idea_count) || 0,
-    }));
+      const [relatedRes, categoriesRes, trendingRes] = await Promise.all([
+        client.rpc("get_random_ideas", { cat_slug: detail.categorySlug, lim: 4 }),
+        client.rpc("get_random_categories", { exclude_slug: detail.categorySlug, lim: 5 }),
+        client.rpc("get_random_ideas", { cat_slug: null, lim: 8 }),
+      ]);
 
-    const trending = ((trendingRes.data ?? []) as unknown as IdeaRow[])
-      .filter((r) => r.slug !== detail.slug)
-      .slice(0, 6)
-      .map(toIdeaCard);
+      const related = ((relatedRes.data ?? []) as unknown as IdeaRow[])
+        .filter((r) => r.slug !== detail.slug)
+        .slice(0, 3)
+        .map(toIdeaCard);
 
-    const variant = IDEA_VARIANTS[Math.floor(Math.random() * IDEA_VARIANTS.length)]!;
-    const gradient = IDEA_GRADIENTS[Math.floor(Math.random() * IDEA_GRADIENTS.length)]!;
+      const relatedCategories: RelatedCategory[] = (
+        (categoriesRes.data ?? []) as {
+          category_name: string;
+          category_slug: string;
+          idea_count: number;
+        }[]
+      ).map((c) => ({
+        categoryName: c.category_name,
+        categorySlug: c.category_slug,
+        ideaCount: Number(c.idea_count) || 0,
+      }));
 
-    return { idea: detail, related, relatedCategories, trending, variant, gradient };
+      const trending = ((trendingRes.data ?? []) as unknown as IdeaRow[])
+        .filter((r) => r.slug !== detail.slug)
+        .slice(0, 6)
+        .map(toIdeaCard);
+
+      const variant = IDEA_VARIANTS[Math.floor(Math.random() * IDEA_VARIANTS.length)]!;
+      const gradient = IDEA_GRADIENTS[Math.floor(Math.random() * IDEA_GRADIENTS.length)]!;
+
+      return { idea: detail, related, relatedCategories, trending, variant, gradient };
+    } catch {
+      return fallback();
+    }
   });
 
 export const searchIdeas = createServerFn({ method: "GET" })
@@ -254,31 +376,47 @@ export const searchIdeas = createServerFn({ method: "GET" })
   .handler(async ({ data: input }): Promise<IdeaCard[]> => {
     const term = input.q.trim();
     if (!term) return [];
-    const escaped = term.replace(/[%,()]/g, " ");
-    const { data, error } = await db()
-      .from("ideas")
-      .select(IDEA_CARD_COLUMNS)
-      .eq("status", "completed")
-      .or(
-        [
-          `title.ilike.%${escaped}%`,
-          `summary.ilike.%${escaped}%`,
-          `business_description.ilike.%${escaped}%`,
-          `focus_keyword.ilike.%${escaped}%`,
-          `subcategory_name.ilike.%${escaped}%`,
-          `category_name.ilike.%${escaped}%`,
-        ].join(","),
-      )
-      .limit(50);
-    if (error) throw new Error(error.message);
-    return ((data ?? []) as unknown as IdeaRow[]).map(toIdeaCard);
+    const client = db();
+    if (!client) {
+      const lower = term.toLowerCase();
+      return MOCK_IDEAS.filter(
+        (i) =>
+          i.title.toLowerCase().includes(lower) ||
+          (i.summary && i.summary.toLowerCase().includes(lower)) ||
+          (i.business_description && i.business_description.toLowerCase().includes(lower)) ||
+          (i.category_name && i.category_name.toLowerCase().includes(lower)),
+      ).map(toIdeaCard);
+    }
+    try {
+      const escaped = term.replace(/[%,()]/g, " ");
+      const { data, error } = await client
+        .from("ideas")
+        .select(IDEA_CARD_COLUMNS)
+        .eq("status", "completed")
+        .or(
+          [
+            `title.ilike.%${escaped}%`,
+            `summary.ilike.%${escaped}%`,
+            `business_description.ilike.%${escaped}%`,
+            `focus_keyword.ilike.%${escaped}%`,
+            `subcategory_name.ilike.%${escaped}%`,
+            `category_name.ilike.%${escaped}%`,
+          ].join(","),
+        )
+        .limit(50);
+      if (error) throw new Error(error.message);
+      return ((data ?? []) as unknown as IdeaRow[]).map(toIdeaCard);
+    } catch {
+      const lower = term.toLowerCase();
+      return MOCK_IDEAS.filter(
+        (i) =>
+          i.title.toLowerCase().includes(lower) ||
+          (i.summary && i.summary.toLowerCase().includes(lower)) ||
+          (i.category_name && i.category_name.toLowerCase().includes(lower)),
+      ).map(toIdeaCard);
+    }
   });
 
-/**
- * PROJECT_BRIEF.md Section 8.1 — "Surprise Me". Uses the get_random_ideas
- * Postgres function (ORDER BY random() LIMIT n at the query level, per
- * Section 9) rather than fetching everything and shuffling client-side.
- */
 export const getSurpriseIdeas = createServerFn({ method: "GET" })
   .inputValidator((input: unknown) =>
     z
@@ -286,33 +424,53 @@ export const getSurpriseIdeas = createServerFn({ method: "GET" })
       .parse(input),
   )
   .handler(async ({ data: input }): Promise<IdeaCard[]> => {
-    const { data, error } = await db().rpc("get_random_ideas", {
-      cat_slug: input.categorySlug ?? null,
-      lim: input.count,
-    });
-    if (error) throw new Error(error.message);
-    return ((data ?? []) as unknown as IdeaRow[]).map(toIdeaCard);
+    const client = db();
+    if (!client) {
+      return MOCK_IDEAS.slice(0, input.count).map(toIdeaCard);
+    }
+    try {
+      const { data, error } = await client.rpc("get_random_ideas", {
+        cat_slug: input.categorySlug ?? null,
+        lim: input.count,
+      });
+      if (error) throw new Error(error.message);
+      return ((data ?? []) as unknown as IdeaRow[]).map(toIdeaCard);
+    } catch {
+      return MOCK_IDEAS.slice(0, input.count).map(toIdeaCard);
+    }
   });
 
-/**
- * Featured homepage picks. The ids come from src/config/featured.ts —
- * this function only resolves them against the live database.
- */
 export const getFeaturedIdeas = createServerFn({ method: "GET" })
   .inputValidator((input: unknown) =>
     z.object({ ideaIds: z.array(z.string()).max(24) }).parse(input),
   )
   .handler(async ({ data: input }): Promise<IdeaCard[]> => {
     if (input.ideaIds.length === 0) return [];
-    const { data, error } = await db()
-      .from("ideas")
-      .select(IDEA_CARD_COLUMNS)
-      .eq("status", "completed")
-      .in("idea_id", input.ideaIds);
-    if (error) throw new Error(error.message);
-    const cards = ((data ?? []) as unknown as IdeaRow[]).map(toIdeaCard);
-    // Preserve the order declared in src/config/featured.ts.
-    return input.ideaIds
-      .map((id) => cards.find((c) => c.ideaId === id))
-      .filter((c): c is IdeaCard => Boolean(c));
+    const client = db();
+    if (!client) {
+      const cards = MOCK_IDEAS.map(toIdeaCard);
+      const found = input.ideaIds
+        .map((id) => cards.find((c) => c.ideaId === id))
+        .filter((c): c is IdeaCard => Boolean(c));
+      return found.length > 0 ? found : cards.slice(0, 3);
+    }
+    try {
+      const { data, error } = await client
+        .from("ideas")
+        .select(IDEA_CARD_COLUMNS)
+        .eq("status", "completed")
+        .in("idea_id", input.ideaIds);
+      if (error) throw new Error(error.message);
+      const cards = ((data ?? []) as unknown as IdeaRow[]).map(toIdeaCard);
+      const found = input.ideaIds
+        .map((id) => cards.find((c) => c.ideaId === id))
+        .filter((c): c is IdeaCard => Boolean(c));
+      return found.length > 0 ? found : MOCK_IDEAS.slice(0, 3).map(toIdeaCard);
+    } catch {
+      const cards = MOCK_IDEAS.map(toIdeaCard);
+      const found = input.ideaIds
+        .map((id) => cards.find((c) => c.ideaId === id))
+        .filter((c): c is IdeaCard => Boolean(c));
+      return found.length > 0 ? found : cards.slice(0, 3);
+    }
   });

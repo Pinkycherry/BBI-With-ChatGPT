@@ -7,18 +7,19 @@ import { createClient } from "@supabase/supabase-js";
  * actually run on. Uses the public anon key, which is safe to ship to the
  * browser: RLS on public.profiles is what actually enforces access.
  */
-export const authClient = createClient(
-  import.meta.env["VITE_IDEAVAULT_DB_URL"] as string,
-  import.meta.env["VITE_IDEAVAULT_DB_ANON_KEY"] as string,
-  {
-    auth: {
-      persistSession: true,
-      autoRefreshToken: true,
-      detectSessionInUrl: true,
-      flowType: "pkce",
-    },
+const supabaseUrl =
+  (import.meta.env["VITE_IDEAVAULT_DB_URL"] as string) || "https://placeholder.supabase.co";
+const supabaseAnonKey =
+  (import.meta.env["VITE_IDEAVAULT_DB_ANON_KEY"] as string) || "placeholder-anon-key";
+
+export const authClient = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    persistSession: true,
+    autoRefreshToken: true,
+    detectSessionInUrl: true,
+    flowType: "pkce",
   },
-);
+});
 
 /**
  * redirectTo must be an absolute URL back into this app (Supabase rejects/

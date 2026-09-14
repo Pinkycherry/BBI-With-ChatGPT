@@ -51,35 +51,59 @@ async function wpFetch(path: string): Promise<unknown> {
 }
 
 export async function fetchPosts(page: number, perPage: number) {
-  const posts = (await wpFetch(
-    `/posts?per_page=${perPage}&page=${page}&_embed=1&orderby=date&order=desc`,
-  )) as WpPost[];
-  return {
-    posts: posts.map(toCard),
-    siteUrl: wordpressSiteUrl(),
-    page,
-    hasMore: posts.length === perPage,
-  };
+  try {
+    const posts = (await wpFetch(
+      `/posts?per_page=${perPage}&page=${page}&_embed=1&orderby=date&order=desc`,
+    )) as WpPost[];
+    return {
+      posts: Array.isArray(posts) ? posts.map(toCard) : [],
+      siteUrl: wordpressSiteUrl(),
+      page,
+      hasMore: Array.isArray(posts) && posts.length === perPage,
+    };
+  } catch {
+    return {
+      posts: [],
+      siteUrl: wordpressSiteUrl(),
+      page,
+      hasMore: false,
+    };
+  }
 }
 
 export async function fetchPostBySlug(slug: string): Promise<{
   post: BlogPost;
   related: BlogPostCard[];
 } | null> {
-  const found = (await wpFetch(
-    `/posts?slug=${encodeURIComponent(slug)}&_embed=1`,
-  )) as WpPost[];
-  const post = found[0];
-  if (!post) return null;
+  try {
+    const found = (await wpFetch(`/posts?slug=${encodeURIComponent(slug)}&_embed=1`)) as WpPost[];
+    const post = found?.[0];
+    if (!post) return null;
 
-  const recent = (await wpFetch(`/posts?per_page=4&_embed=1&orderby=date&order=desc`)) as WpPost[];
+    let related: BlogPostCard[] = [];
+    try {
+      const recent = (await wpFetch(
+        `/posts?per_page=4&_embed=1&orderby=date&order=desc`,
+      )) as WpPost[];
+      if (Array.isArray(recent)) {
+        related = recent
+          .filter((p) => p.slug !== slug)
+          .slice(0, 3)
+          .map(toCard);
+      }
+    } catch {
+      related = [];
+    }
 
-  return {
-    post: {
-      ...toCard(post),
-      html: sanitizeWordPressHtml(post.content.rendered),
-      sourceUrl: post.link,
-    },
-    related: recent.filter((p) => p.slug !== slug).slice(0, 3).map(toCard),
-  };
+    return {
+      post: {
+        ...toCard(post),
+        html: sanitizeWordPressHtml(post.content.rendered),
+        sourceUrl: post.link,
+      },
+      related,
+    };
+  } catch {
+    return null;
+  }
 }

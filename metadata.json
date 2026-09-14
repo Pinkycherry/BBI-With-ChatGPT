@@ -1,0 +1,6 @@
+{
+  "name": "BBI — Bro Business Ideas",
+  "description": "Researched business idea blueprints with market context, trend scores and honest founder-fit verdicts.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

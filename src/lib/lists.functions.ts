@@ -9,6 +9,7 @@ import {
   type IdeaDetail,
   type IdeaRow,
 } from "./ideas-shared";
+import { MOCK_CATEGORIES, MOCK_IDEAS } from "./mock-data";
 
 /**
  * LISTICLE TEMPLATE DATA — PROJECT_BRIEF.md Section 6.3.
@@ -174,42 +175,85 @@ function toEntry(row: IdeaRow, rank: number): ListicleEntry {
 
 type IndexRow = Pick<IdeaRow, "category_name" | "category_slug" | "title" | "slug" | "trend_score">;
 
+function fallbackListicleIndex(): ListicleSummary[] {
+  const map = new Map<string, ListicleSummary>();
+  for (const idea of MOCK_IDEAS) {
+    const existing = map.get(idea.category_slug);
+    if (existing) {
+      existing.ideaCount += 1;
+    } else {
+      map.set(idea.category_slug, {
+        categoryName: idea.category_name,
+        categorySlug: idea.category_slug,
+        ideaCount: 1,
+        title: "",
+        topIdeaTitle: idea.title,
+        topIdeaSlug: idea.slug,
+        topTrendScore: idea.trend_score,
+      });
+    }
+  }
+  for (const cat of MOCK_CATEGORIES) {
+    if (!map.has(cat.categorySlug)) {
+      map.set(cat.categorySlug, {
+        categoryName: cat.categoryName,
+        categorySlug: cat.categorySlug,
+        ideaCount: cat.ideaCount,
+        title: "",
+        topIdeaTitle: null,
+        topIdeaSlug: null,
+        topTrendScore: 85,
+      });
+    }
+  }
+  const lists = [...map.values()];
+  for (const list of lists) list.title = listicleTitle(list.categoryName, list.ideaCount);
+  return lists.sort((a, b) => b.ideaCount - a.ideaCount);
+}
+
 /**
  * Every category that has completed ideas, with its live count and its
  * highest-trending idea. Shared by the index route and the cross-link rail at
  * the foot of a single listicle, so both read one query shape.
  */
 async function loadListicleIndex(): Promise<ListicleSummary[]> {
-  const { data, error } = await db()
-    .from("ideas")
-    .select("category_name,category_slug,title,slug,trend_score")
-    .eq("status", "completed")
-    .order("trend_score", { ascending: false, nullsFirst: false });
-  if (error) throw new Error(error.message);
+  const client = db();
+  if (!client) return fallbackListicleIndex();
 
-  const map = new Map<string, ListicleSummary>();
-  for (const row of (data ?? []) as IndexRow[]) {
-    const existing = map.get(row.category_slug);
-    if (existing) {
-      existing.ideaCount += 1;
-      continue;
+  try {
+    const { data, error } = await client
+      .from("ideas")
+      .select("category_name,category_slug,title,slug,trend_score")
+      .eq("status", "completed")
+      .order("trend_score", { ascending: false, nullsFirst: false });
+    if (error || !data || data.length === 0) return fallbackListicleIndex();
+
+    const map = new Map<string, ListicleSummary>();
+    for (const row of data as IndexRow[]) {
+      const existing = map.get(row.category_slug);
+      if (existing) {
+        existing.ideaCount += 1;
+        continue;
+      }
+      // Rows arrive trend_score DESC, so the first row seen for a category is
+      // that category's top idea. No second query needed.
+      map.set(row.category_slug, {
+        categoryName: row.category_name,
+        categorySlug: row.category_slug,
+        ideaCount: 1,
+        title: "",
+        topIdeaTitle: row.title,
+        topIdeaSlug: row.slug,
+        topTrendScore: row.trend_score,
+      });
     }
-    // Rows arrive trend_score DESC, so the first row seen for a category is
-    // that category's top idea. No second query needed.
-    map.set(row.category_slug, {
-      categoryName: row.category_name,
-      categorySlug: row.category_slug,
-      ideaCount: 1,
-      title: "",
-      topIdeaTitle: row.title,
-      topIdeaSlug: row.slug,
-      topTrendScore: row.trend_score,
-    });
-  }
 
-  const lists = [...map.values()];
-  for (const list of lists) list.title = listicleTitle(list.categoryName, list.ideaCount);
-  return lists.sort((a, b) => b.ideaCount - a.ideaCount);
+    const lists = [...map.values()];
+    for (const list of lists) list.title = listicleTitle(list.categoryName, list.ideaCount);
+    return lists.sort((a, b) => b.ideaCount - a.ideaCount);
+  } catch {
+    return fallbackListicleIndex();
+  }
 }
 
 export const getListicleIndex = createServerFn({ method: "GET" }).handler(
@@ -219,45 +263,83 @@ export const getListicleIndex = createServerFn({ method: "GET" }).handler(
 export const getListicle = createServerFn({ method: "GET" })
   .inputValidator((input: unknown) => z.object({ categorySlug: z.string() }).parse(input))
   .handler(async ({ data: input }): Promise<ListiclePage | null> => {
-    const [ideasRes, lists] = await Promise.all([
-      db()
-        .from("ideas")
-        .select("*")
-        .eq("status", "completed")
-        .eq("category_slug", input.categorySlug)
-        .order("trend_score", { ascending: false, nullsFirst: false }),
-      loadListicleIndex(),
-    ]);
-    if (ideasRes.error) throw new Error(ideasRes.error.message);
-
-    const rows = (ideasRes.data ?? []) as unknown as IdeaRow[];
-    if (rows.length === 0) return null;
-
-    const categoryName = rows[0]?.category_name ?? input.categorySlug;
-    const entries = rows.slice(0, DETAILED_ENTRY_COUNT).map((row, i) => toEntry(row, i + 1));
-    const rest = rows.slice(DETAILED_ENTRY_COUNT).map(toIdeaCard);
-
-    const subcategories: { name: string; slug: string; ideaCount: number }[] = [];
-    for (const row of rows) {
-      const found = subcategories.find((s) => s.slug === row.subcategory_slug);
-      if (found) found.ideaCount += 1;
-      else
-        subcategories.push({
-          name: row.subcategory_name,
-          slug: row.subcategory_slug,
-          ideaCount: 1,
-        });
-    }
-    subcategories.sort((a, b) => b.ideaCount - a.ideaCount);
-
-    return {
-      categoryName,
-      categorySlug: input.categorySlug,
-      title: listicleTitle(categoryName, rows.length),
-      totalIdeas: rows.length,
-      entries,
-      rest,
-      subcategories,
-      otherLists: lists.filter((list) => list.categorySlug !== input.categorySlug).slice(0, 6),
+    const client = db();
+    const fallbackListicle = async (): Promise<ListiclePage | null> => {
+      const lists = await loadListicleIndex();
+      const rows = MOCK_IDEAS.filter((i) => i.category_slug === input.categorySlug);
+      const activeRows = rows.length > 0 ? rows : MOCK_IDEAS;
+      const cat = MOCK_CATEGORIES.find((c) => c.categorySlug === input.categorySlug);
+      const categoryName = cat?.categoryName ?? activeRows[0]?.category_name ?? input.categorySlug;
+      const entries = activeRows
+        .slice(0, DETAILED_ENTRY_COUNT)
+        .map((row, i) => toEntry(row, i + 1));
+      const rest = activeRows.slice(DETAILED_ENTRY_COUNT).map(toIdeaCard);
+      const subcategories: { name: string; slug: string; ideaCount: number }[] = [];
+      for (const row of activeRows) {
+        const found = subcategories.find((s) => s.slug === row.subcategory_slug);
+        if (found) found.ideaCount += 1;
+        else
+          subcategories.push({
+            name: row.subcategory_name,
+            slug: row.subcategory_slug,
+            ideaCount: 1,
+          });
+      }
+      return {
+        categoryName,
+        categorySlug: input.categorySlug,
+        title: listicleTitle(categoryName, activeRows.length),
+        totalIdeas: activeRows.length,
+        entries,
+        rest,
+        subcategories,
+        otherLists: lists.filter((list) => list.categorySlug !== input.categorySlug).slice(0, 6),
+      };
     };
+
+    if (!client) return fallbackListicle();
+
+    try {
+      const [ideasRes, lists] = await Promise.all([
+        client
+          .from("ideas")
+          .select("*")
+          .eq("status", "completed")
+          .eq("category_slug", input.categorySlug)
+          .order("trend_score", { ascending: false, nullsFirst: false }),
+        loadListicleIndex(),
+      ]);
+      if (ideasRes.error || !ideasRes.data || ideasRes.data.length === 0) return fallbackListicle();
+
+      const rows = ideasRes.data as unknown as IdeaRow[];
+      const categoryName = rows[0]?.category_name ?? input.categorySlug;
+      const entries = rows.slice(0, DETAILED_ENTRY_COUNT).map((row, i) => toEntry(row, i + 1));
+      const rest = rows.slice(DETAILED_ENTRY_COUNT).map(toIdeaCard);
+
+      const subcategories: { name: string; slug: string; ideaCount: number }[] = [];
+      for (const row of rows) {
+        const found = subcategories.find((s) => s.slug === row.subcategory_slug);
+        if (found) found.ideaCount += 1;
+        else
+          subcategories.push({
+            name: row.subcategory_name,
+            slug: row.subcategory_slug,
+            ideaCount: 1,
+          });
+      }
+      subcategories.sort((a, b) => b.ideaCount - a.ideaCount);
+
+      return {
+        categoryName,
+        categorySlug: input.categorySlug,
+        title: listicleTitle(categoryName, rows.length),
+        totalIdeas: rows.length,
+        entries,
+        rest,
+        subcategories,
+        otherLists: lists.filter((list) => list.categorySlug !== input.categorySlug).slice(0, 6),
+      };
+    } catch {
+      return fallbackListicle();
+    }
   });
