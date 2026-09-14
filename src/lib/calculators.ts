@@ -1,3 +1,4 @@
+import { GENERATED_CALCULATORS } from "./generated-calculators";
 /**
  * SINGLE SOURCE OF TRUTH for the calculator template (brief section 6.8).
  *
@@ -139,8 +140,13 @@ export type Calculator = {
   readonly intro: string;
   /** Meta description. */
   readonly description: string;
+  readonly seoKeywords?: readonly string[];
   readonly fields: readonly CalculatorField[];
   readonly compute: (values: CalculatorValues) => readonly Reading[];
+  readonly mentorAnalysis?: (values: CalculatorValues, readings: readonly Reading[]) => {
+    header: string;
+    tips: readonly string[];
+  };
 };
 
 // ---------------------------------------------------------------------------
@@ -631,6 +637,7 @@ export function fundingNeeded(input: FundingNeededInput): readonly Reading[] {
 const RUPEE_MAX = 1_000_000_000;
 
 export const CALCULATORS: readonly Calculator[] = [
+
   {
     slug: "break-even",
     title: "Break-even",
@@ -965,6 +972,8 @@ export const CALCULATORS: readonly Calculator[] = [
         monthsToCover: at(v, "monthsToCover"),
       }),
   },
+,
+  ...GENERATED_CALCULATORS
 ];
 
 export function findCalculator(slug: string): Calculator | undefined {

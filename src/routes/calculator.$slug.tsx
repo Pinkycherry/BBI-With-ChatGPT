@@ -43,6 +43,7 @@ export const Route = createFileRoute("/calculator/$slug")({
       meta: [
         { title },
         { name: "description", content: calculator.description },
+        { name: "keywords", content: (calculator.seoKeywords || []).join(", ") },
         { property: "og:title", content: title },
         { property: "og:description", content: calculator.description },
         { property: "og:type", content: "website" },
@@ -125,9 +126,7 @@ function CalculatorPage({ calculator }: { calculator: Calculator }) {
               { label: pageName },
             ]}
           />
-          <p className="mt-6 t-eyebrow">
-            Calculator
-          </p>
+          <p className="mt-6 t-eyebrow">Calculator</p>
           <h1
             ref={titleRef}
             className="cx-layer cx-z3 mt-4 text-4xl font-extrabold tracking-tight sm:text-5xl"
@@ -162,9 +161,7 @@ function CalculatorPage({ calculator }: { calculator: Calculator }) {
               <div ref={fieldsRef} className="mt-6 space-y-7">
                 {fieldGroups(calculator).map(({ group, fields }) => (
                   <fieldset key={group} className="border-0 p-0">
-                    <legend className="t-eyebrow">
-                      {group}
-                    </legend>
+                    <legend className="t-eyebrow">{group}</legend>
                     <div className="mt-4 grid grid-cols-[repeat(auto-fit,minmax(15rem,1fr))] gap-5">
                       {fields.map((field) => (
                         <FieldInput
@@ -213,6 +210,7 @@ function CalculatorPage({ calculator }: { calculator: Calculator }) {
                         <ResultRow key={reading.key} reading={reading} />
                       ))}
                     </ul>
+                    
                     <p className="mt-5 border-t border-border pt-4 text-xs leading-relaxed text-muted-foreground">
                       These answers come only from the figures above. This page holds no benchmark,
                       no market average and no opinion on whether a number is good — it does the
@@ -221,7 +219,31 @@ function CalculatorPage({ calculator }: { calculator: Calculator }) {
                   </>
                 )}
               </div>
+
+              {calculator.mentorAnalysis && issues.length === 0 && (
+                <div className="glass mo-card mt-6 overflow-hidden rounded-2xl border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-accent/5 p-6 shadow-[0_8px_30px_rgba(0,0,0,0.12)]">
+                  <div className="flex items-center gap-4 mb-4">
+                    <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-tr from-primary to-accent shadow-[0_0_20px_rgba(200,80,20,0.3)]">
+                      <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                      </svg>
+                    </div>
+                    <h3 className="font-display text-xl font-bold text-foreground">
+                      {calculator.mentorAnalysis(values, readings).header}
+                    </h3>
+                  </div>
+                  <ul className="space-y-3 mt-4">
+                    {calculator.mentorAnalysis(values, readings).tips.map((tip, i) => (
+                      <li key={i} className="flex items-start gap-3 text-sm leading-relaxed text-muted-foreground">
+                        <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-accent/80 shadow-[0_0_8px_rgba(200,80,20,0.8)]" />
+                        <span>{tip}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
+
           </div>
 
           <div className="glass mt-10 rounded-2xl px-5 py-6 sm:px-7">
@@ -272,9 +294,10 @@ function FieldInput({
       <label htmlFor={id} className="block text-sm font-semibold">
         {field.label} <span className="font-normal text-muted-foreground">({field.unitLabel})</span>
       </label>
-      <div className="mt-1.5 flex items-center gap-2 rounded-md border border-input bg-card px-3 focus-within:border-primary">
+      
+      <div className="mt-1.5 flex items-center gap-2 rounded-xl border border-input/60 bg-gradient-to-b from-card to-card/50 px-3 py-1 shadow-sm transition-all focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 hover:border-primary/50">
         {field.prefix && (
-          <span aria-hidden className="text-sm text-muted-foreground">
+          <span aria-hidden className="text-sm font-medium text-muted-foreground/80">
             {field.prefix}
           </span>
         )}
@@ -287,6 +310,8 @@ function FieldInput({
           value={value}
           onChange={(event) => onChange(event.target.value)}
           aria-describedby={issue ? `${helpId} ${errorId}` : helpId}
+          className="w-full bg-transparent py-1.5 text-base font-semibold outline-none placeholder:text-muted-foreground"
+
           aria-invalid={issue ? true : undefined}
           className="w-full min-w-0 bg-transparent py-2.5 text-sm tabular-nums outline-none"
         />
@@ -309,27 +334,24 @@ function FieldInput({
 }
 
 function ResultRow({ reading }: { reading: Reading }) {
-  const blocked = reading.status === "blocked";
   return (
-    <li className="mo-row -mx-2 rounded-xl px-2 py-2.5">
-      <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-        {reading.label}
-      </p>
-      <p
-        className={`mt-1 font-display font-bold tabular-nums ${
-          blocked
-            ? "text-lg leading-snug text-muted-foreground"
-            : reading.primary
-              ? "text-3xl text-accent"
-              : "text-xl"
-        }`}
-      >
-        {reading.display}
-      </p>
-      <p className="mt-1.5 text-xs leading-relaxed text-muted-foreground">{reading.formula}</p>
-      {reading.note && (
-        <p className="mt-1 text-xs leading-relaxed text-muted-foreground/80">{reading.note}</p>
+    <li className="relative overflow-hidden rounded-xl border border-border/60 bg-gradient-to-br from-background to-muted/20 p-4 shadow-sm transition-all hover:shadow-md">
+      {reading.primary && (
+        <div className="absolute top-0 right-0 h-16 w-16 -translate-y-8 translate-x-8 rounded-full bg-primary/20 blur-2xl" />
       )}
+      <div className="relative">
+        <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
+          {reading.label}
+        </p>
+        <p className={reading.primary ? "mt-1 font-display text-4xl font-extrabold tracking-tight text-primary drop-shadow-sm" : "mt-1 text-2xl font-bold tracking-tight text-foreground"}>
+          {reading.display}
+        </p>
+        <p className="mt-3 rounded-md bg-muted/50 px-2.5 py-1.5 text-xs font-medium text-muted-foreground">
+          {reading.formula}
+        </p>
+        {reading.note && <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{reading.note}</p>}
+      </div>
     </li>
   );
+
 }

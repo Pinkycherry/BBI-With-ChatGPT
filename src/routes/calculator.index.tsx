@@ -1,14 +1,10 @@
+import { useState } from "react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 import { SiteShell, Breadcrumbs } from "@/components/site-shell";
 import { CALCULATORS } from "@/lib/calculators";
 import { JsonLd, breadcrumbSchema, collectionPageSchema } from "@/lib/schema";
-import {
-  useDepthScene,
-  useElementPointerGroup,
-  useStaggerReveal,
-  useTextReveal,
-} from "@/motion";
+import { useDepthScene, useElementPointerGroup, useStaggerReveal, useTextReveal } from "@/motion";
 
 const TITLE = "Business Calculators for Indian Founders | BBI";
 const DESCRIPTION =
@@ -29,6 +25,7 @@ export const Route = createFileRoute("/calculator/")({
 });
 
 function CalculatorIndex() {
+  const [search, setSearch] = useState("");
   // One headline reveal per page, on the H1. One stagger, on the grid.
   const titleRef = useTextReveal<HTMLHeadingElement>();
   // Masthead depth scene: one shared observer + one shared frame callback
@@ -60,9 +57,7 @@ function CalculatorIndex() {
         <div ref={sceneRef} className="cx-scene mx-auto max-w-6xl px-3 py-12 sm:px-4">
           {/* EDITABLE SECTION START — safe to add, remove, or reorder sections below without breaking routing or data fetching. */}
           <Breadcrumbs items={[{ label: "Home", to: "/" }, { label: "Calculators" }]} />
-          <p className="mt-6 t-eyebrow">
-            Calculators
-          </p>
+          <p className="mt-6 t-eyebrow">Calculators</p>
           <h1
             ref={titleRef}
             className="cx-layer cx-z3 mt-4 text-4xl font-extrabold tracking-tight sm:text-5xl"
@@ -78,6 +73,22 @@ function CalculatorIndex() {
             anywhere, nothing is stored, and no figure is filled in for you.
           </p>
 
+          
+          <div className="mt-8 relative max-w-xl">
+            <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-4">
+              <svg className="h-5 w-5 text-muted-foreground" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M9 3.5a5.5 5.5 0 100 11 5.5 5.5 0 000-11zM2 9a7 7 0 1112.452 4.391l3.328 3.329a.75.75 0 11-1.06 1.06l-3.329-3.328A7 7 0 012 9z" clipRule="evenodd" />
+              </svg>
+            </div>
+            <input
+              type="search"
+              placeholder="Search 60+ calculators..."
+              className="w-full rounded-2xl border border-border/50 bg-background/50 py-3.5 pl-11 pr-4 text-sm outline-none transition-colors focus:border-primary focus:ring-1 focus:ring-primary"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
+
           <div
             ref={(node) => {
               gridRef.current = node;
@@ -85,16 +96,22 @@ function CalculatorIndex() {
             }}
             className="mt-10 grid gap-5 sm:grid-cols-2"
           >
-            {CALCULATORS.map((calculator) => (
+            {CALCULATORS.filter(c => {
+              const q = search.toLowerCase();
+              return c.title.toLowerCase().includes(q) || c.answers.toLowerCase().includes(q) || c.description.toLowerCase().includes(q);
+            }).map((calculator) => (
+              
               <Link
                 key={calculator.slug}
                 to="/calculator/$slug"
                 params={{ slug: calculator.slug }}
-                className="glass mo-card flex h-full flex-col gap-3 rounded-2xl p-6"
+                className="group relative flex h-full flex-col gap-3 overflow-hidden rounded-2xl border border-border/50 bg-gradient-to-br from-card/80 to-muted/30 p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)] hover:border-primary/30"
               >
-                <h2 className="font-display text-xl font-bold tracking-tight">
+                <div className="absolute -right-12 -top-12 h-32 w-32 rounded-full bg-primary/10 blur-3xl transition-all group-hover:bg-primary/20" />
+                <h2 className="font-display text-xl font-bold tracking-tight text-foreground transition-colors group-hover:text-primary">
                   {calculator.title} <span className="text-accent">{calculator.highlight}</span>
                 </h2>
+
                 <p className="text-sm leading-relaxed text-muted-foreground">
                   {calculator.answers}
                 </p>
