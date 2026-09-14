@@ -972,10 +972,9 @@ export const CALCULATORS: readonly Calculator[] = [
         monthsToCover: at(v, "monthsToCover"),
       }),
   },
-,
   ...GENERATED_CALCULATORS
 ];
 
 export function findCalculator(slug: string): Calculator | undefined {
-  return CALCULATORS.find((calculator) => calculator.slug === slug);
+  return CALCULATORS.find((calculator) => calculator && calculator.slug === slug);
 }
