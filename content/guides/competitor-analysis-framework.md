@@ -13,7 +13,6 @@ author: "BBI Research Team"
 
 # Competitor Analysis Framework for Founders
 
-<img src="/images/guides/competitor-analysis-framework-hero.webp" alt="BBI - Hero illustration for Competitor Analysis Framework for Founders - Conceptual diagram showing the core principles of competitor analysis framework" width="1200" height="630" fetchpriority="high" />
 
 Obsessing over competitors leads to derivative products. However, ignoring them entirely is strategic negligence. A strong competitor analysis framework does not focus on feature parity; it focuses on identifying positioning gaps, systemic weaknesses, and unserved niches that allow you to establish a strong initial wedge.
 

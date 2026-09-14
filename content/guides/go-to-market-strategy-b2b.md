@@ -13,7 +13,6 @@ author: "BBI Research Team"
 
 # Go-to-Market Strategy for B2B Startups
 
-<img src="/images/guides/go-to-market-strategy-b2b-hero.webp" alt="BBI - Hero illustration for Go-to-Market Strategy for B2B Startups - Conceptual diagram showing the core principles of go to market strategy b2b" width="1200" height="630" fetchpriority="high" />
 
 A Go-To-Market strategy is not a marketing plan; it is the operational alignment of pricing, sales, and distribution. In B2B, assuming 'if we build it, they will come' is a death sentence. You must systematically identify your wedge into the market and construct a predictable engine to exploit it.
 

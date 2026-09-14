@@ -13,7 +13,6 @@ author: "BBI Research Team"
 
 # Product-Led Growth Onboarding: Driving Rapid Activation
 
-<img src="/images/guides/product-led-growth-onboarding-hero.webp" alt="BBI - Hero illustration for Product-Led Growth Onboarding: Driving Rapid Activation - Conceptual diagram showing the core principles of product led growth onboarding" width="1200" height="630" fetchpriority="high" />
 
 In a PLG model, your product must sell itself. This means the onboarding experience is your primary sales rep. If users do not reach their 'Aha!' moment within the first five minutes, they will abandon the platform. Rapid activation is the cornerstone of product-led growth.
 

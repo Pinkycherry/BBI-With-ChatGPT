@@ -13,7 +13,6 @@ author: "BBI Research Team"
 
 # Micro SaaS Pricing Models: Structuring for Profitability
 
-<img src="/images/guides/micro-saas-pricing-models-hero.webp" alt="BBI - Hero illustration for Micro SaaS Pricing Models: Structuring for Profitability - Conceptual diagram showing the core principles of micro saas pricing models" width="1200" height="630" fetchpriority="high" />
 
 Pricing is the single most powerful lever in a Micro SaaS business. Yet, founders consistently underprice their products, relying on cost-plus models rather than value-based extraction. If you are building a targeted solution, your pricing must reflect the specific pain you are alleviating for your customer, not the hours you spent coding it.
 

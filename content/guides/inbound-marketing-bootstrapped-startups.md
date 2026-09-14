@@ -13,7 +13,6 @@ author: "BBI Research Team"
 
 # Inbound Marketing for Bootstrapped Startups
 
-<img src="/images/guides/inbound-marketing-bootstrapped-startups-hero.webp" alt="BBI - Hero illustration for Inbound Marketing for Bootstrapped Startups - Conceptual diagram showing the core principles of inbound marketing bootstrapped startups" width="1200" height="630" fetchpriority="high" />
 
 Bootstrapped founders cannot outspend venture-backed competitors on ads. Your leverage lies in inbound marketing. By building high-value, programmatic SEO assets and establishing deep domain authority, you create an organic acquisition moat that compounds over time and drives CAC down to near zero.
 

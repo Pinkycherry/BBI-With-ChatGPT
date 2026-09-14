@@ -13,7 +13,6 @@ author: "BBI Research Team"
 
 # Startup Cash Flow Management: Extending Your Runway
 
-<img src="/images/guides/startup-cash-flow-management-hero.webp" alt="BBI - Hero illustration for Startup Cash Flow Management: Extending Your Runway - Conceptual diagram showing the core principles of startup cash flow management" width="1200" height="630" fetchpriority="high" />
 
 Revenue is vanity, margin is sanity, but cash is reality. A profitable startup will still go bankrupt if the timing of its cash outflows precedes its inflows. Mastering cash flow management—optimizing working capital and rigorously projecting runway—is the ultimate defensive skill for any founder.
 

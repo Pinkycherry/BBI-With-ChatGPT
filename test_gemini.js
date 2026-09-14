@@ -1,15 +1,9 @@
-const { GoogleGenAI } = require("@google/genai");
-
-async function main() {
+import { GoogleGenAI } from "@google/genai";
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+async function test() {
   try {
-    const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
-    const response = await ai.models.generateContent({
-      model: "gemini-2.5-pro",
-      contents: "Say hello",
-    });
-    console.log(response.text);
-  } catch (error) {
-    console.error("Error:", error);
-  }
+    const res = await ai.models.generateContent({ model: "gemini-1.5-flash", contents: "Say hello!"});
+    console.log("gemini-1.5-flash:", res.text);
+  } catch(e) { console.error("gemini-1.5-flash error:", e.status); }
 }
-main();
+test();

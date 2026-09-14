@@ -13,7 +13,6 @@ author: "BBI Research Team"
 
 # Startup Metrics Dashboard: KPIs that Actually Matter
 
-<img src="/images/guides/startup-metrics-dashboard-hero.webp" alt="BBI - Hero illustration for Startup Metrics Dashboard: KPIs that Actually Matter - Conceptual diagram showing the core principles of startup metrics dashboard" width="1200" height="630" fetchpriority="high" />
 
 Data without structure is noise. A startup metrics dashboard should not be a sprawling collection of every conceivable data point. It must be a highly focused array of leading and lagging indicators—Burn Rate, CAC, Churn, and your North Star—that directly inform operational decisions and drive team alignment.
 

@@ -13,7 +13,6 @@ author: "BBI Research Team"
 
 # Minimum Viable Product Development: Ship Faster
 
-<img src="/images/guides/minimum-viable-product-development-hero.webp" alt="BBI - Hero illustration for Minimum Viable Product Development: Ship Faster - Conceptual diagram showing the core principles of minimum viable product development" width="1200" height="630" fetchpriority="high" />
 
 Perfectionism is the enemy of validation. An MVP is not a smaller version of your final vision; it is a singular tool designed to test your riskiest assumption. If you are not slightly embarrassed by your first release, you launched too late. Speed to market dictates survival.
 

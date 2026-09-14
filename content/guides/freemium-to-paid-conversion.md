@@ -13,7 +13,6 @@ author: "BBI Research Team"
 
 # Freemium to Paid Conversion: Strategies that Actually Work
 
-<img src="/images/guides/freemium-to-paid-conversion-hero.webp" alt="BBI - Hero illustration for Freemium to Paid Conversion: Strategies that Actually Work - Conceptual diagram showing the core principles of freemium to paid conversion" width="1200" height="630" fetchpriority="high" />
 
 A massive free user base is a liability unless you can convert them. Freemium models only work when the friction between the free tier and the paid tier is perfectly calibrated. You must gate the exact features that drive professional value while leaving enough core functionality to hook the user.
 

@@ -13,7 +13,6 @@ author: "BBI Research Team"
 
 # Zero-Investment Business Models for Bootstrapped Founders
 
-<img src="/images/guides/zero-investment-business-models-hero.webp" alt="BBI - Hero illustration for Zero-Investment Business Models for Bootstrapped Founders - Conceptual diagram showing the core principles of zero investment business models" width="1200" height="630" fetchpriority="high" />
 
 Capital is an accelerant, not a prerequisite. Bootstrapping forces financial discipline and rapid iteration. By leveraging zero-investment models like productized services, reverse marketplaces, and micro-consulting, founders can generate cash flow from day one without sacrificing equity to venture capitalists.
 

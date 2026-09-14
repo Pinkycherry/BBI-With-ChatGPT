@@ -13,7 +13,6 @@ author: "BBI Research Team"
 
 # Product-Market Fit Metrics: How to Measure True PMF
 
-<img src="/images/guides/product-market-fit-metrics-hero.webp" alt="BBI - Hero illustration for Product-Market Fit Metrics: How to Measure True PMF - Conceptual diagram showing the core principles of product market fit metrics" width="1200" height="630" fetchpriority="high" />
 
 Product-market fit is not a gut feeling; it is a mathematical reality visible in your data. If you scale acquisition before achieving PMF, you are simply filling a leaky bucket. Understanding the exact metrics that indicate fit is the only way to know when to step on the gas.
 

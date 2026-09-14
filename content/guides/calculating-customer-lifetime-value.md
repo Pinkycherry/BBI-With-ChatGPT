@@ -13,7 +13,6 @@ author: "BBI Research Team"
 
 # Calculating Customer Lifetime Value (CLTV) in SaaS
 
-<img src="/images/guides/calculating-customer-lifetime-value-hero.webp" alt="BBI - Hero illustration for Calculating Customer Lifetime Value (CLTV) in SaaS - Conceptual diagram showing the core principles of calculating customer lifetime value" width="1200" height="630" fetchpriority="high" />
 
 Customer Lifetime Value (CLTV) is the ultimate metric for SaaS unit economics. It determines exactly how much you can afford to spend on acquisition. If you do not understand the mathematical relationship between churn, MRR, and CLTV, you are operating blindly in a highly competitive market.
 
