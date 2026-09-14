@@ -80,7 +80,7 @@ function StartupGuidesIndexPage() {
             </div>
             <div className="flex shrink-0 items-center gap-2">
               <Link
-                to="/useful-tools"
+                to="/calculator"
                 className="flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
               >
                 <Compass className="h-3.5 w-3.5" />
@@ -183,7 +183,7 @@ function StartupGuidesIndexPage() {
                 </p>
               </div>
               <Link
-                to="/useful-tools"
+                to="/calculator"
                 className="shrink-0 rounded-xl bg-primary px-5 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-primary-foreground transition-opacity hover:opacity-90"
               >
                 Open Calculators →

@@ -100,7 +100,7 @@ export function FounderGlossaryPage() {
             </div>
             <div className="flex shrink-0 items-center gap-2">
               <Link
-                to="/useful-tools"
+                to="/calculator"
                 className="flex items-center gap-2 rounded-full border border-border px-4 py-2 text-xs font-semibold uppercase tracking-[0.16em] text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
               >
                 <Calculator className="h-3.5 w-3.5" />

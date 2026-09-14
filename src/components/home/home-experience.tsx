@@ -243,7 +243,7 @@ function Header({ categories }: { categories: CategoryNode[] }) {
         >
           {(
             [
-              { to: "/useful-tools", label: "Useful Calculators" },
+              { to: "/calculator", label: "Useful Calculators" },
               { to: "/startup-guides", label: "Startup Guides" },
               { to: "/founder-stories", label: "Founder Stories" },
               { to: "/founder-glossary", label: "Founder Glossary" },
@@ -271,7 +271,7 @@ function Header({ categories }: { categories: CategoryNode[] }) {
           <Link to="/search" onClick={() => setOpen(null)}>
             Search ideas <Search size={18} />
           </Link>
-          <Link to="/useful-tools" onClick={() => setOpen(null)}>
+          <Link to="/calculator" onClick={() => setOpen(null)}>
             Useful Calculators <ArrowUpRight size={18} />
           </Link>
           <Link to="/startup-guides" onClick={() => setOpen(null)}>
@@ -757,7 +757,7 @@ function OperatorToolkitSection() {
       >
         {/* Card 1: Calculators */}
         <Link
-          to="/useful-tools"
+          to="/calculator"
           style={{
             background: "#ffffff",
             border: "1px solid #e9e2db",
@@ -1327,7 +1327,7 @@ export function HomeExperience({
           <Newsletter />
           <div className="nh-footer-links">
             <h3>Resources</h3>
-            <Link to="/useful-tools">Useful Calculators</Link>
+            <Link to="/calculator">Useful Calculators</Link>
             <Link to="/startup-guides">Startup Guides</Link>
             <Link to="/founder-stories">Founder Stories</Link>
             <Link to="/founder-glossary">Startup Glossary</Link>

@@ -15,7 +15,7 @@ import {
 import { SiteShell, Breadcrumbs } from "@/components/site-shell";
 import { JsonLd, breadcrumbSchema, collectionPageSchema } from "@/lib/schema";
 import { STARTUP_GUIDES } from "@/lib/guides-data";
-import { USEFUL_CALCULATORS } from "@/lib/useful-tools-data";
+import { CALCULATORS } from "@/lib/calculators";
 import { CASE_STUDIES } from "@/lib/case-studies-data";
 import { GLOSSARY_DATA } from "@/lib/glossary-data";
 
@@ -136,7 +136,7 @@ function LearningResourcesIndexPage() {
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {/* Pillar 1: Useful Tools */}
             <Link
-              to="/useful-tools"
+              to="/calculator"
               className="glass group flex flex-col justify-between rounded-2xl p-6 transition-all hover:border-primary/50 hover:shadow-lg"
             >
               <div>
@@ -152,7 +152,7 @@ function LearningResourcesIndexPage() {
                 </p>
               </div>
               <div className="mt-6 flex items-center justify-between border-t border-border/60 pt-3 text-xs font-bold uppercase tracking-wider text-primary">
-                <span>{USEFUL_CALCULATORS.length} Tools Available</span>
+                <span>{CALCULATORS.length} Tools Available</span>
                 <ArrowRight className="h-4 w-4" />
               </div>
             </Link>
@@ -303,7 +303,7 @@ function LearningResourcesIndexPage() {
                 Browse Idea Library
               </Link>
               <Link
-                to="/useful-tools"
+                to="/calculator"
                 className="rounded-xl border border-border px-6 py-3 text-xs font-bold uppercase tracking-[0.18em] text-foreground transition-colors hover:border-primary"
               >
                 Open Calculators

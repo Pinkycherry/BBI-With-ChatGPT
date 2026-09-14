@@ -150,7 +150,7 @@ const navLinks = [{ to: "/pricing", label: "Pricing" }];
 
 const EXPLORE_ITEMS = [
   { to: "/browse", label: "Browse all ideas" },
-  { to: "/useful-tools", label: "Useful Tools" },
+  { to: "/calculator", label: "Calculators & Tools" },
   { to: "/startup-guides", label: "Startup Guides" },
   { to: "/founder-stories", label: "Founder Stories" },
   { to: "/founder-glossary", label: "Founder Glossary" },
@@ -644,7 +644,7 @@ const footerColumns: { title: string; links: { to: string; label: string }[] }[]
   {
     title: "Resources",
     links: [
-      { to: "/useful-tools", label: "Useful Tools" },
+      { to: "/calculator", label: "Calculators & Tools" },
       { to: "/startup-guides", label: "Startup Guides" },
       { to: "/founder-stories", label: "Founder Stories" },
       { to: "/founder-glossary", label: "Startup Glossary" },

@@ -153,7 +153,7 @@ function StartupGuideDetailPage() {
               </p>
             </div>
             <Link
-              to="/useful-tools"
+              to="/calculator"
               className="flex shrink-0 items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-primary-foreground hover:opacity-90"
             >
               <Calculator className="h-4 w-4" />
