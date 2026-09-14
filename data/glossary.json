@@ -1,0 +1,349 @@
+{
+  "version": "1.0.0",
+  "generated_at": "2026-09-14T01:00:00.000Z",
+  "terms_count": 45,
+  "data_level": "ACTUAL",
+  "glossary": [
+    {
+      "term": "Total Addressable Market (TAM)",
+      "slug": "total-addressable-market",
+      "category": "Market Sizing",
+      "definition": "The total global or regional market demand for a product or service, calculated as the maximum possible annual revenue if the company captured 100% market share.",
+      "related_terms": ["Serviceable Addressable Market (SAM)", "Serviceable Obtainable Market (SOM)", "Market Sizing", "Bottom-Up Analysis"],
+      "formula": "TAM = Total Target Accounts in World × Average Annual Contract Value (ACV)"
+    },
+    {
+      "term": "Serviceable Addressable Market (SAM)",
+      "slug": "serviceable-addressable-market",
+      "category": "Market Sizing",
+      "definition": "The specific segment of the Total Addressable Market that a company can realistically target and serve given its current geography, channel capabilities, and product specialization.",
+      "related_terms": ["Total Addressable Market (TAM)", "Serviceable Obtainable Market (SOM)", "Ideal Customer Profile (ICP)"],
+      "formula": "SAM = Target Accounts within Reachable Geography/Channel × ACV"
+    },
+    {
+      "term": "Serviceable Obtainable Market (SOM)",
+      "slug": "serviceable-obtainable-market",
+      "category": "Market Sizing",
+      "definition": "The portion of the Serviceable Addressable Market that a company expects to realistically capture within the next 12 to 36 months, factoring in competition and sales bandwidth.",
+      "related_terms": ["Serviceable Addressable Market (SAM)", "Total Addressable Market (TAM)", "Market Share"],
+      "formula": "SOM = SAM × Realistic Market Share Percentage (typically 1% - 5%)"
+    },
+    {
+      "term": "Customer Acquisition Cost (CAC)",
+      "slug": "customer-acquisition-cost",
+      "category": "Economics & Metrics",
+      "definition": "The total financial outlay required to acquire a single new paying customer, factoring in all sales salaries, ad spend, creative agency fees, and marketing software.",
+      "related_terms": ["CAC Payback Period", "Lifetime Value (LTV)", "Blended CAC", "Paid CAC"],
+      "formula": "CAC = Total Sales & Marketing Costs in Period / New Customers Acquired in Period"
+    },
+    {
+      "term": "Customer Lifetime Value (LTV)",
+      "slug": "customer-lifetime-value",
+      "category": "Economics & Metrics",
+      "definition": "The total net gross profit that an individual customer will generate for a business over the entire duration of their commercial relationship.",
+      "related_terms": ["Customer Acquisition Cost (CAC)", "LTV:CAC Ratio", "Churn Rate", "ARPU"],
+      "formula": "LTV = (Average Revenue Per User × Gross Margin %) / Churn Rate"
+    },
+    {
+      "term": "LTV:CAC Ratio",
+      "slug": "ltv-to-cac-ratio",
+      "category": "Economics & Metrics",
+      "definition": "A golden benchmark ratio measuring the return on marketing capital. A ratio of 3:1 is considered healthy; below 1:1 loses money on each customer, while above 5:1 suggests underinvestment in marketing.",
+      "related_terms": ["Customer Acquisition Cost (CAC)", "Customer Lifetime Value (LTV)", "Unit Economics"],
+      "formula": "LTV:CAC = Customer Lifetime Value / Customer Acquisition Cost"
+    },
+    {
+      "term": "Monthly Recurring Revenue (MRR)",
+      "slug": "monthly-recurring-revenue",
+      "category": "Economics & Metrics",
+      "definition": "The predictable, normalized revenue stream a subscription business collects every 30 days. Excludes one-off setup fees and non-recurring consulting revenue.",
+      "related_terms": ["Annual Recurring Revenue (ARR)", "Net New MRR", "Expansion MRR", "Churn MRR"],
+      "formula": "MRR = Total Paying Subscribers × Average Monthly Subscription Price"
+    },
+    {
+      "term": "Annual Recurring Revenue (ARR)",
+      "slug": "annual-recurring-revenue",
+      "category": "Economics & Metrics",
+      "definition": "The annualized value of recurring subscription revenue. The standard valuation multiple metric for venture-scale B2B SaaS businesses.",
+      "related_terms": ["Monthly Recurring Revenue (MRR)", "Net Revenue Retention (NRR)", "Rule of 40"],
+      "formula": "ARR = MRR × 12"
+    },
+    {
+      "term": "CAC Payback Period",
+      "slug": "cac-payback-period",
+      "category": "Economics & Metrics",
+      "definition": "The number of months required for a company to earn back the capital spent acquiring a customer from that customer's gross profit contribution.",
+      "related_terms": ["Customer Acquisition Cost (CAC)", "Unit Economics", "Gross Margin"],
+      "formula": "Payback Months = CAC / (Monthly ARPU × Gross Margin %)"
+    },
+    {
+      "term": "Churn Rate (Customer & Revenue)",
+      "slug": "churn-rate",
+      "category": "Economics & Metrics",
+      "definition": "The percentage rate at which customers cancel their subscriptions or recurring revenue is lost within a specified time interval (typically monthly or annually).",
+      "related_terms": ["Net Revenue Retention (NRR)", "Customer Lifetime Value (LTV)", "Retention Cohort"],
+      "formula": "Monthly Customer Churn = (Customers Lost in Month / Customers at Start of Month) × 100"
+    },
+    {
+      "term": "Net Revenue Retention (NRR)",
+      "slug": "net-revenue-retention",
+      "category": "Economics & Metrics",
+      "definition": "The percentage of recurring revenue retained from an existing cohort of customers over a period, accounting for upgrades, downgrades, and cancellations. NRR > 100% means the cohort grows without new customer acquisition.",
+      "related_terms": ["Expansion MRR", "Churn Rate", "Gross Revenue Retention"],
+      "formula": "NRR = [(Starting ARR + Expansion - Contraction - Churn) / Starting ARR] × 100"
+    },
+    {
+      "term": "Gross Margin",
+      "slug": "gross-margin",
+      "category": "Economics & Metrics",
+      "definition": "The percentage of revenue retained after deducting the direct cost of goods sold (COGS) or hosting, customer support, and third-party APIs needed to deliver the service.",
+      "related_terms": ["Contribution Margin", "COGS", "Unit Economics"],
+      "formula": "Gross Margin % = [(Revenue - COGS) / Revenue] × 100"
+    },
+    {
+      "term": "Contribution Margin",
+      "slug": "contribution-margin",
+      "category": "Economics & Metrics",
+      "definition": "Revenue remaining per unit after deducting variable costs. It indicates how much each sale contributes to covering fixed overhead expenses like office rent and executive salaries.",
+      "related_terms": ["Break-Even Analysis", "Fixed Costs", "Variable Costs"],
+      "formula": "Contribution Margin per Unit = Selling Price per Unit - Variable Cost per Unit"
+    },
+    {
+      "term": "Burn Rate (Gross vs. Net)",
+      "slug": "burn-rate",
+      "category": "Finance & Operations",
+      "definition": "The rate at which a company expends cash. Gross burn is total monthly cash spent; Net burn is cash spent minus incoming cash collections.",
+      "related_terms": ["Runway", "Burn Multiple", "Default Alive"],
+      "formula": "Net Monthly Burn = Gross Operating Expenses - Collected Revenue"
+    },
+    {
+      "term": "Runway",
+      "slug": "runway",
+      "category": "Finance & Operations",
+      "definition": "The amount of time in months a company has before it exhausts its cash reserves, assuming current net monthly burn remains constant.",
+      "related_terms": ["Burn Rate", "Zero Cash Date", "Default Alive"],
+      "formula": "Runway (Months) = Current Liquid Cash Balance / Net Monthly Burn"
+    },
+    {
+      "term": "Burn Multiple",
+      "slug": "burn-multiple",
+      "category": "Finance & Operations",
+      "definition": "A capital efficiency metric coined by Craft Ventures that measures how much cash a startup burns to generate each dollar of Net New ARR.",
+      "related_terms": ["Capital Efficiency", "Rule of 40", "Net Burn"],
+      "formula": "Burn Multiple = Net Burn in Period / Net New ARR Added in Period"
+    },
+    {
+      "term": "Rule of 40",
+      "slug": "rule-of-40",
+      "category": "Economics & Metrics",
+      "definition": "A benchmark for software businesses stating that the combined sum of year-over-year revenue growth rate percentage and profit margin percentage should equal or exceed 40%.",
+      "related_terms": ["ARR", "EBITDA Margin", "Capital Efficiency"],
+      "formula": "Rule of 40 Score = Annual Revenue Growth Rate % + Free Cash Flow (or EBITDA) Margin %"
+    },
+    {
+      "term": "Product-Market Fit (PMF)",
+      "slug": "product-market-fit",
+      "category": "Product & Growth",
+      "definition": "The inflection point where a product satisfies strong commercial demand in a sizable market, evidenced by sustained retention cohorts, organic word of mouth, and accelerating inbound sales.",
+      "related_terms": ["Sean Ellis Test", "Cohort Retention", "Ideal Customer Profile"],
+      "formula": "Sean Ellis Benchmark: ≥ 40% of surveyed users report they would be 'very disappointed' without the product"
+    },
+    {
+      "term": "Minimum Viable Product (MVP)",
+      "slug": "minimum-viable-product",
+      "category": "Product & Growth",
+      "definition": "The simplest version of a product that can be released to early adopters to validate core hypotheses and gather feedback with minimal engineering investment.",
+      "related_terms": ["Smoke Test", "Wizard of Oz Test", "Rapid Prototyping"]
+    },
+    {
+      "term": "Ideal Customer Profile (ICP)",
+      "slug": "ideal-customer-profile",
+      "category": "Product & Growth",
+      "definition": "A categorical description of the perfect company or buyer account that derives the highest value from your product, experiences the lowest churn, and has the shortest sales cycle.",
+      "related_terms": ["Buyer Persona", "SAM", "Target Market", "Account-Based Marketing"]
+    },
+    {
+      "term": "Product-Led Growth (PLG)",
+      "slug": "product-led-growth",
+      "category": "Product & Growth",
+      "definition": "A go-to-market business methodology in which user acquisition, onboarding, retention, and expansion are primarily driven by the product itself rather than direct sales reps.",
+      "related_terms": ["Sales-Led Growth (SLG)", "Freemium", "Self-Serve Funnel"],
+      "example_or_formula": "Example companies: Slack, Notion, Zoom, Figma"
+    },
+    {
+      "term": "Sales-Led Growth (SLG)",
+      "slug": "sales-led-growth",
+      "category": "Product & Growth",
+      "definition": "A go-to-market model where qualified enterprise pipeline generation, custom demo presentations, contract negotiations, and procurement reviews are driven by sales executives.",
+      "related_terms": ["Product-Led Growth (PLG)", "Enterprise Sales", "Annual Contract Value"],
+      "example_or_formula": "Common for ACV > $25,000 where security compliance, SSO, and customized terms are mandatory"
+    },
+    {
+      "term": "Freemium",
+      "slug": "freemium",
+      "category": "Business Models",
+      "definition": "A pricing strategy where basic functionality is provided free of charge to maximize top-of-funnel adoption, while advanced features, higher capacity, or team collaboration are paywalled.",
+      "related_terms": ["Free Trial", "Reverse Trial", "Product-Led Growth (PLG)"]
+    },
+    {
+      "term": "Bootstrapping",
+      "slug": "bootstrapping",
+      "category": "Fundraising & Capital",
+      "definition": "The process of building and scaling a company solely using personal savings, sweat equity, and customer revenues without taking institutional venture capital.",
+      "related_terms": ["Sweat Equity", "Self-Funded", "Capital Efficiency", "Dividends"]
+    },
+    {
+      "term": "Default Alive vs. Default Dead",
+      "slug": "default-alive-vs-default-dead",
+      "category": "Finance & Operations",
+      "definition": "A framework coined by Paul Graham. A company is 'Default Alive' if its current revenue growth rate will carry it to profitability before its remaining cash runs out without raising more capital.",
+      "related_terms": ["Runway", "Burn Rate", "Cash Flow Positive"],
+      "formula": "Default Alive = Projected Cash Balance at Breakeven Point > $0"
+    },
+    {
+      "term": "SAFE (Simple Agreement for Future Equity)",
+      "slug": "safe-agreement",
+      "category": "Fundraising & Capital",
+      "definition": "A standardized legal instrument created by Y Combinator allowing investors to provide early cash in exchange for the contractual right to receive equity in a future priced round.",
+      "related_terms": ["Convertible Note", "Valuation Cap", "Discount Rate", "Priced Round"]
+    },
+    {
+      "term": "Convertible Note",
+      "slug": "convertible-note",
+      "category": "Fundraising & Capital",
+      "definition": "A debt instrument that carries an interest rate and maturity date, which automatically converts into preferred stock when the startup closes a qualified priced equity round.",
+      "related_terms": ["SAFE", "Valuation Cap", "Maturity Date", "Interest Rate"]
+    },
+    {
+      "term": "Valuation Cap",
+      "slug": "valuation-cap",
+      "category": "Fundraising & Capital",
+      "definition": "The maximum effective enterprise valuation at which an early investor's convertible instrument (SAFE or Convertible Note) will convert into equity, protecting them from excessive dilution.",
+      "related_terms": ["Discount Rate", "SAFE", "Dilution", "Pre-Money Valuation"]
+    },
+    {
+      "term": "Pre-Money vs. Post-Money Valuation",
+      "slug": "pre-money-vs-post-money",
+      "category": "Fundraising & Capital",
+      "definition": "Pre-money valuation is the agreed value of the company before receiving new investment cash. Post-money is the valuation immediately following the investment.",
+      "related_terms": ["Dilution", "Cap Table", "Share Price"],
+      "formula": "Post-Money Valuation = Pre-Money Valuation + New Investment Capital"
+    },
+    {
+      "term": "Cap Table (Capitalization Table)",
+      "slug": "cap-table",
+      "category": "Fundraising & Capital",
+      "definition": "A detailed mathematical ledger listing all founders, angel investors, venture funds, and option pool holders along with their ownership percentages, equity classes, and share counts.",
+      "related_terms": ["Dilution", "ESOP", "Fully Diluted Shares"]
+    },
+    {
+      "term": "Dilution",
+      "slug": "dilution",
+      "category": "Fundraising & Capital",
+      "definition": "The decrease in an existing shareholder's percentage ownership of a company that occurs whenever new shares of stock are issued to incoming investors or an employee option pool.",
+      "related_terms": ["Cap Table", "ESOP", "Pro-Rata Rights"],
+      "formula": "New Ownership % = Existing Shares / (Total Existing Shares + Newly Issued Shares)"
+    },
+    {
+      "term": "Vesting & One-Year Cliff",
+      "slug": "vesting-and-cliff",
+      "category": "Legal & Equity",
+      "definition": "A schedule by which founders and employees earn equity over time (typically 4 years with a 1-year cliff). If an individual leaves before 12 months, they forfeit 100% of their equity grant.",
+      "related_terms": ["Cap Table", "ESOP", "Founder Equity Split"]
+    },
+    {
+      "term": "Term Sheet",
+      "slug": "term-sheet",
+      "category": "Fundraising & Capital",
+      "definition": "A non-binding summary agreement laying out the core financial and legal terms under which a venture capital firm will invest in a company (valuation, board seats, liquidation preferences).",
+      "related_terms": ["Lead Investor", "Liquidation Preference", "Due Diligence"]
+    },
+    {
+      "term": "Lead Investor",
+      "slug": "lead-investor",
+      "category": "Fundraising & Capital",
+      "definition": "The investment fund or angel that writes the largest check in a financing round, negotiates the terms of the term sheet, and frequently takes a seat on the board of directors.",
+      "related_terms": ["Term Sheet", "Syndicate", "Follow-on Investor"]
+    },
+    {
+      "term": "Viral Coefficient (K-Factor)",
+      "slug": "viral-coefficient-k-factor",
+      "category": "Product & Growth",
+      "definition": "The number of new users an existing user successfully recruits into the product. A K-factor greater than 1.0 represents exponential, self-sustaining viral growth.",
+      "related_terms": ["Viral Loop", "Flywheel Effect", "Organic Growth"],
+      "formula": "K = Number of Invites Sent per User × Conversion Rate of Invitees"
+    },
+    {
+      "term": "Flywheel Effect",
+      "slug": "flywheel-effect",
+      "category": "Strategy & Scaling",
+      "definition": "A business model dynamic where each component of the business feeds positive momentum into the next step, causing the overall system to accelerate with decreasing incremental friction.",
+      "related_terms": ["Network Effects", "Economies of Scale", "Moat"],
+      "example_or_formula": "Amazon Flywheel: Lower Prices → More Customers → More Third-Party Sellers → Economies of Scale → Lower Prices"
+    },
+    {
+      "term": "Economic Moat",
+      "slug": "economic-moat",
+      "category": "Strategy & Scaling",
+      "definition": "A distinct, sustainable competitive advantage that prevents competitors from easily copying a company's product, stealing customers, or eroding its operating profit margins.",
+      "related_terms": ["Network Effects", "Switching Costs", "Intellectual Property", "Brand Affinity"]
+    },
+    {
+      "term": "Switching Costs",
+      "slug": "switching-costs",
+      "category": "Strategy & Scaling",
+      "definition": "The total friction—financial, operational, psychological, or time-related—incurred by a customer if they decide to switch from your product to a competitor's solution.",
+      "related_terms": ["Moat", "Churn Rate", "Net Revenue Retention"]
+    },
+    {
+      "term": "Network Effects",
+      "slug": "network-effects",
+      "category": "Strategy & Scaling",
+      "definition": "The phenomenon where a product or platform becomes exponentially more valuable to every existing user as additional users join the network.",
+      "related_terms": ["Metcalfe's Law", "Two-Sided Marketplace", "Viral Coefficient"]
+    },
+    {
+      "term": "Pivot",
+      "slug": "pivot",
+      "category": "Strategy & Scaling",
+      "definition": "A structured course correction designed to test a new fundamental hypothesis about the product, customer segment, or business model while maintaining the company's core vision.",
+      "related_terms": ["Product-Market Fit", "Iterative Development", "Customer Discovery"]
+    },
+    {
+      "term": "Cohort Analysis",
+      "slug": "cohort-analysis",
+      "category": "Product & Growth",
+      "definition": "The analytical practice of grouping users by their join date (e.g., January 2026 cohort) to track their retention, engagement, and spending patterns over time independently of new sign-ups.",
+      "related_terms": ["Retention Curve", "Churn Rate", "LTV"]
+    },
+    {
+      "term": "Smoke Test",
+      "slug": "smoke-test",
+      "category": "Product & Growth",
+      "definition": "A lean validation tactic where a landing page or advertisement for a non-existent product is launched to measure customer intent through click-through rates, pre-orders, or sign-ups.",
+      "related_terms": ["MVP", "Painted Door Test", "Idea Validation"]
+    },
+    {
+      "term": "Letter of Intent (LOI)",
+      "slug": "letter-of-intent",
+      "category": "Legal & Sales",
+      "definition": "A formal non-binding document signed by an enterprise buyer expressing their intent to purchase and implement a product once specific technical features and milestones are completed.",
+      "related_terms": ["Pre-Sales", "Validation", "Enterprise Sales Cycle"]
+    },
+    {
+      "term": "Zero to One",
+      "slug": "zero-to-one",
+      "category": "Strategy & Scaling",
+      "definition": "A concept popularized by Peter Thiel describing the act of creating something genuinely novel and transformative, as opposed to copying existing models (going from 1 to n).",
+      "related_terms": ["Monopoly Strategy", "Innovation", "Moat"]
+    },
+    {
+      "term": "Average Revenue Per User (ARPU)",
+      "slug": "average-revenue-per-user",
+      "category": "Economics & Metrics",
+      "definition": "The average monthly or annual revenue generated per active subscriber or user account across the entire paying customer base.",
+      "related_terms": ["MRR", "ARR", "ACV", "LTV"],
+      "formula": "ARPU = Total Collected Revenue in Month / Total Active Paying Accounts in Month"
+    }
+  ]
+}

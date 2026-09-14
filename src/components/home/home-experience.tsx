@@ -243,15 +243,19 @@ function Header({ categories }: { categories: CategoryNode[] }) {
         >
           {(
             [
+              { to: "/useful-tools", label: "Useful Calculators" },
+              { to: "/startup-guides", label: "Startup Guides" },
+              { to: "/founder-stories", label: "Founder Stories" },
+              { to: "/founder-glossary", label: "Founder Glossary" },
+              { to: "/learning-resources", label: "Learning Resources" },
               { to: "/about", label: "Our story" },
-              { to: "/calculator", label: "Business calculators" },
               { to: "/list", label: "Curated idea lists" },
               { to: "/blog", label: "Field notes" },
               { to: "/pricing", label: "Access & pricing" },
               { to: "/contact", label: "Get in touch" },
             ] as const
           ).map((l) => (
-            <Link key={l.to} to={l.to}>
+            <Link key={l.to} to={l.to} onClick={() => setOpen(null)}>
               {l.label}
               <ArrowUpRight size={16} />
             </Link>
@@ -264,8 +268,23 @@ function Header({ categories }: { categories: CategoryNode[] }) {
           className="nh-dropdown nh-mobile-menu"
           aria-label="Mobile navigation"
         >
-          <Link to="/search">
+          <Link to="/search" onClick={() => setOpen(null)}>
             Search ideas <Search size={18} />
+          </Link>
+          <Link to="/useful-tools" onClick={() => setOpen(null)}>
+            Useful Calculators <ArrowUpRight size={18} />
+          </Link>
+          <Link to="/startup-guides" onClick={() => setOpen(null)}>
+            Startup Guides <ArrowUpRight size={18} />
+          </Link>
+          <Link to="/founder-stories" onClick={() => setOpen(null)}>
+            Founder Stories <ArrowUpRight size={18} />
+          </Link>
+          <Link to="/founder-glossary" onClick={() => setOpen(null)}>
+            Founder Glossary <ArrowUpRight size={18} />
+          </Link>
+          <Link to="/learning-resources" onClick={() => setOpen(null)}>
+            Learning Resources <ArrowUpRight size={18} />
           </Link>
           <a href="#categories" onClick={() => setOpen(null)}>
             Browse categories <ArrowDown size={18} />
@@ -273,9 +292,12 @@ function Header({ categories }: { categories: CategoryNode[] }) {
           <a href="#how-it-works" onClick={() => setOpen(null)}>
             How it works <ArrowDown size={18} />
           </a>
-          <Link to="/about">Our story</Link>
-          <Link to="/calculator">Calculators</Link>
-          <Link to="/pricing">Access & pricing</Link>
+          <Link to="/about" onClick={() => setOpen(null)}>
+            Our story
+          </Link>
+          <Link to="/pricing" onClick={() => setOpen(null)}>
+            Access & pricing
+          </Link>
           {account}
         </nav>
       )}
@@ -704,6 +726,243 @@ function GoldenTree({ catalog }: { catalog: Catalog }) {
   );
 }
 
+function OperatorToolkitSection() {
+  return (
+    <section
+      className="nh-toolkit nh-container"
+      aria-labelledby="nh-toolkit-title"
+      style={{ paddingTop: "90px", paddingBottom: "70px" }}
+    >
+      <div className="nh-section-heading nh-heading-left" data-home-reveal>
+        <div>
+          <p className="nh-eyebrow">Calculators, Playbooks & Real Case Studies</p>
+          <h2 id="nh-toolkit-title">
+            The Operator&apos;s Toolkit.
+            <br />
+            <span>Real numbers. Zero fluff.</span>
+          </h2>
+        </div>
+        <Link to="/learning-resources" className="nh-text-link">
+          All resources <ArrowUpRight size={18} />
+        </Link>
+      </div>
+
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+          gap: "24px",
+          marginTop: "40px",
+        }}
+      >
+        {/* Card 1: Calculators */}
+        <Link
+          to="/useful-tools"
+          style={{
+            background: "#ffffff",
+            border: "1px solid #e9e2db",
+            borderRadius: "20px",
+            padding: "30px 26px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            textDecoration: "none",
+            color: "inherit",
+          }}
+        >
+          <div>
+            <span
+              style={{
+                fontSize: "10px",
+                fontWeight: 700,
+                letterSpacing: "0.18em",
+                color: "#c94c27",
+                textTransform: "uppercase",
+              }}
+            >
+              5 Live Calculators
+            </span>
+            <h3 style={{ fontSize: "21px", fontWeight: 600, marginTop: "12px", marginBottom: "8px" }}>
+              Useful Calculators
+            </h3>
+            <p style={{ fontSize: "14px", color: "#686664", lineHeight: 1.6 }}>
+              Interactive TAM/SAM/SOM, runway, break-even units, CAC, and LTV models with real-time feedback.
+            </p>
+          </div>
+          <span
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              fontSize: "12px",
+              fontWeight: 700,
+              letterSpacing: "0.14em",
+              color: "#bd401c",
+              textTransform: "uppercase",
+              marginTop: "24px",
+            }}
+          >
+            Model Numbers <ArrowRight size={14} />
+          </span>
+        </Link>
+
+        {/* Card 2: Startup Guides */}
+        <Link
+          to="/startup-guides"
+          style={{
+            background: "#ffffff",
+            border: "1px solid #e9e2db",
+            borderRadius: "20px",
+            padding: "30px 26px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            textDecoration: "none",
+            color: "inherit",
+          }}
+        >
+          <div>
+            <span
+              style={{
+                fontSize: "10px",
+                fontWeight: 700,
+                letterSpacing: "0.18em",
+                color: "#c94c27",
+                textTransform: "uppercase",
+              }}
+            >
+              5 Tactical Playbooks
+            </span>
+            <h3 style={{ fontSize: "21px", fontWeight: 600, marginTop: "12px", marginBottom: "8px" }}>
+              Startup Guides
+            </h3>
+            <p style={{ fontSize: "14px", color: "#686664", lineHeight: 1.6 }}>
+              Empirical customer discovery without pitching, bottom-up TAM calculation, and lean launch systems.
+            </p>
+          </div>
+          <span
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              fontSize: "12px",
+              fontWeight: 700,
+              letterSpacing: "0.14em",
+              color: "#bd401c",
+              textTransform: "uppercase",
+              marginTop: "24px",
+            }}
+          >
+            Read Playbooks <ArrowRight size={14} />
+          </span>
+        </Link>
+
+        {/* Card 3: Founder Stories */}
+        <Link
+          to="/founder-stories"
+          style={{
+            background: "#ffffff",
+            border: "1px solid #e9e2db",
+            borderRadius: "20px",
+            padding: "30px 26px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            textDecoration: "none",
+            color: "inherit",
+          }}
+        >
+          <div>
+            <span
+              style={{
+                fontSize: "10px",
+                fontWeight: 700,
+                letterSpacing: "0.18em",
+                color: "#15803d",
+                textTransform: "uppercase",
+              }}
+            >
+              Verified Case Studies
+            </span>
+            <h3 style={{ fontSize: "21px", fontWeight: 600, marginTop: "12px", marginBottom: "8px" }}>
+              Founder Stories
+            </h3>
+            <p style={{ fontSize: "14px", color: "#686664", lineHeight: 1.6 }}>
+              Real bootstrappers sharing transparent revenues ($12K–$42K/mo), initial outlays, and timeline milestones.
+            </p>
+          </div>
+          <span
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              fontSize: "12px",
+              fontWeight: 700,
+              letterSpacing: "0.14em",
+              color: "#bd401c",
+              textTransform: "uppercase",
+              marginTop: "24px",
+            }}
+          >
+            View Breakdowns <ArrowRight size={14} />
+          </span>
+        </Link>
+
+        {/* Card 4: Glossary */}
+        <Link
+          to="/founder-glossary"
+          style={{
+            background: "#ffffff",
+            border: "1px solid #e9e2db",
+            borderRadius: "20px",
+            padding: "30px 26px",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "space-between",
+            textDecoration: "none",
+            color: "inherit",
+          }}
+        >
+          <div>
+            <span
+              style={{
+                fontSize: "10px",
+                fontWeight: 700,
+                letterSpacing: "0.18em",
+                color: "#4f46e5",
+                textTransform: "uppercase",
+              }}
+            >
+              45 Essential Terms
+            </span>
+            <h3 style={{ fontSize: "21px", fontWeight: 600, marginTop: "12px", marginBottom: "8px" }}>
+              Founder Glossary
+            </h3>
+            <p style={{ fontSize: "14px", color: "#686664", lineHeight: 1.6 }}>
+              Venture metrics, unit economics ratios, and financial terms with formulas and operator benchmarks.
+            </p>
+          </div>
+          <span
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: "6px",
+              fontSize: "12px",
+              fontWeight: 700,
+              letterSpacing: "0.14em",
+              color: "#bd401c",
+              textTransform: "uppercase",
+              marginTop: "24px",
+            }}
+          >
+            Search Glossary <ArrowRight size={14} />
+          </span>
+        </Link>
+      </div>
+    </section>
+  );
+}
+
 function Newsletter() {
   const [email, setEmail] = useState("");
   const subscribe = useServerFn(subscribeToNewsletter);
@@ -915,6 +1174,7 @@ export function HomeExperience({
         <CategoryWorld categories={catalog.categories} />
         <Discovery categories={catalog.categories} />
         <GoldenTree catalog={catalog} />
+        <OperatorToolkitSection />
         <section className="nh-featured nh-container" aria-labelledby="nh-featured-title">
           <div className="nh-section-heading nh-heading-left" data-home-reveal>
             <div>
@@ -1066,10 +1326,17 @@ export function HomeExperience({
           </div>
           <Newsletter />
           <div className="nh-footer-links">
+            <h3>Resources</h3>
+            <Link to="/useful-tools">Useful Calculators</Link>
+            <Link to="/startup-guides">Startup Guides</Link>
+            <Link to="/founder-stories">Founder Stories</Link>
+            <Link to="/founder-glossary">Startup Glossary</Link>
+            <Link to="/learning-resources">Learning Resources</Link>
+          </div>
+          <div className="nh-footer-links">
             <h3>Explore</h3>
             <Link to="/browse">The library</Link>
             <Link to="/search">Search ideas</Link>
-            <Link to="/calculator">Calculators</Link>
             <Link to="/list">Curated lists</Link>
             <Link to="/blog">Field notes</Link>
           </div>

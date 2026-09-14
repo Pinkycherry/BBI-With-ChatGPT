@@ -1,0 +1,588 @@
+{
+  "version": "1.0.0",
+  "generated_at": "2026-09-14T01:00:00.000Z",
+  "calculators": [
+    {
+      "id": "calc-tam-sam-som",
+      "slug": "tam-sam-som",
+      "name": "TAM / SAM / SOM Market Sizing Calculator",
+      "category": "market-sizing",
+      "data_level": "ACTUAL",
+      "status": "completed",
+      "description": "Calculates Total Addressable Market (TAM), Serviceable Addressable Market (SAM), and Serviceable Obtainable Market (SOM) using top-down and bottom-up market sizing methodologies.",
+      "formula_text": "TAM = Total Target Customers in World/Region × Average Annual Contract Value (ACV); SAM = Target Customers within Reachable Segment/Geography × ACV; SOM = SAM × Realistic Market Share % (typically 1-5% within 1-3 years).",
+      "inputs": [
+        {
+          "id": "total_potential_customers",
+          "label": "Total Potential Customers in Market (Global or Primary Territory)",
+          "type": "number",
+          "default_value": 500000,
+          "unit": "accounts/users",
+          "min": 1,
+          "max": 1000000000,
+          "step": 1000,
+          "description": "Total universe of individuals or companies experiencing the problem your solution solves."
+        },
+        {
+          "id": "average_annual_value",
+          "label": "Average Annual Revenue per Customer (ACV / ARPU)",
+          "type": "currency",
+          "currency": "USD",
+          "default_value": 1200,
+          "unit": "$/year",
+          "min": 1,
+          "max": 10000000,
+          "step": 50,
+          "description": "Expected annual spend per account or subscriber."
+        },
+        {
+          "id": "serviceable_percentage",
+          "label": "Serviceable Market Filter % (Geography, Channel, Tech Stack Fit)",
+          "type": "percentage",
+          "default_value": 15,
+          "unit": "%",
+          "min": 0.1,
+          "max": 100,
+          "step": 0.5,
+          "description": "Portion of the total market that matches your specific niche, geography, and sales channel capability."
+        },
+        {
+          "id": "obtainable_market_share",
+          "label": "Target Obtainable Market Share % (Years 1-3)",
+          "type": "percentage",
+          "default_value": 2,
+          "unit": "%",
+          "min": 0.01,
+          "max": 50,
+          "step": 0.1,
+          "description": "The realistic percentage of your SAM you can capture within 24 to 36 months given current resources."
+        }
+      ],
+      "outputs": [
+        {
+          "id": "tam_value",
+          "label": "Total Addressable Market (TAM)",
+          "formula_expression": "total_potential_customers * average_annual_value",
+          "unit": "currency_usd",
+          "description": "Overall revenue opportunity if you achieved 100% market share of all potential buyers."
+        },
+        {
+          "id": "sam_value",
+          "label": "Serviceable Addressable Market (SAM)",
+          "formula_expression": "(total_potential_customers * (serviceable_percentage / 100)) * average_annual_value",
+          "unit": "currency_usd",
+          "description": "Target segment of the TAM within your geographic, linguistic, or regulatory reach."
+        },
+        {
+          "id": "som_value",
+          "label": "Serviceable Obtainable Market (SOM)",
+          "formula_expression": "sam_value * (obtainable_market_share / 100)",
+          "unit": "currency_usd",
+          "description": "Realistic near-term revenue goal representing defensible target market share."
+        },
+        {
+          "id": "target_customer_count",
+          "label": "Required Paying Customers to Hit SOM",
+          "formula_expression": "som_value / average_annual_value",
+          "unit": "accounts",
+          "description": "Actual number of closed deals or subscribers needed to hit the SOM objective."
+        }
+      ],
+      "industry_benchmarks": {
+        "early_stage_b2b_saas": {
+          "typical_sam_ratio": "10% - 25% of TAM",
+          "realistic_year_3_som_share": "1% - 3% of SAM"
+        },
+        "consumer_mobile_app": {
+          "typical_sam_ratio": "5% - 15% of TAM",
+          "realistic_year_3_som_share": "0.5% - 1.5% of SAM"
+        },
+        "niche_agency_or_service": {
+          "typical_sam_ratio": "2% - 8% of TAM",
+          "realistic_year_3_som_share": "3% - 7% of local SAM"
+        }
+      },
+      "example_calculation": {
+        "scenario": "B2B Accounting Automation for Dental Clinics in the US",
+        "inputs": {
+          "total_potential_customers": 200000,
+          "average_annual_value": 2400,
+          "serviceable_percentage": 20,
+          "obtainable_market_share": 2.5
+        },
+        "results": {
+          "tam_value": 480000000,
+          "sam_value": 96000000,
+          "som_value": 2400000,
+          "target_customer_count": 1000
+        }
+      },
+      "seo": {
+        "title": "TAM SAM SOM Calculator — Free Market Sizing Tool for Startups",
+        "description": "Calculate Total Addressable Market (TAM), Serviceable Addressable Market (SAM), and Obtainable Market (SOM) with real formulas and benchmark ranges.",
+        "keywords": ["tam sam som calculator", "market sizing tool", "startup market size", "total addressable market formula"]
+      }
+    },
+    {
+      "id": "calc-runway",
+      "slug": "runway",
+      "name": "Burn Rate & Runway Calculator",
+      "category": "finance",
+      "data_level": "ACTUAL",
+      "status": "completed",
+      "description": "Projects cash exhaustion timeline, net monthly burn, and zero-cash date based on current cash reserves, gross expenses, and monthly revenue growth.",
+      "formula_text": "Net Monthly Burn = Gross Monthly Expenses - Monthly Recurring Revenue; Cash Runway (Months) = Current Cash Balance / Net Monthly Burn; Zero-Cash Date = Current Date + (Runway × 30.4 days).",
+      "inputs": [
+        {
+          "id": "cash_balance",
+          "label": "Current Cash & Liquid Reserves",
+          "type": "currency",
+          "currency": "USD",
+          "default_value": 150000,
+          "unit": "$",
+          "min": 0,
+          "max": 100000000,
+          "step": 1000,
+          "description": "Total available bank balance dedicated to operations."
+        },
+        {
+          "id": "gross_monthly_expenses",
+          "label": "Gross Monthly Operating Expenses (Payroll, Servers, Tools, Rent)",
+          "type": "currency",
+          "currency": "USD",
+          "default_value": 22000,
+          "unit": "$/month",
+          "min": 0,
+          "max": 10000000,
+          "step": 500,
+          "description": "Total cash out the door every 30 days."
+        },
+        {
+          "id": "monthly_revenue",
+          "label": "Monthly Inflowing Cash / Revenue",
+          "type": "currency",
+          "currency": "USD",
+          "default_value": 7000,
+          "unit": "$/month",
+          "min": 0,
+          "max": 10000000,
+          "step": 250,
+          "description": "Current monthly collected revenue."
+        },
+        {
+          "id": "monthly_revenue_growth_rate",
+          "label": "Expected Monthly Revenue Growth Rate %",
+          "type": "percentage",
+          "default_value": 5,
+          "unit": "%",
+          "min": 0,
+          "max": 100,
+          "step": 0.5,
+          "description": "Compound monthly percentage increase in monthly revenue."
+        }
+      ],
+      "outputs": [
+        {
+          "id": "net_monthly_burn",
+          "label": "Initial Net Monthly Burn",
+          "formula_expression": "gross_monthly_expenses - monthly_revenue",
+          "unit": "currency_usd",
+          "description": "Net cash loss incurred per month before taking into account growth compounding."
+        },
+        {
+          "id": "runway_months",
+          "label": "Estimated Runway (Months)",
+          "formula_expression": "cash_balance / (gross_monthly_expenses - monthly_revenue)",
+          "unit": "months",
+          "description": "Number of months the business can survive without new financing or inflection."
+        },
+        {
+          "id": "fundraising_deadline_months",
+          "label": "Safe Next Round Kickoff Window",
+          "formula_expression": "max(0, runway_months - 6)",
+          "unit": "months",
+          "description": "You must begin fundraising or launch aggressive cost cuts at least 6 months before zero cash."
+        },
+        {
+          "id": "default_alive_status",
+          "label": "Default Alive / Default Dead Assessment",
+          "formula_expression": "if (monthly_revenue_growth_rate > 0 and compounding_revenue >= gross_monthly_expenses before cash_balance <= 0) then 'Default Alive' else 'Default Dead'",
+          "unit": "status_badge",
+          "description": "Paul Graham definition: whether current growth reaches profitability before bank balance reaches $0."
+        }
+      ],
+      "industry_benchmarks": {
+        "healthy_seed_stage": "18 - 24 months runway post-round",
+        "series_a_readiness": "12 - 18 months runway remaining when initiating investor pitch cycles",
+        "bootstrapped_lifestyle": "3 - 6 months personal runway reserve + cash-flow positive operations"
+      },
+      "example_calculation": {
+        "scenario": "Post-Seed Developer Tool Startup",
+        "inputs": {
+          "cash_balance": 180000,
+          "gross_monthly_expenses": 25000,
+          "monthly_revenue": 10000,
+          "monthly_revenue_growth_rate": 8
+        },
+        "results": {
+          "net_monthly_burn": 15000,
+          "runway_months": 12.0,
+          "fundraising_deadline_months": 6.0,
+          "default_alive_status": "Default Alive (Inflects at month 10)"
+        }
+      },
+      "seo": {
+        "title": "Startup Runway & Burn Rate Calculator — Calculate Zero-Cash Date",
+        "description": "Track your gross burn, net burn, and startup runway in months. Plan fundraising timing with dynamic growth modeling.",
+        "keywords": ["startup runway calculator", "burn rate calculator", "zero cash date formula", "default alive calculator"]
+      }
+    },
+    {
+      "id": "calc-break-even",
+      "slug": "break-even",
+      "name": "Break-Even Analysis Calculator",
+      "category": "finance",
+      "data_level": "ACTUAL",
+      "status": "completed",
+      "description": "Calculates the exact sales volume in units and total revenue required to cover all fixed and variable costs, leaving zero net profit or loss.",
+      "formula_text": "Contribution Margin per Unit = Unit Sales Price - Variable Cost per Unit; Contribution Margin Ratio = Contribution Margin per Unit / Unit Sales Price; Break-Even Volume (Units) = Fixed Operating Costs / Contribution Margin per Unit; Break-Even Revenue = Break-Even Volume × Unit Sales Price.",
+      "inputs": [
+        {
+          "id": "fixed_costs",
+          "label": "Total Monthly Fixed Operating Costs",
+          "type": "currency",
+          "currency": "USD",
+          "default_value": 8500,
+          "unit": "$/month",
+          "min": 0,
+          "max": 10000000,
+          "step": 100,
+          "description": "Overhead expenses paid regardless of production volume: salaries, rent, software subscriptions, insurance."
+        },
+        {
+          "id": "sales_price_per_unit",
+          "label": "Sales Price per Unit (or Subscription Price)",
+          "type": "currency",
+          "currency": "USD",
+          "default_value": 99,
+          "unit": "$/unit",
+          "min": 0.01,
+          "max": 1000000,
+          "step": 1,
+          "description": "Average selling price for one unit or one month of service."
+        },
+        {
+          "id": "variable_cost_per_unit",
+          "label": "Variable Cost per Unit (COGS, Shipping, Payment Fees)",
+          "type": "currency",
+          "currency": "USD",
+          "default_value": 19,
+          "unit": "$/unit",
+          "min": 0,
+          "max": 1000000,
+          "step": 0.5,
+          "description": "Direct incremental expenses incurred per unit sold: payment gateway percentage, hosting per user, raw materials, packaging."
+        }
+      ],
+      "outputs": [
+        {
+          "id": "contribution_margin_unit",
+          "label": "Contribution Margin per Unit",
+          "formula_expression": "sales_price_per_unit - variable_cost_per_unit",
+          "unit": "currency_usd",
+          "description": "Dollar amount each sale contributes toward paying down fixed monthly overhead."
+        },
+        {
+          "id": "contribution_margin_ratio",
+          "label": "Contribution Margin Ratio",
+          "formula_expression": "((sales_price_per_unit - variable_cost_per_unit) / sales_price_per_unit) * 100",
+          "unit": "percentage",
+          "description": "Percentage of every revenue dollar available to cover fixed costs."
+        },
+        {
+          "id": "break_even_units",
+          "label": "Break-Even Sales Volume (Units)",
+          "formula_expression": "ceil(fixed_costs / (sales_price_per_unit - variable_cost_per_unit))",
+          "unit": "units",
+          "description": "Number of sales needed each month to achieve exact zero profit/loss."
+        },
+        {
+          "id": "break_even_revenue",
+          "label": "Break-Even Revenue ($)",
+          "formula_expression": "break_even_units * sales_price_per_unit",
+          "unit": "currency_usd",
+          "description": "Total monthly revenue required to achieve profitability."
+        }
+      ],
+      "industry_benchmarks": {
+        "saas_software": "75% - 88% contribution margin ratio (break-even reached at low unit volume)",
+        "ecommerce_dtc": "35% - 55% contribution margin ratio (sensitive to ad spend and shipping)",
+        "agency_consulting": "50% - 70% gross contribution margin ratio after contractor hours"
+      },
+      "example_calculation": {
+        "scenario": "Micro-SaaS B2B SEO Monitoring Utility",
+        "inputs": {
+          "fixed_costs": 4000,
+          "sales_price_per_unit": 49,
+          "variable_cost_per_unit": 9
+        },
+        "results": {
+          "contribution_margin_unit": 40,
+          "contribution_margin_ratio": 81.63,
+          "break_even_units": 100,
+          "break_even_revenue": 4900
+        }
+      },
+      "seo": {
+        "title": "Break-Even Calculator — Calculate Units & Revenue to Break Even",
+        "description": "Determine your break-even point in units and sales dollars with fixed overhead, variable costs, and contribution margin ratios.",
+        "keywords": ["break even calculator", "break even analysis formula", "contribution margin calculator", "fixed vs variable cost"]
+      }
+    },
+    {
+      "id": "calc-cac",
+      "slug": "cac",
+      "name": "Customer Acquisition Cost (CAC) & Payback Calculator",
+      "category": "unit-economics",
+      "data_level": "ACTUAL",
+      "status": "completed",
+      "description": "Calculates fully blended Customer Acquisition Cost (CAC), paid-only CAC, and CAC payback period in months.",
+      "formula_text": "Blended CAC = (Total Ad Spend + Sales Salaries + Marketing Software) / Total New Customers Acquired; CAC Payback Period (Months) = Blended CAC / (Average Monthly Revenue per Customer × Gross Margin %).",
+      "inputs": [
+        {
+          "id": "paid_ad_spend",
+          "label": "Total Paid Advertising Spend (Meta, Google, LinkedIn)",
+          "type": "currency",
+          "currency": "USD",
+          "default_value": 6000,
+          "unit": "$/month",
+          "min": 0,
+          "max": 5000000,
+          "step": 100,
+          "description": "Direct media spend allocated to paid campaigns."
+        },
+        {
+          "id": "sales_marketing_salaries",
+          "label": "Sales & Marketing Team Headcount Cost",
+          "type": "currency",
+          "currency": "USD",
+          "default_value": 4500,
+          "unit": "$/month",
+          "min": 0,
+          "max": 5000000,
+          "step": 100,
+          "description": "Salaries, contractor fees, and commissions directly associated with acquiring customers."
+        },
+        {
+          "id": "marketing_software_tools",
+          "label": "Marketing Tooling & Software Stack",
+          "type": "currency",
+          "currency": "USD",
+          "default_value": 500,
+          "unit": "$/month",
+          "min": 0,
+          "max": 100000,
+          "step": 50,
+          "description": "Cost of CRM, email automation, analytics, and landing page hosting."
+        },
+        {
+          "id": "new_customers_acquired",
+          "label": "Total New Paying Customers Acquired in Period",
+          "type": "number",
+          "default_value": 85,
+          "unit": "customers",
+          "min": 1,
+          "max": 1000000,
+          "step": 1,
+          "description": "Total count of closed accounts during the measurement window."
+        },
+        {
+          "id": "monthly_arpu",
+          "label": "Average Monthly Revenue per User (ARPU)",
+          "type": "currency",
+          "currency": "USD",
+          "default_value": 65,
+          "unit": "$/month",
+          "min": 1,
+          "max": 100000,
+          "step": 5,
+          "description": "Expected monthly gross billings per customer."
+        },
+        {
+          "id": "gross_margin_percent",
+          "label": "Gross Margin Percentage %",
+          "type": "percentage",
+          "default_value": 80,
+          "unit": "%",
+          "min": 1,
+          "max": 100,
+          "step": 1,
+          "description": "Gross margin after server, hosting, or direct fulfillment costs."
+        }
+      ],
+      "outputs": [
+        {
+          "id": "blended_cac",
+          "label": "Fully Loaded Blended CAC",
+          "formula_expression": "(paid_ad_spend + sales_marketing_salaries + marketing_software_tools) / new_customers_acquired",
+          "unit": "currency_usd",
+          "description": "Comprehensive cost to acquire one paying customer including all overhead and team expenses."
+        },
+        {
+          "id": "paid_only_cac",
+          "label": "Paid Media CAC (Direct Ad Only)",
+          "formula_expression": "paid_ad_spend / new_customers_acquired",
+          "unit": "currency_usd",
+          "description": "Direct media efficiency before headcount allocation."
+        },
+        {
+          "id": "cac_payback_months",
+          "label": "CAC Payback Period (Months)",
+          "formula_expression": "blended_cac / (monthly_arpu * (gross_margin_percent / 100))",
+          "unit": "months",
+          "description": "Time in months before gross profit from an acquired customer repays the capital spent to acquire them."
+        }
+      ],
+      "industry_benchmarks": {
+        "b2b_smb_saas": "CAC Payback < 12 months (Top tier < 7 months)",
+        "enterprise_saas": "CAC Payback 12 - 18 months",
+        "consumer_dtc_subscriptions": "CAC Payback < 4 months (Ideally 1st order break-even)"
+      },
+      "example_calculation": {
+        "scenario": "Self-Serve Team Collaboration SaaS",
+        "inputs": {
+          "paid_ad_spend": 8000,
+          "sales_marketing_salaries": 4000,
+          "marketing_software_tools": 800,
+          "new_customers_acquired": 100,
+          "monthly_arpu": 80,
+          "gross_margin_percent": 85
+        },
+        "results": {
+          "blended_cac": 128.0,
+          "paid_only_cac": 80.0,
+          "cac_payback_months": 1.88
+        }
+      },
+      "seo": {
+        "title": "Customer Acquisition Cost (CAC) & Payback Calculator",
+        "description": "Calculate fully loaded CAC, paid media CAC, and payback period in months to measure acquisition efficiency.",
+        "keywords": ["cac calculator", "customer acquisition cost formula", "cac payback period", "blended cac calculation"]
+      }
+    },
+    {
+      "id": "calc-ltv",
+      "slug": "ltv",
+      "name": "Customer Lifetime Value (LTV) & LTV:CAC Ratio Calculator",
+      "category": "unit-economics",
+      "data_level": "ACTUAL",
+      "status": "completed",
+      "description": "Calculates Customer Lifetime Value (LTV), average customer lifespan, and the golden LTV:CAC ratio to determine unit economics sustainability.",
+      "formula_text": "Average Lifespan (Months) = 1 / (Monthly Churn Rate % / 100); Gross Customer Lifetime Value = (Average Monthly Revenue per Account × Average Lifespan) × (Gross Margin % / 100); LTV:CAC Ratio = LTV / Blended CAC.",
+      "inputs": [
+        {
+          "id": "monthly_arpu",
+          "label": "Average Monthly Revenue per User (ARPU / AOV)",
+          "type": "currency",
+          "currency": "USD",
+          "default_value": 75,
+          "unit": "$/month",
+          "min": 1,
+          "max": 100000,
+          "step": 5,
+          "description": "Average gross monthly billing per account."
+        },
+        {
+          "id": "monthly_churn_rate",
+          "label": "Monthly Customer Churn Rate %",
+          "type": "percentage",
+          "default_value": 4.5,
+          "unit": "%/month",
+          "min": 0.1,
+          "max": 100,
+          "step": 0.1,
+          "description": "Percentage of existing subscribers that cancel subscription each month."
+        },
+        {
+          "id": "gross_margin_rate",
+          "label": "Gross Margin Percentage %",
+          "type": "percentage",
+          "default_value": 82,
+          "unit": "%",
+          "min": 1,
+          "max": 100,
+          "step": 1,
+          "description": "Gross margin after direct fulfillment and hosting costs."
+        },
+        {
+          "id": "blended_cac",
+          "label": "Customer Acquisition Cost (CAC)",
+          "type": "currency",
+          "currency": "USD",
+          "default_value": 350,
+          "unit": "$",
+          "min": 1,
+          "max": 100000,
+          "step": 10,
+          "description": "Total marketing and sales expense spent to acquire one customer."
+        }
+      ],
+      "outputs": [
+        {
+          "id": "customer_lifespan_months",
+          "label": "Expected Customer Lifespan",
+          "formula_expression": "1 / (monthly_churn_rate / 100)",
+          "unit": "months",
+          "description": "Average duration in months a subscriber remains active before churning."
+        },
+        {
+          "id": "customer_lifetime_value",
+          "label": "Customer Lifetime Value (LTV)",
+          "formula_expression": "(monthly_arpu * (1 / (monthly_churn_rate / 100))) * (gross_margin_rate / 100)",
+          "unit": "currency_usd",
+          "description": "Total gross profit an individual customer generates over their entire tenure."
+        },
+        {
+          "id": "ltv_cac_ratio",
+          "label": "LTV to CAC Ratio",
+          "formula_expression": "customer_lifetime_value / blended_cac",
+          "unit": "ratio",
+          "description": "Return multiplier on customer acquisition investment. Benchmark standard is ≥ 3.0x."
+        },
+        {
+          "id": "unit_economics_verdict",
+          "label": "Unit Economics Health Verdict",
+          "formula_expression": "if (ltv_cac_ratio < 1.0) then 'Value Destroying' else if (ltv_cac_ratio < 3.0) then 'Marginal / High Burn' else if (ltv_cac_ratio <= 5.0) then 'Healthy & Sustainable' else 'Underinvesting in Growth'",
+          "unit": "status_badge",
+          "description": "Benchmark verdict guiding growth capital allocation."
+        }
+      ],
+      "industry_benchmarks": {
+        "sub_1x": "Losing money on every acquired user (critical emergency)",
+        "1x_to_3x": "Acceptable for early testing, but fragile to CAC spikes",
+        "3x_to_5x": "Venture-backable sweet spot with high capital efficiency",
+        "greater_than_5x": "Opportunity to bid more aggressively to capture market share"
+      },
+      "example_calculation": {
+        "scenario": "Vertical SaaS for Architectural Design Studios",
+        "inputs": {
+          "monthly_arpu": 120,
+          "monthly_churn_rate": 3.0,
+          "gross_margin_rate": 85,
+          "blended_cac": 600
+        },
+        "results": {
+          "customer_lifespan_months": 33.33,
+          "customer_lifetime_value": 3400.0,
+          "ltv_cac_ratio": 5.67,
+          "unit_economics_verdict": "Underinvesting in Growth (Scale marketing spend)"
+        }
+      },
+      "seo": {
+        "title": "Customer Lifetime Value (LTV) Calculator & LTV:CAC Ratio",
+        "description": "Calculate Customer Lifetime Value (LTV), customer lifespan from churn, and LTV:CAC ratios to benchmark startup unit economics.",
+        "keywords": ["ltv calculator", "customer lifetime value formula", "ltv to cac ratio", "saas churn to ltv"]
+      }
+    }
+  ]
+}

@@ -150,6 +150,11 @@ const navLinks = [{ to: "/pricing", label: "Pricing" }];
 
 const EXPLORE_ITEMS = [
   { to: "/browse", label: "Browse all ideas" },
+  { to: "/useful-tools", label: "Useful Tools" },
+  { to: "/startup-guides", label: "Startup Guides" },
+  { to: "/founder-stories", label: "Founder Stories" },
+  { to: "/founder-glossary", label: "Founder Glossary" },
+  { to: "/learning-resources", label: "Learning Resources" },
   { to: "/search", label: "Search" },
   { to: "/blog", label: "Blog" },
   { to: "/services", label: "Services" },
@@ -637,6 +642,16 @@ const footerColumns: { title: string; links: { to: string; label: string }[] }[]
     ],
   },
   {
+    title: "Resources",
+    links: [
+      { to: "/useful-tools", label: "Useful Tools" },
+      { to: "/startup-guides", label: "Startup Guides" },
+      { to: "/founder-stories", label: "Founder Stories" },
+      { to: "/founder-glossary", label: "Startup Glossary" },
+      { to: "/learning-resources", label: "Learning Resources" },
+    ],
+  },
+  {
     title: "Company",
     links: [
       { to: "/about", label: "About" },
@@ -821,7 +836,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
               1,249px ribbon on an 844px screen. These are short lists of
               short labels; two columns halve the height and give it a shape.
               Everything from sm: up is the approved desktop layout, untouched. */}
-          <div className="grid grid-cols-2 gap-x-6 gap-y-7 sm:grid-cols-2 sm:gap-10 lg:grid-cols-[1.1fr_1fr_1fr_1.4fr]">
+          <div className="grid grid-cols-2 gap-x-6 gap-y-7 sm:grid-cols-3 sm:gap-8 lg:grid-cols-[1.1fr_1fr_1fr_1fr_1.4fr]">
             {/* Categories, capped. The cap is what keeps this footer one
                 height whether the catalogue holds 14 categories or 1,400. */}
             <div className="col-span-2 sm:col-span-1">
