@@ -5,6 +5,8 @@ export type GlossaryTerm = {
   slug: string;
   category: string;
   definition: string;
+  why_it_matters?: string;
+  example_in_practice?: string;
   related_terms?: string[];
   formula?: string;
   example_or_formula?: string;

@@ -9,13 +9,13 @@ import { GLOSSARY_DATA, GLOSSARY_CATEGORIES, type GlossaryTerm } from "@/lib/glo
 export const Route = createFileRoute("/founder-glossary/")({
   head: () => ({
     meta: [
-      { title: "Founder Glossary — 45 Essential Startup Terms | BBI" },
+      { title: `Founder Glossary — ${GLOSSARY_DATA.length} Essential Startup Terms | BBI` },
       {
         name: "description",
         content:
-          "Clear, practical definitions and formulas for 45 essential startup, unit economics, fundraising, and venture metrics.",
+          `Clear, practical definitions and formulas for ${GLOSSARY_DATA.length} essential startup, unit economics, fundraising, and venture metrics.`,
       },
-      { property: "og:title", content: "Founder Glossary — 45 Essential Startup Terms | BBI" },
+      { property: "og:title", content: `Founder Glossary — ${GLOSSARY_DATA.length} Essential Startup Terms | BBI` },
       {
         property: "og:description",
         content:
@@ -53,6 +53,8 @@ export function FounderGlossaryPage() {
         !q ||
         item.term.toLowerCase().includes(q) ||
         item.definition.toLowerCase().includes(q) ||
+        (item.why_it_matters && item.why_it_matters.toLowerCase().includes(q)) ||
+        (item.example_in_practice && item.example_in_practice.toLowerCase().includes(q)) ||
         (item.formula && item.formula.toLowerCase().includes(q)) ||
         (item.related_terms && item.related_terms.some((r) => r.toLowerCase().includes(q)));
 
@@ -69,7 +71,7 @@ export function FounderGlossaryPage() {
           collectionPageSchema({
             path: "/founder-glossary",
             name: "Founder & Unit Economics Glossary",
-            description: "45 essential startup and unit economics terms defined for operators.",
+            description: `${GLOSSARY_DATA.length} essential startup and unit economics terms defined for operators.`,
             itemCount: GLOSSARY_DATA.length,
           }),
           breadcrumbSchema([
@@ -92,7 +94,7 @@ export function FounderGlossaryPage() {
                 </span>
               </h1>
               <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted-foreground">
-                45 operator-tested terms covering venture financing, unit economics, product-market
+                {GLOSSARY_DATA.length} operator-tested terms covering venture financing, unit economics, product-market
                 fit, and market sizing with exact mathematical formulas.
               </p>
             </div>
@@ -217,6 +219,28 @@ export function FounderGlossaryPage() {
                   <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                     {t.definition}
                   </p>
+
+                  {t.why_it_matters && (
+                    <div className="mt-3">
+                      <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                        Why it matters
+                      </p>
+                      <p className="mt-1 text-sm text-foreground/80 leading-relaxed">
+                        {t.why_it_matters}
+                      </p>
+                    </div>
+                  )}
+
+                  {t.example_in_practice && (
+                    <div className="mt-3 rounded-xl border border-border/60 bg-muted/30 p-3">
+                      <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
+                        Example
+                      </p>
+                      <p className="mt-1 text-sm text-foreground/90 italic">
+                        "{t.example_in_practice}"
+                      </p>
+                    </div>
+                  )}
 
                   {/* Mathematical Formula if present */}
                   {t.formula && (
