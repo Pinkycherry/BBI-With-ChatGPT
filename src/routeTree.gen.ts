@@ -17,6 +17,7 @@ import { Route as DisclaimerRouteImport } from './routes/disclaimer'
 import { Route as GdprRouteImport } from './routes/gdpr'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as PrivacyRouteImport } from './routes/privacy'
+import { Route as ProcessIdeasRouteImport } from './routes/process-ideas'
 import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as ServicesRouteImport } from './routes/services'
@@ -33,9 +34,16 @@ import { Route as CalculatorSlugRouteImport } from './routes/calculator.$slug'
 import { Route as CategoryCategorySlugRouteImport } from './routes/category.$categorySlug'
 import { Route as FaqIndexRouteImport } from './routes/faq.index'
 import { Route as FaqCategorySlugRouteImport } from './routes/faq.$categorySlug'
+import { Route as FounderGlossaryIndexRouteImport } from './routes/founder-glossary.index'
+import { Route as FounderStoriesIndexRouteImport } from './routes/founder-stories.index'
+import { Route as FounderStoriesSlugRouteImport } from './routes/founder-stories.$slug'
 import { Route as IdeaSlugRouteImport } from './routes/idea.$slug'
+import { Route as LearningResourcesIndexRouteImport } from './routes/learning-resources.index'
 import { Route as ListIndexRouteImport } from './routes/list.index'
 import { Route as ListSlugRouteImport } from './routes/list.$slug'
+import { Route as StartupGuidesIndexRouteImport } from './routes/startup-guides.index'
+import { Route as StartupGuidesSlugRouteImport } from './routes/startup-guides.$slug'
+import { Route as UsefulToolsIndexRouteImport } from './routes/useful-tools.index'
 import { Route as ValidateIndustrySlugRouteImport } from './routes/validate.$industrySlug'
 import { Route as CategoryCategorySlugIndexRouteImport } from './routes/category.$categorySlug.index'
 import { Route as CategoryCategorySlugSubcategorySlugRouteImport } from './routes/category.$categorySlug.$subcategorySlug'
@@ -78,6 +86,11 @@ const PricingRoute = PricingRouteImport.update({
 const PrivacyRoute = PrivacyRouteImport.update({
   id: '/privacy',
   path: '/privacy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ProcessIdeasRoute = ProcessIdeasRouteImport.update({
+  id: '/process-ideas',
+  path: '/process-ideas',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RefundPolicyRoute = RefundPolicyRouteImport.update({
@@ -160,9 +173,29 @@ const FaqCategorySlugRoute = FaqCategorySlugRouteImport.update({
   path: '/faq/$categorySlug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const FounderGlossaryIndexRoute = FounderGlossaryIndexRouteImport.update({
+  id: '/founder-glossary/',
+  path: '/founder-glossary/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FounderStoriesIndexRoute = FounderStoriesIndexRouteImport.update({
+  id: '/founder-stories/',
+  path: '/founder-stories/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FounderStoriesSlugRoute = FounderStoriesSlugRouteImport.update({
+  id: '/founder-stories/$slug',
+  path: '/founder-stories/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IdeaSlugRoute = IdeaSlugRouteImport.update({
   id: '/idea/$slug',
   path: '/idea/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LearningResourcesIndexRoute = LearningResourcesIndexRouteImport.update({
+  id: '/learning-resources/',
+  path: '/learning-resources/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ListIndexRoute = ListIndexRouteImport.update({
@@ -173,6 +206,21 @@ const ListIndexRoute = ListIndexRouteImport.update({
 const ListSlugRoute = ListSlugRouteImport.update({
   id: '/list/$slug',
   path: '/list/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StartupGuidesIndexRoute = StartupGuidesIndexRouteImport.update({
+  id: '/startup-guides/',
+  path: '/startup-guides/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const StartupGuidesSlugRoute = StartupGuidesSlugRouteImport.update({
+  id: '/startup-guides/$slug',
+  path: '/startup-guides/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const UsefulToolsIndexRoute = UsefulToolsIndexRouteImport.update({
+  id: '/useful-tools/',
+  path: '/useful-tools/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ValidateIndustrySlugRoute = ValidateIndustrySlugRouteImport.update({
@@ -202,6 +250,7 @@ export interface FileRoutesByFullPath {
   '/gdpr': typeof GdprRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
+  '/process-ideas': typeof ProcessIdeasRoute
   '/refund-policy': typeof RefundPolicyRoute
   '/search': typeof SearchRoute
   '/services': typeof ServicesRoute
@@ -215,13 +264,20 @@ export interface FileRoutesByFullPath {
   '/calculator/$slug': typeof CalculatorSlugRoute
   '/category/$categorySlug': typeof CategoryCategorySlugRouteWithChildren
   '/faq/$categorySlug': typeof FaqCategorySlugRoute
+  '/founder-stories/$slug': typeof FounderStoriesSlugRoute
   '/idea/$slug': typeof IdeaSlugRoute
   '/list/$slug': typeof ListSlugRoute
+  '/startup-guides/$slug': typeof StartupGuidesSlugRoute
   '/validate/$industrySlug': typeof ValidateIndustrySlugRoute
   '/blog/': typeof BlogIndexRoute
   '/calculator/': typeof CalculatorIndexRoute
   '/faq/': typeof FaqIndexRoute
+  '/founder-glossary/': typeof FounderGlossaryIndexRoute
+  '/founder-stories/': typeof FounderStoriesIndexRoute
+  '/learning-resources/': typeof LearningResourcesIndexRoute
   '/list/': typeof ListIndexRoute
+  '/startup-guides/': typeof StartupGuidesIndexRoute
+  '/useful-tools/': typeof UsefulToolsIndexRoute
   '/category/$categorySlug/$subcategorySlug': typeof CategoryCategorySlugSubcategorySlugRoute
   '/category/$categorySlug/': typeof CategoryCategorySlugIndexRoute
 }
@@ -234,6 +290,7 @@ export interface FileRoutesByTo {
   '/gdpr': typeof GdprRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
+  '/process-ideas': typeof ProcessIdeasRoute
   '/refund-policy': typeof RefundPolicyRoute
   '/search': typeof SearchRoute
   '/services': typeof ServicesRoute
@@ -246,13 +303,20 @@ export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/calculator/$slug': typeof CalculatorSlugRoute
   '/faq/$categorySlug': typeof FaqCategorySlugRoute
+  '/founder-stories/$slug': typeof FounderStoriesSlugRoute
   '/idea/$slug': typeof IdeaSlugRoute
   '/list/$slug': typeof ListSlugRoute
+  '/startup-guides/$slug': typeof StartupGuidesSlugRoute
   '/validate/$industrySlug': typeof ValidateIndustrySlugRoute
   '/blog': typeof BlogIndexRoute
   '/calculator': typeof CalculatorIndexRoute
   '/faq': typeof FaqIndexRoute
+  '/founder-glossary': typeof FounderGlossaryIndexRoute
+  '/founder-stories': typeof FounderStoriesIndexRoute
+  '/learning-resources': typeof LearningResourcesIndexRoute
   '/list': typeof ListIndexRoute
+  '/startup-guides': typeof StartupGuidesIndexRoute
+  '/useful-tools': typeof UsefulToolsIndexRoute
   '/category/$categorySlug/$subcategorySlug': typeof CategoryCategorySlugSubcategorySlugRoute
   '/category/$categorySlug': typeof CategoryCategorySlugIndexRoute
 }
@@ -266,6 +330,7 @@ export interface FileRoutesById {
   '/gdpr': typeof GdprRoute
   '/pricing': typeof PricingRoute
   '/privacy': typeof PrivacyRoute
+  '/process-ideas': typeof ProcessIdeasRoute
   '/refund-policy': typeof RefundPolicyRoute
   '/search': typeof SearchRoute
   '/services': typeof ServicesRoute
@@ -279,13 +344,20 @@ export interface FileRoutesById {
   '/calculator/$slug': typeof CalculatorSlugRoute
   '/category/$categorySlug': typeof CategoryCategorySlugRouteWithChildren
   '/faq/$categorySlug': typeof FaqCategorySlugRoute
+  '/founder-stories/$slug': typeof FounderStoriesSlugRoute
   '/idea/$slug': typeof IdeaSlugRoute
   '/list/$slug': typeof ListSlugRoute
+  '/startup-guides/$slug': typeof StartupGuidesSlugRoute
   '/validate/$industrySlug': typeof ValidateIndustrySlugRoute
   '/blog/': typeof BlogIndexRoute
   '/calculator/': typeof CalculatorIndexRoute
   '/faq/': typeof FaqIndexRoute
+  '/founder-glossary/': typeof FounderGlossaryIndexRoute
+  '/founder-stories/': typeof FounderStoriesIndexRoute
+  '/learning-resources/': typeof LearningResourcesIndexRoute
   '/list/': typeof ListIndexRoute
+  '/startup-guides/': typeof StartupGuidesIndexRoute
+  '/useful-tools/': typeof UsefulToolsIndexRoute
   '/category/$categorySlug/$subcategorySlug': typeof CategoryCategorySlugSubcategorySlugRoute
   '/category/$categorySlug/': typeof CategoryCategorySlugIndexRoute
 }
@@ -300,6 +372,7 @@ export interface FileRouteTypes {
     | '/gdpr'
     | '/pricing'
     | '/privacy'
+    | '/process-ideas'
     | '/refund-policy'
     | '/search'
     | '/services'
@@ -313,13 +386,20 @@ export interface FileRouteTypes {
     | '/calculator/$slug'
     | '/category/$categorySlug'
     | '/faq/$categorySlug'
+    | '/founder-stories/$slug'
     | '/idea/$slug'
     | '/list/$slug'
+    | '/startup-guides/$slug'
     | '/validate/$industrySlug'
     | '/blog/'
     | '/calculator/'
     | '/faq/'
+    | '/founder-glossary/'
+    | '/founder-stories/'
+    | '/learning-resources/'
     | '/list/'
+    | '/startup-guides/'
+    | '/useful-tools/'
     | '/category/$categorySlug/$subcategorySlug'
     | '/category/$categorySlug/'
   fileRoutesByTo: FileRoutesByTo
@@ -332,6 +412,7 @@ export interface FileRouteTypes {
     | '/gdpr'
     | '/pricing'
     | '/privacy'
+    | '/process-ideas'
     | '/refund-policy'
     | '/search'
     | '/services'
@@ -344,13 +425,20 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/calculator/$slug'
     | '/faq/$categorySlug'
+    | '/founder-stories/$slug'
     | '/idea/$slug'
     | '/list/$slug'
+    | '/startup-guides/$slug'
     | '/validate/$industrySlug'
     | '/blog'
     | '/calculator'
     | '/faq'
+    | '/founder-glossary'
+    | '/founder-stories'
+    | '/learning-resources'
     | '/list'
+    | '/startup-guides'
+    | '/useful-tools'
     | '/category/$categorySlug/$subcategorySlug'
     | '/category/$categorySlug'
   id:
@@ -363,6 +451,7 @@ export interface FileRouteTypes {
     | '/gdpr'
     | '/pricing'
     | '/privacy'
+    | '/process-ideas'
     | '/refund-policy'
     | '/search'
     | '/services'
@@ -376,13 +465,20 @@ export interface FileRouteTypes {
     | '/calculator/$slug'
     | '/category/$categorySlug'
     | '/faq/$categorySlug'
+    | '/founder-stories/$slug'
     | '/idea/$slug'
     | '/list/$slug'
+    | '/startup-guides/$slug'
     | '/validate/$industrySlug'
     | '/blog/'
     | '/calculator/'
     | '/faq/'
+    | '/founder-glossary/'
+    | '/founder-stories/'
+    | '/learning-resources/'
     | '/list/'
+    | '/startup-guides/'
+    | '/useful-tools/'
     | '/category/$categorySlug/$subcategorySlug'
     | '/category/$categorySlug/'
   fileRoutesById: FileRoutesById
@@ -396,6 +492,7 @@ export interface RootRouteChildren {
   GdprRoute: typeof GdprRoute
   PricingRoute: typeof PricingRoute
   PrivacyRoute: typeof PrivacyRoute
+  ProcessIdeasRoute: typeof ProcessIdeasRoute
   RefundPolicyRoute: typeof RefundPolicyRoute
   SearchRoute: typeof SearchRoute
   ServicesRoute: typeof ServicesRoute
@@ -409,13 +506,20 @@ export interface RootRouteChildren {
   CalculatorSlugRoute: typeof CalculatorSlugRoute
   CategoryCategorySlugRoute: typeof CategoryCategorySlugRouteWithChildren
   FaqCategorySlugRoute: typeof FaqCategorySlugRoute
+  FounderStoriesSlugRoute: typeof FounderStoriesSlugRoute
   IdeaSlugRoute: typeof IdeaSlugRoute
   ListSlugRoute: typeof ListSlugRoute
+  StartupGuidesSlugRoute: typeof StartupGuidesSlugRoute
   ValidateIndustrySlugRoute: typeof ValidateIndustrySlugRoute
   BlogIndexRoute: typeof BlogIndexRoute
   CalculatorIndexRoute: typeof CalculatorIndexRoute
   FaqIndexRoute: typeof FaqIndexRoute
+  FounderGlossaryIndexRoute: typeof FounderGlossaryIndexRoute
+  FounderStoriesIndexRoute: typeof FounderStoriesIndexRoute
+  LearningResourcesIndexRoute: typeof LearningResourcesIndexRoute
   ListIndexRoute: typeof ListIndexRoute
+  StartupGuidesIndexRoute: typeof StartupGuidesIndexRoute
+  UsefulToolsIndexRoute: typeof UsefulToolsIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -474,6 +578,13 @@ declare module '@tanstack/react-router' {
       path: '/privacy'
       fullPath: '/privacy'
       preLoaderRoute: typeof PrivacyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/process-ideas': {
+      id: '/process-ideas'
+      path: '/process-ideas'
+      fullPath: '/process-ideas'
+      preLoaderRoute: typeof ProcessIdeasRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/refund-policy': {
@@ -588,11 +699,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FaqCategorySlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/founder-glossary/': {
+      id: '/founder-glossary/'
+      path: '/founder-glossary'
+      fullPath: '/founder-glossary/'
+      preLoaderRoute: typeof FounderGlossaryIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/founder-stories/': {
+      id: '/founder-stories/'
+      path: '/founder-stories'
+      fullPath: '/founder-stories/'
+      preLoaderRoute: typeof FounderStoriesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/founder-stories/$slug': {
+      id: '/founder-stories/$slug'
+      path: '/founder-stories/$slug'
+      fullPath: '/founder-stories/$slug'
+      preLoaderRoute: typeof FounderStoriesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/idea/$slug': {
       id: '/idea/$slug'
       path: '/idea/$slug'
       fullPath: '/idea/$slug'
       preLoaderRoute: typeof IdeaSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/learning-resources/': {
+      id: '/learning-resources/'
+      path: '/learning-resources'
+      fullPath: '/learning-resources/'
+      preLoaderRoute: typeof LearningResourcesIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/list/': {
@@ -607,6 +746,27 @@ declare module '@tanstack/react-router' {
       path: '/list/$slug'
       fullPath: '/list/$slug'
       preLoaderRoute: typeof ListSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/startup-guides/': {
+      id: '/startup-guides/'
+      path: '/startup-guides'
+      fullPath: '/startup-guides/'
+      preLoaderRoute: typeof StartupGuidesIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/startup-guides/$slug': {
+      id: '/startup-guides/$slug'
+      path: '/startup-guides/$slug'
+      fullPath: '/startup-guides/$slug'
+      preLoaderRoute: typeof StartupGuidesSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/useful-tools/': {
+      id: '/useful-tools/'
+      path: '/useful-tools'
+      fullPath: '/useful-tools/'
+      preLoaderRoute: typeof UsefulToolsIndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/validate/$industrySlug': {
@@ -656,6 +816,7 @@ const rootRouteChildren: RootRouteChildren = {
   GdprRoute: GdprRoute,
   PricingRoute: PricingRoute,
   PrivacyRoute: PrivacyRoute,
+  ProcessIdeasRoute: ProcessIdeasRoute,
   RefundPolicyRoute: RefundPolicyRoute,
   SearchRoute: SearchRoute,
   ServicesRoute: ServicesRoute,
@@ -669,13 +830,20 @@ const rootRouteChildren: RootRouteChildren = {
   CalculatorSlugRoute: CalculatorSlugRoute,
   CategoryCategorySlugRoute: CategoryCategorySlugRouteWithChildren,
   FaqCategorySlugRoute: FaqCategorySlugRoute,
+  FounderStoriesSlugRoute: FounderStoriesSlugRoute,
   IdeaSlugRoute: IdeaSlugRoute,
   ListSlugRoute: ListSlugRoute,
+  StartupGuidesSlugRoute: StartupGuidesSlugRoute,
   ValidateIndustrySlugRoute: ValidateIndustrySlugRoute,
   BlogIndexRoute: BlogIndexRoute,
   CalculatorIndexRoute: CalculatorIndexRoute,
   FaqIndexRoute: FaqIndexRoute,
+  FounderGlossaryIndexRoute: FounderGlossaryIndexRoute,
+  FounderStoriesIndexRoute: FounderStoriesIndexRoute,
+  LearningResourcesIndexRoute: LearningResourcesIndexRoute,
   ListIndexRoute: ListIndexRoute,
+  StartupGuidesIndexRoute: StartupGuidesIndexRoute,
+  UsefulToolsIndexRoute: UsefulToolsIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

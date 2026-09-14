@@ -3,7 +3,7 @@
  * site. Nothing here is invented, stock, or generated — the list below holds
  * only URLs that are known to resolve.
  *
- * To add more: paste the media URLs from the WordPress library into
+ * To add more: paste the media URLs from the image library into
  * `EF_LIBRARY`. Each entry needs a `src` and an `alt`; the helpers below take
  * care of distributing them across the site so no single image repeats twice
  * in a row inside one grid.
