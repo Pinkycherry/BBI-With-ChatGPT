@@ -7,130 +7,92 @@
       "id": "case-01-ugc-agency",
       "slug": "ugc-creator-agency-dtc",
       "story_theme": "UGC Agency",
-      "title": "Scaling a Creator-Led UGC Agency to $34K/Month for DTC Brands",
-      "founder_profile": {
-        "founder_alias": "Elena Rostova",
-        "background": "Former e-commerce media buyer",
-        "location": "Remote / Austin, TX"
-      },
-      "initial_investment": {
-        "total_amount_usd": 180,
-        "breakdown": [
-          { "item": "Domain & Workspace", "cost": 30 },
-          { "item": "Airtable Pro tier", "cost": 24 },
-          { "item": "Cold email inbox setup", "cost": 126 }
-        ]
-      },
-      "time_to_first_dollar": "18 days",
-      "time_to_scaling": "7 months to cross $20K/month",
-      "revenue": {
-        "monthly_revenue_usd": 34500,
-        "annual_run_rate_usd": 414000,
-        "net_profit_margin_percent": 62
-      },
-      "data_level": "ACTUAL",
+      "title": "Scaling a Creator-Led UGC Agency for DTC Brands",
+      "data_level": "PLACEHOLDER",
       "status": "completed",
       "problem_identified": "Direct-to-Consumer (DTC) beauty and wellness brands were experiencing creative ad fatigue on TikTok and Meta within 7 to 10 days, but lacked the internal staff to scout, brief, and contract dozens of micro-creators every month.",
-      "solution_and_offer": "A productized 'Creative Sprints' subscription: 12 high-converting, tested UGC videos per month with scripting, creator management, and raw hooks included for a flat retainer of $3,500/month.",
+      "solution_and_offer": "A productized 'Creative Sprints' subscription: 12 high-converting, tested UGC videos per month with scripting, creator management, and raw hooks included for a flat retainer of premium pricing/month.",
       "execution_milestones": [
         {
-          "month": "Month 1",
+          "month": "Phase",
           "milestone_title": "First Beta Client",
-          "revenue_reached_usd": 2500,
-          "key_action": "Manually pitched 60 DTC founders on LinkedIn with a free creative tear-down video showing why their existing TikTok ads were fatiguing."
+          "key_action": "Manually pitched 60 DTC founders on professional networks with a free creative tear-down video showing why their existing TikTok ads were fatiguing."
         },
         {
-          "month": "Month 3",
+          "month": "Phase",
           "milestone_title": "Roster Standardization",
-          "revenue_reached_usd": 10500,
-          "key_action": "Built an Airtable database of 120 vetted micro-creators paid $100 per approved asset, locking in predictable 60%+ gross margins."
+          "key_action": "Built an Airtable database of 120 vetted micro-creators paid revenue per approved asset, locking in predictable 60%+ gross margins."
         },
         {
-          "month": "Month 7",
-          "milestone_title": "Crossing $20K/Mo",
-          "revenue_reached_usd": 24500,
+          "month": "Phase",
+          "milestone_title": "Significant Scaling",
           "key_action": "Hired a part-time video creative director to review drafts, freeing the founder to focus 100% on outbound sales."
         },
         {
-          "month": "Month 12",
+          "month": "Phase",
           "milestone_title": "Stabilized Scale",
-          "revenue_reached_usd": 34500,
           "key_action": "Maintained 10 brand retainers on automated Stripe billing with 90-day minimum commitments."
         }
       ],
-      "tech_stack_and_tools": ["Airtable", "Frame.io", "Stripe Billing", "Slack Connect", "Instantly.ai"],
+      "tech_stack_and_tools": [
+        "Database Tool",
+        "Industry Standard Tool",
+        "Payment Processor",
+        "Team Chat",
+        "Cold Email Tool"
+      ],
       "customer_acquisition_tactics": [
         "Unsolicited 3-minute Loom video audits critiquing current Meta Ad Library creatives of targeted brands",
-        "Publishing weekly breakdown carousels on LinkedIn analyzing top-performing TikTok ad hooks",
-        "Referral incentives giving clients $500 off next month's invoice for introduced brand founders"
+        "Publishing weekly breakdown carousels on professional networks analyzing top-performing TikTok ad hooks",
+        "Referral incentives giving clients a small budget off next month's invoice for introduced brand founders"
       ],
       "primary_bottleneck_and_fix": "Creators frequently missed production deadlines. Fixed by implementing a strict 48-hour revision clause and maintaining an active 3x creator bench for fast substitution.",
       "key_takeaways_for_founders": [
         "Never buy ad space yourself; sell the creative asset inventory to brands that already have dedicated ad budgets.",
         "Productize deliverables into predictable monthly counts rather than open-ended consulting hours.",
         "High margins require separating creative strategy (in-house) from creator fulfillment (contracted)."
-      ]
+      ],
+      "is_composite": "This is an illustrative composite case study representing common patterns in this business model. It does not represent a specific real founder."
     },
     {
       "id": "case-02-ai-repurposing",
       "slug": "ai-content-repurposing-b2b",
       "story_theme": "AI Repurposing",
-      "title": "Bootstrapping an Executive Content Repurposing Service to $28K/Month",
-      "founder_profile": {
-        "founder_alias": "Kavita Nair",
-        "background": "Former copywriter and social media strategist",
-        "location": "Bengaluru, India"
-      },
-      "initial_investment": {
-        "total_amount_usd": 95,
-        "breakdown": [
-          { "item": "Domain name", "cost": 12 },
-          { "item": "Claude/ChatGPT Plus subscription", "cost": 20 },
-          { "item": "Descript & Whisper tooling", "cost": 30 },
-          { "item": "Carrd landing page hosting", "cost": 19 },
-          { "item": "Google Workspace", "cost": 14 }
-        ]
-      },
-      "time_to_first_dollar": "11 days",
-      "time_to_scaling": "5 months to reach $15K/month",
-      "revenue": {
-        "monthly_revenue_usd": 28200,
-        "annual_run_rate_usd": 338400,
-        "net_profit_margin_percent": 74
-      },
-      "data_level": "ACTUAL",
+      "title": "Bootstrapping an Executive Content Repurposing Service",
+      "data_level": "PLACEHOLDER",
       "status": "completed",
       "problem_identified": "B2B SaaS CEOs and venture partners were recording 45-minute podcast interviews and webinar keynotes, but letting the recordings sit idle on YouTube without extracting written text or vertical video clips.",
       "solution_and_offer": "The 'Thought-Leader Engine': Hand over one raw webinar or podcast audio file per week, and receive 5 polished LinkedIn thought-leadership posts, 1 Substack newsletter essay, and 3 vertical video shorts with captions in 72 hours.",
       "execution_milestones": [
         {
-          "month": "Month 1",
+          "month": "Phase",
           "milestone_title": "Free Proof of Concept",
-          "revenue_reached_usd": 1800,
-          "key_action": "Transcribed 3 venture capitalists' podcast appearances for free, generated carousels, and sent them via direct message. Two immediately converted into paying $1,500/month retainers."
+          "key_action": "Transcribed 3 venture capitalists' podcast appearances for free, generated carousels, and sent them via direct message. Two immediately converted into paying revenue/month retainers."
         },
         {
-          "month": "Month 3",
+          "month": "Phase",
           "milestone_title": "AI Workflow Hardening",
-          "revenue_reached_usd": 9000,
           "key_action": "Configured custom Claude prompt chains tuned specifically to each client's tone of voice, reducing draft creation time from 4 hours to 30 minutes."
         },
         {
-          "month": "Month 6",
+          "month": "Phase",
           "milestone_title": "Hiring Human Polishers",
-          "revenue_reached_usd": 18500,
           "key_action": "Employed two junior editors to review and humanize AI outputs, ensuring no robotic phrasing reached client approval portals."
         },
         {
-          "month": "Month 10",
+          "month": "Phase",
           "milestone_title": "Tiered Expansion",
-          "revenue_reached_usd": 28200,
-          "key_action": "Upsold existing accounts to a $2,800/month tier that included ghostwritten X/Twitter threads and personal newsletter distribution."
+          "key_action": "Upsold existing accounts to a revenue/month tier that included ghostwritten X/Twitter threads and personal newsletter distribution."
         }
       ],
-      "tech_stack_and_tools": ["Claude 3.5 Sonnet", "Descript", "Submagic", "Notion Client Portals", "Stripe"],
+      "tech_stack_and_tools": [
+        "AI Language Model",
+        "Industry Standard Tool",
+        "Database Tool",
+        "Payment Processor"
+      ],
       "customer_acquisition_tactics": [
-        "Direct LinkedIn outreach to recently funded Series A and Series B CEOs whose social accounts were dormant",
+        "Direct professional networks outreach to recently funded Series A and Series B CEOs whose social accounts were dormant",
         "Delivering a finished 'sample week' of content completely free before asking for a contract",
         "Partnering with podcast production agencies that lacked in-house written editorial capability"
       ],
@@ -139,216 +101,161 @@
         "Do not sell 'AI services'; sell the business outcome of an active, authoritative personal brand.",
         "Clients do not pay for the LLM; they pay for the editorial judgment that removes AI cliches.",
         "Retainer contracts with clear weekly deliverables create compound MRR stability."
-      ]
+      ],
+      "is_composite": "This is an illustrative composite case study representing common patterns in this business model. It does not represent a specific real founder."
     },
     {
       "id": "case-03-side-hustle",
       "slug": "notion-systems-micro-consulting",
       "story_theme": "Side Hustle",
-      "title": "From Weekend Side Hustle to $12K/Month Notion Workflow Systems",
-      "founder_profile": {
-        "founder_alias": "Marcus Chen",
-        "background": "Full-time project manager at a mid-sized IT consultancy",
-        "location": "Toronto, Canada"
-      },
-      "initial_investment": {
-        "total_amount_usd": 55,
-        "breakdown": [
-          { "item": "Notion Plus account", "cost": 10 },
-          { "item": "Gumroad storefront", "cost": 0 },
-          { "item": "Domain name & redirect", "cost": 15 },
-          { "item": "Canva Pro (monthly)", "cost": 13 },
-          { "item": "Loom screen recording tool", "cost": 17 }
-        ]
-      },
-      "time_to_first_dollar": "6 days",
-      "time_to_scaling": "4 months to surpass full-time salary",
-      "revenue": {
-        "monthly_revenue_usd": 12400,
-        "annual_run_rate_usd": 148800,
-        "net_profit_margin_percent": 91
-      },
-      "data_level": "ACTUAL",
+      "title": "From Weekend Side Hustle Notion Workflow Systems",
+      "data_level": "PLACEHOLDER",
       "status": "completed",
       "problem_identified": "Small creative agencies (5-15 employees) were drowning in fragmented project management across Trello, Asana, and messy Google Docs, but could not justify hiring an enterprise systems integrator.",
-      "solution_and_offer": "A dual-tier monetization engine: A $97 self-serve 'Agency Operating System' Notion template for DIY teams, paired with a $2,500 'Done-In-A-Weekend' migration service for busy agency owners.",
+      "solution_and_offer": "A dual-tier monetization engine: A premium pricing self-serve 'Agency Operating System' Notion template for DIY teams, paired with a premium pricing 'Done-In-A-Weekend' migration service for busy agency owners.",
       "execution_milestones": [
         {
-          "month": "Month 1",
+          "month": "Phase",
           "milestone_title": "First Digital Sales",
-          "revenue_reached_usd": 850,
-          "key_action": "Shared an interactive GIF walkthrough of his internal project dashboard on the r/Notion subreddit and Twitter, driving 9 template sales at $97."
+          "key_action": "Shared an interactive GIF walkthrough of his internal project dashboard on the r/Notion subreddit and Twitter, driving 9 template sales at revenue."
         },
         {
-          "month": "Month 2",
+          "month": "Phase",
           "milestone_title": "First High-Ticket Client",
-          "revenue_reached_usd": 3800,
-          "key_action": "A buyer of the template requested custom implementation. Charged $2,500 to migrate their agency's data over a single weekend."
+          "key_action": "A buyer of the template requested custom implementation. Charged revenue to migrate their agency's data over a single weekend."
         },
         {
-          "month": "Month 5",
+          "month": "Phase",
           "milestone_title": "Productized Consistency",
-          "revenue_reached_usd": 8900,
-          "key_action": "Capped custom implementations at 3 per month to protect his day-job schedule while template revenue rose organically to $1,400/month."
+          "key_action": "Capped custom implementations at 3 per month to protect his day-job schedule while template revenue rose organically to revenue/month."
         },
         {
-          "month": "Month 9",
-          "milestone_title": "Crossing $12K/Mo",
-          "revenue_reached_usd": 12400,
+          "month": "Phase",
+          "milestone_title": "Significant Scaling",
           "key_action": "Partnered with agency coaches who bundle the template into their operational training programs."
         }
       ],
-      "tech_stack_and_tools": ["Notion", "Gumroad", "Loom", "Calendly", "Make.com"],
+      "tech_stack_and_tools": [
+        "Database Tool",
+        "Checkout Platform",
+        "Industry Standard Tool",
+        "Scheduling Link",
+        "Automation Tool"
+      ],
       "customer_acquisition_tactics": [
         "Publishing 60-second video tutorials showing specific agency workflow fixes (e.g., 'How to track client retainer hours in Notion')",
         "Offering a free 15-minute 'Workflow Diagnostic Call' with zero pitch, letting agency owners naturally request implementation",
         "Building free mini-templates as lead magnets to capture prospective buyer emails"
       ],
-      "primary_bottleneck_and_fix": "Agency clients asked for continuous minor tweaks post-launch. Fixed by including a strict 14-day warranty period, after which maintenance required a $400/month support retainer.",
+      "primary_bottleneck_and_fix": "Agency clients asked for continuous minor tweaks post-launch. Fixed by including a strict 14-day warranty period, after which maintenance required a market rates/month support retainer.",
       "key_takeaways_for_founders": [
-        "A low-ticket digital template ($97) is the best possible lead generation funnel for a high-ticket service ($2,500).",
+        "A low-ticket digital template (premium pricing) is the best possible lead generation funnel for a high-ticket service (premium pricing).",
         "Solve problems for people who already have software budgets; agencies spend money on operations every week.",
         "Limiting client capacity creates genuine urgency and prevents side-hustle burnout."
-      ]
+      ],
+      "is_composite": "This is an illustrative composite case study representing common patterns in this business model. It does not represent a specific real founder."
     },
     {
       "id": "case-04-faceless-yt",
       "slug": "faceless-youtube-finance-automation",
       "story_theme": "Faceless YT",
-      "title": "Building a Faceless Business History YouTube Channel to $16K/Month",
-      "founder_profile": {
-        "founder_alias": "Tariq Mansoor",
-        "background": "Finance student and video editor",
-        "location": "Manchester, UK"
-      },
-      "initial_investment": {
-        "total_amount_usd": 140,
-        "breakdown": [
-          { "item": "Midjourney subscription", "cost": 30 },
-          { "item": "ElevenLabs voice cloning tier", "cost": 22 },
-          { "item": "Epidemic Sound audio license", "cost": 15 },
-          { "item": "Canva thumbnail designer", "cost": 13 },
-          { "item": "Microphone for voice reference", "cost": 60 }
-        ]
-      },
-      "time_to_first_dollar": "84 days (YouTube Partner Program threshold)",
-      "time_to_scaling": "8 months to hit $10K/month",
-      "revenue": {
-        "monthly_revenue_usd": 16800,
-        "annual_run_rate_usd": 201600,
-        "net_profit_margin_percent": 68
-      },
-      "data_level": "ACTUAL",
+      "title": "Building a Faceless Business History YouTube Channel",
+      "data_level": "PLACEHOLDER",
       "status": "completed",
       "problem_identified": "Millions of curious viewers want engaging, documentary-style breakdowns of corporate scandals, startup rivalries, and economic history, but existing television documentaries are slow, formal, and paywalled.",
-      "solution_and_offer": "A weekly 14-minute faceless documentary channel publishing high-tension, fast-paced business storytelling videos produced using archival public domain footage, AI motion graphics, and rich audio design.",
+      "solution_and_offer": "A weekly 14-minute faceless documentary channel publishing high-tension, fast-paced business storytelling videos produced using archival public domain footage, generated motion graphics, and rich audio design.",
       "execution_milestones": [
         {
-          "month": "Month 1-2",
+          "month": "Phase",
           "milestone_title": "The Initial Grind",
-          "revenue_reached_usd": 0,
-          "key_action": "Published 12 videos with minimal views. Studied click-through rates (CTR) and average view duration (AVD) rigorously."
+          "key_action": "Published several videos with minimal views. Studied click-through rates (CTR) and average view duration (AVD) rigorously."
         },
         {
-          "month": "Month 3",
+          "month": "Phase",
           "milestone_title": "First Algorithm Breakout",
-          "revenue_reached_usd": 1200,
-          "key_action": "Video on 'How Red Bull Actually Makes Money' hit 680,000 views. Qualified for monetization within 48 hours."
+          "key_action": "Video on 'How Red Bull Actually Makes Money' hit significant traction. Qualified for monetization within 48 hours."
         },
         {
-          "month": "Month 6",
+          "month": "Phase",
           "milestone_title": "Integrating Dedicated Sponsors",
-          "revenue_reached_usd": 7800,
-          "key_action": "Secured first 60-second integrated sponsorship from a B2B brokerage for $2,500 in addition to YouTube AdSense."
+          "key_action": "Secured first 60-second integrated sponsorship from a B2B brokerage for revenue in addition to the platform platform ad revenue."
         },
         {
-          "month": "Month 10",
+          "month": "Phase",
           "milestone_title": "Systematized Pipeline",
-          "revenue_reached_usd": 16800,
-          "key_action": "Built an automated assembly line: freelance researcher writes script, ElevenLabs renders voiceover, freelance editor cuts video in DaVinci Resolve."
+          "key_action": "Built an automated assembly line: freelance researcher writes script, voice generation tools renders voiceover, freelance editor cuts video in video editors."
         }
       ],
-      "tech_stack_and_tools": ["ElevenLabs", "Midjourney", "DaVinci Resolve", "Epidemic Sound", "1of10 Thumbnail Research"],
+      "tech_stack_and_tools": [
+        "AI Voice Generator",
+        "AI Image Generator",
+        "Video Editor",
+        "Audio Library",
+        "Industry Standard Tool"
+      ],
       "customer_acquisition_tactics": [
         "A/B testing thumbnail designs with extreme emotional contrast and under 4 words of text",
         "Engineering high-retention hooks that delay the primary answer to the 8-minute mark",
-        "Repurposing 45-second climax clips to YouTube Shorts and TikTok with pinned comments linking to the main video"
+        "Repurposing 45-second climax clips to short-form video platforms with pinned comments linking to the main video"
       ],
-      "primary_bottleneck_and_fix": "Scriptwriting took 25 hours per video. Solved by hiring an economics graduate student on Upwork at $120 per script to conduct primary historical research.",
+      "primary_bottleneck_and_fix": "Scriptwriting took 25 hours per video. Solved by hiring an economics graduate student on freelance platforms at market rates per script to conduct primary historical research.",
       "key_takeaways_for_founders": [
-        "YouTube is not a video platform; it is a packaging and retention optimization engine.",
-        "Finance and business documentary niches enjoy $12-$25 CPMs, 4x higher than gaming or entertainment.",
-        "Never monetize with AdSense alone; direct brand sponsorships generate over 55% of total gross income."
-      ]
+        "Video platforms is not a video platform; it is a packaging and retention optimization engine.",
+        "Finance and business documentary niches generate significantly higher advertiser returns than gaming or entertainment.",
+        "Never monetize with AdSense alone; direct brand sponsorships generate the majority of total gross income."
+      ],
+      "is_composite": "This is an illustrative composite case study representing common patterns in this business model. It does not represent a specific real founder."
     },
     {
       "id": "case-05-service-business",
       "slug": "cold-email-infrastructure-agency",
       "story_theme": "Service Business",
-      "title": "Bootstrapping a Cold Email Infrastructure Service to $42K/Month",
-      "founder_profile": {
-        "founder_alias": "Vikram Sethi",
-        "background": "DevOps engineer turned outbound sales specialist",
-        "location": "Mumbai, India"
-      },
-      "initial_investment": {
-        "total_amount_usd": 240,
-        "breakdown": [
-          { "item": "Secondary Google Workspace tenants", "cost": 72 },
-          { "item": "10 test domains", "cost": 100 },
-          { "item": "Email warming software", "cost": 49 },
-          { "item": "Hosting & Stripe fees", "cost": 19 }
-        ]
-      },
-      "time_to_first_dollar": "14 days",
-      "time_to_scaling": "6 months to cross $25K/month",
-      "revenue": {
-        "monthly_revenue_usd": 42000,
-        "annual_run_rate_usd": 504000,
-        "net_profit_margin_percent": 58
-      },
-      "data_level": "ACTUAL",
+      "title": "Bootstrapping a Cold Email Infrastructure Service",
+      "data_level": "PLACEHOLDER",
       "status": "completed",
-      "problem_identified": "Stricter Google and Yahoo inbox delivery guidelines introduced in 2024 caused outbound sales teams' emails to land in spam folders, yet sales leaders lacked the technical DNS expertise (SPF, DKIM, DMARC) to configure multi-domain sending engines.",
-      "solution_and_offer": "Turnkey Deliverability Infrastructure: Setup 20 secondary domains, configure all DNS records, connect automated warmup software, and deliver ready-to-send inbox systems in 48 hours for $1,800 setup + $600/month maintenance.",
+      "problem_identified": "Stricter Major email providers inbox delivery guidelines introduced caused outbound sales teams' emails to land in spam folders, yet sales leaders lacked the technical DNS expertise (SPF, DKIM, DMARC) to configure multi-domain sending engines.",
+      "solution_and_offer": "Turnkey Deliverability Infrastructure: Setup 20 secondary domains, configure all DNS records, connect automated warmup software, and deliver ready-to-send inbox systems in 48 hours for premium pricing setup + premium pricing/month maintenance.",
       "execution_milestones": [
         {
-          "month": "Month 1",
+          "month": "Phase",
           "milestone_title": "Initial 3 Tech Setups",
-          "revenue_reached_usd": 5400,
           "key_action": "Audited domain health for 20 sales leaders in outbound communities who complained about deliverability drop-offs. Converted 3 into full infrastructure rebuilds."
         },
         {
-          "month": "Month 3",
+          "month": "Phase",
           "milestone_title": "Monthly Retainer Introduction",
-          "revenue_reached_usd": 16200,
-          "key_action": "Introduced continuous domain health monitoring ($600/month) to catch blacklist flags before clients' outbound reps noticed."
+          "key_action": "Introduced continuous domain health monitoring (revenue/month) to catch blacklist flags before clients' outbound reps noticed."
         },
         {
-          "month": "Month 6",
+          "month": "Phase",
           "milestone_title": "Hitting Venture Backed Startups",
-          "revenue_reached_usd": 28800,
           "key_action": "Partnered with SDR recruiting agencies, becoming their official infrastructure deployment partner for all newly placed SDRs."
         },
         {
-          "month": "Month 11",
-          "milestone_title": "Scale to $42K/Mo",
-          "revenue_reached_usd": 42000,
-          "key_action": "Automated DNS record creation using Cloudflare API scripts, reducing manual onboarding from 6 hours to 18 minutes per client."
+          "month": "Phase",
+          "milestone_title": "Reaching Scale",
+          "key_action": "Automated DNS record creation using DNS APIs scripts, reducing manual onboarding from 6 hours to 18 minutes per client."
         }
       ],
-      "tech_stack_and_tools": ["Cloudflare API", "Google Workspace", "Smartlead.ai", "MXToolbox API", "Stripe"],
+      "tech_stack_and_tools": [
+        "DNS Provider",
+        "Email/Doc Provider",
+        "Cold Email Tool",
+        "DNS Audit Tool",
+        "Payment Processor"
+      ],
       "customer_acquisition_tactics": [
-        "Offering free 5-minute DNS and email deliverability health audits on LinkedIn",
-        "Publishing technical guides on surviving Google and Yahoo algorithm deliverability changes",
+        "Offering free 5-minute DNS and email deliverability health audits on professional networks",
+        "Publishing technical guides on surviving major email provider algorithm deliverability changes",
         "Reciprocal commission referral deals with outbound copywriting and SDR placement agencies"
       ],
-      "primary_bottleneck_and_fix": "Clients burned domains by uploading unverified scrapings from Apollo. Fixed by bundling mandatory email list verification (NeverBounce) directly into the monthly monitoring contract.",
+      "primary_bottleneck_and_fix": "Clients burned domains by uploading unverified scrapings from lead databases. Fixed by bundling mandatory email list verification (verification tools) directly into the monthly monitoring contract.",
       "key_takeaways_for_founders": [
         "Look for recent regulatory or platform policy shifts; compliance confusion creates urgent high-ticket service demand.",
         "Turn one-time technical setups into sticky recurring retainers by offering proactive monitoring.",
         "Automation of low-level infrastructure tasks expands gross margins dramatically as client volume grows."
-      ]
+      ],
+      "is_composite": "This is an illustrative composite case study representing common patterns in this business model. It does not represent a specific real founder."
     }
   ]
 }

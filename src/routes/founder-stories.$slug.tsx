@@ -22,7 +22,7 @@ export const Route = createFileRoute("/founder-stories/$slug")({
     const study = getCaseStudyBySlug(params.slug);
     const title = study ? `${study.title} | Founder Case Study` : "Founder Story | BBI";
     const description = study
-      ? `How ${study.founder_profile.founder_alias} scaled a ${study.story_theme} to $${study.revenue.monthly_revenue_usd.toLocaleString()}/mo.`
+      ? `How this founder scaled a ${study.story_theme} without venture capital.`
       : "In-depth case study on bootstrapped business execution.";
     return {
       meta: [
@@ -78,9 +78,9 @@ function FounderStoryDetailPage() {
           articleSchema({
             path: `/founder-stories/${study.slug}`,
             title: study.title,
-            description: `How ${study.founder_profile.founder_alias} built a profitable ${study.story_theme}.`,
+            description: `How $"Verified Operator" built a profitable ${study.story_theme}.`,
             publishedAt: "2026-09-14",
-            author: study.founder_profile.founder_alias,
+            author: "Verified Operator",
           }),
           breadcrumbSchema([
             { name: "Home", path: "/" },
@@ -118,12 +118,12 @@ function FounderStoryDetailPage() {
             <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
               <span>
                 Founder:{" "}
-                <strong className="text-foreground">{study.founder_profile.founder_alias}</strong>
+                <strong className="text-foreground">"Verified Operator"</strong>
               </span>
               <span>·</span>
-              <span>Location: {study.founder_profile.location}</span>
+              <span>Location: "Global"</span>
               <span>·</span>
-              <span>Background: {study.founder_profile.background}</span>
+              <span>Verified Operator</span>
             </div>
           </header>
 
@@ -139,7 +139,7 @@ function FounderStoryDetailPage() {
                   Monthly Run Rate
                 </p>
                 <p className="mt-1 font-display text-xl font-black text-foreground">
-                  {formatUsd(study.revenue.monthly_revenue_usd)}
+                  "Premium Pricing"
                 </p>
               </div>
 
@@ -148,7 +148,7 @@ function FounderStoryDetailPage() {
                   Annualized Run Rate
                 </p>
                 <p className="mt-1 font-display text-xl font-black text-primary">
-                  {formatUsd(study.revenue.annual_run_rate_usd)}
+                  "Sustainable Scale"
                 </p>
               </div>
 
@@ -157,7 +157,7 @@ function FounderStoryDetailPage() {
                   Net Profit Margin
                 </p>
                 <p className="mt-1 font-display text-xl font-black text-emerald-600">
-                  {study.revenue.net_profit_margin_percent}%
+                  "High Margin"
                 </p>
               </div>
 
@@ -166,7 +166,7 @@ function FounderStoryDetailPage() {
                   Initial Capital
                 </p>
                 <p className="mt-1 font-display text-xl font-black text-foreground">
-                  {formatUsd(study.initial_investment.total_amount_usd)}
+                  "Bootstrapped"
                 </p>
               </div>
 
@@ -175,7 +175,7 @@ function FounderStoryDetailPage() {
                   First Dollar
                 </p>
                 <p className="mt-1 font-display text-lg font-bold text-foreground">
-                  {study.time_to_first_dollar}
+                  "Rapid Validation"
                 </p>
               </div>
 
@@ -184,42 +184,13 @@ function FounderStoryDetailPage() {
                   Time to Scale
                 </p>
                 <p className="mt-1 font-display text-lg font-bold text-foreground">
-                  {study.time_to_scaling}
+                  {"Organic Growth"}
                 </p>
               </div>
             </div>
           </section>
 
-          {/* Initial Capital Breakdown */}
-          <section className="glass my-8 rounded-2xl p-6 sm:p-8">
-            <h2 className="font-display text-xl font-bold tracking-tight">
-              Day Zero Startup Costs: {formatUsd(study.initial_investment.total_amount_usd)}
-            </h2>
-            <p className="mt-1 text-sm text-muted-foreground">
-              Itemized ledger of what was purchased before revenue was collected:
-            </p>
-
-            <div className="mt-5 overflow-hidden rounded-xl border border-border/70">
-              <table className="w-full text-left text-xs">
-                <thead className="bg-secondary/60 text-muted-foreground">
-                  <tr>
-                    <th className="p-3 font-semibold">Expense Item</th>
-                    <th className="p-3 text-right font-semibold">Amount (USD)</th>
-                  </tr>
-                </thead>
-                <tbody className="divide-y divide-border/60">
-                  {study.initial_investment.breakdown.map((item, idx) => (
-                    <tr key={idx} className="hover:bg-secondary/30">
-                      <td className="p-3 text-foreground font-medium">{item.item}</td>
-                      <td className="p-3 text-right font-mono text-foreground">
-                        {formatUsd(item.cost)}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
-          </section>
+          
 
           {/* Problem & Solution */}
           <section className="my-8 grid gap-6 md:grid-cols-2">
@@ -254,7 +225,7 @@ function FounderStoryDetailPage() {
               Execution Timeline
             </p>
             <h2 className="mt-1 font-display text-2xl font-bold tracking-tight">
-              From $0 to {formatUsd(study.revenue.monthly_revenue_usd)}/mo
+              From $0 to "Premium Pricing"/mo
             </h2>
 
             <div className="mt-6 space-y-6">
@@ -275,7 +246,7 @@ function FounderStoryDetailPage() {
                         {milestone.month}
                       </span>
                       <span className="rounded-md bg-emerald-500/10 px-2 py-0.5 text-xs font-bold text-emerald-600">
-                        {formatUsd(milestone.revenue_reached_usd)}/mo
+                        Milestone Achieved
                       </span>
                     </div>
 

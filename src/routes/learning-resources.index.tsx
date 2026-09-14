@@ -32,7 +32,7 @@ export const Route = createFileRoute("/learning-resources/")({
       {
         property: "og:description",
         content:
-          "Master hub for startup validation: TAM sizing, unit economics calculators, real founder P&L breakdowns, and playbooks.",
+          "Master hub for startup validation: TAM sizing, unit economics calculators, illustrative founder case studies, and playbooks.",
       },
     ],
   }),
@@ -127,7 +127,7 @@ function LearningResourcesIndexPage() {
             </h1>
             <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted-foreground">
               A comprehensive library of empirical frameworks, mathematical calculators, in-depth
-              playbooks, and verified founder P&L breakdowns designed to help you build defensible,
+              playbooks, and illustrative case studies designed to help you build defensible,
               cash-flow-positive ventures.
             </p>
           </div>
@@ -193,12 +193,11 @@ function LearningResourcesIndexPage() {
                   Founder Case Studies
                 </h2>
                 <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                  Transparent P&L breakdowns, Day-Zero startup outlays, and execution timelines of
-                  real bootstrappers.
+                  Illustrative case studies of bootstrapped business models, execution timelines, and practical takeaways.
                 </p>
               </div>
               <div className="mt-6 flex items-center justify-between border-t border-border/60 pt-3 text-xs font-bold uppercase tracking-wider text-emerald-600">
-                <span>{CASE_STUDIES.length} Verified Stories</span>
+                <span>{CASE_STUDIES.length} Case Studies</span>
                 <ArrowRight className="h-4 w-4" />
               </div>
             </Link>
@@ -216,7 +215,7 @@ function LearningResourcesIndexPage() {
                   Startup Glossary
                 </h2>
                 <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                  45 essential venture terms, financial ratios, and unit economics formulas with
+                  {GLOSSARY_DATA.length} essential venture terms, financial ratios, and unit economics formulas with
                   operator rules of thumb.
                 </p>
               </div>

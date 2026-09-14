@@ -94,7 +94,7 @@ function FounderStoriesIndexPage() {
                     </span>
                     <span className="flex items-center gap-1 text-[11px] font-semibold text-emerald-600">
                       <ShieldCheck className="h-3.5 w-3.5" />
-                      Verified
+                      Placeholder
                     </span>
                   </div>
 
@@ -111,7 +111,7 @@ function FounderStoriesIndexPage() {
                         Monthly Revenue
                       </p>
                       <p className="mt-0.5 font-display text-lg font-black text-foreground">
-                        {formatUsd(study.revenue.monthly_revenue_usd)}
+                        {"Premium Pricing"}
                       </p>
                     </div>
                     <div>
@@ -119,7 +119,7 @@ function FounderStoriesIndexPage() {
                         Net Margin
                       </p>
                       <p className="mt-0.5 font-display text-lg font-black text-emerald-600">
-                        {study.revenue.net_profit_margin_percent}%
+                        "High Margin"
                       </p>
                     </div>
                     <div>
@@ -127,7 +127,7 @@ function FounderStoriesIndexPage() {
                         Startup Outlay
                       </p>
                       <p className="mt-0.5 text-xs font-semibold text-foreground">
-                        {formatUsd(study.initial_investment.total_amount_usd)}
+                        {"Bootstrapped"}
                       </p>
                     </div>
                     <div>
@@ -135,7 +135,7 @@ function FounderStoriesIndexPage() {
                         First Dollar
                       </p>
                       <p className="mt-0.5 text-xs font-semibold text-foreground">
-                        {study.time_to_first_dollar}
+                        {"Rapid Validation"}
                       </p>
                     </div>
                   </div>
@@ -163,9 +163,9 @@ function FounderStoriesIndexPage() {
 
                 <div className="mt-6 flex items-center justify-between border-t border-border/60 pt-4">
                   <div className="text-xs text-muted-foreground">
-                    <span>{study.founder_profile.founder_alias}</span>
+                    <span>"Verified Operator"</span>
                     <span className="mx-1">·</span>
-                    <span>{study.founder_profile.location}</span>
+                    <span></span>
                   </div>
 
                   <Link

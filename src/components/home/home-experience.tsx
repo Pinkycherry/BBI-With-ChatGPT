@@ -1,4 +1,8 @@
 import { Link, useNavigate } from "@tanstack/react-router";
+import { STARTUP_GUIDES } from "@/lib/guides-data";
+import { CALCULATORS } from "@/lib/calculators";
+import { CASE_STUDIES } from "@/lib/case-studies-data";
+import { GLOSSARY_DATA } from "@/lib/glossary-data";
 import { useServerFn } from "@tanstack/react-start";
 import { useMutation } from "@tanstack/react-query";
 import {
@@ -780,7 +784,7 @@ function OperatorToolkitSection() {
                 textTransform: "uppercase",
               }}
             >
-              5 Live Calculators
+              {CALCULATORS.length} Live Calculators
             </span>
             <h3 style={{ fontSize: "21px", fontWeight: 600, marginTop: "12px", marginBottom: "8px" }}>
               Useful Calculators
@@ -831,7 +835,7 @@ function OperatorToolkitSection() {
                 textTransform: "uppercase",
               }}
             >
-              5 Tactical Playbooks
+              {STARTUP_GUIDES.length} Tactical Playbooks
             </span>
             <h3 style={{ fontSize: "21px", fontWeight: 600, marginTop: "12px", marginBottom: "8px" }}>
               Startup Guides
@@ -882,13 +886,13 @@ function OperatorToolkitSection() {
                 textTransform: "uppercase",
               }}
             >
-              Verified Case Studies
+              Illustrative Case Studies
             </span>
             <h3 style={{ fontSize: "21px", fontWeight: 600, marginTop: "12px", marginBottom: "8px" }}>
               Founder Stories
             </h3>
             <p style={{ fontSize: "14px", color: "#686664", lineHeight: 1.6 }}>
-              Real bootstrappers sharing transparent revenues ($12K–$42K/mo), initial outlays, and timeline milestones.
+              Illustrative case studies of bootstrapped business models, execution timelines, and practical takeaways.
             </p>
           </div>
           <span
@@ -933,7 +937,7 @@ function OperatorToolkitSection() {
                 textTransform: "uppercase",
               }}
             >
-              45 Essential Terms
+              Essential Terms
             </span>
             <h3 style={{ fontSize: "21px", fontWeight: 600, marginTop: "12px", marginBottom: "8px" }}>
               Founder Glossary
