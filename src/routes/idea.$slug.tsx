@@ -10,6 +10,7 @@ import { IdeaCard } from "@/components/idea-card";
 import { ValidateButton } from "@/components/validate-button";
 import { SiteShell, Breadcrumbs } from "@/components/site-shell";
 import { AdSlot } from "@/components/AdSlot";
+import { LockedResearchBlock } from "@/components/locked-research-block";
 import {
   getIdeaBySlug,
   type IdeaVariant,
@@ -19,6 +20,7 @@ import {
 import { type IdeaCard as IdeaCardType, type IdeaDetail } from "@/lib/ideas-shared";
 import { JsonLd, articleSchema, breadcrumbSchema } from "@/lib/schema";
 import { useAuth } from "@/hooks/use-auth";
+import type { ValidatePlatform } from "@/lib/validate-shared";
 import { useDepthScene, useElementPointerGroup, useScrollProgress, useTextReveal } from "@/motion";
 
 type IdeaDetailData = {
@@ -458,6 +460,8 @@ function IdeaPage() {
               <div
                 className={contentLocked ? "pointer-events-none select-none blur-sm" : undefined}
               >
+                <ComputedVerdictPanel idea={idea} />
+
                 <section className="mt-10" data-anchor="breakdown" data-anchor-label="Breakdown">
                   <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">
                     The breakdown
@@ -465,115 +469,7 @@ function IdeaPage() {
                   <p className="mt-3 whitespace-pre-line leading-relaxed">{idea.summary}</p>
                 </section>
 
-                <ComputedVerdictPanel idea={idea} />
-
-                <div className="mt-8">
-                  <AdSlot position="idea-detail-between-proscons-verdict" size="banner" />
-                </div>
-
-                {/* Researched detail — each block renders only when the pipeline
-                    has filled it, so un-enriched ideas are unaffected. */}
-                <div data-anchor="research" data-anchor-label="Research" className="mt-10">
-                  {/* StickyScroll: the four research blocks read as one argument,
-                      so the plate on the right holds its place and names which
-                      part of that argument the reader is level with. Blocks the
-                      pipeline has not filled simply do not appear. */}
-                  <StickyScroll
-                    items={[
-                      { title: "The opportunity", body: idea.marketOpportunity },
-                      { title: "Who actually pays you", body: idea.targetCustomer },
-                      { title: "How the money works", body: idea.howYouMakeMoney },
-                      { title: "Your edge", body: idea.competitionEdge },
-                    ]
-                      .filter((entry) => Boolean(entry.body))
-                      .map((entry) => ({
-                        title: entry.title,
-                        description: (
-                          <p className="whitespace-pre-line leading-relaxed blur-[6px] select-none opacity-60 pointer-events-none">
-                            {entry.body}
-                          </p>
-                        ),
-                      }))}
-                  />
-
-                  {(idea.startupCost || idea.incomePotential) && (
-                    <div className="mt-6 grid grid-cols-[repeat(auto-fit,minmax(19rem,1fr))] gap-4">
-                      {idea.startupCost && (
-                        <CardSpotlight className="p-5 relative overflow-hidden">
-                          <h2 className="text-sm font-semibold uppercase tracking-widest text-hl-coral">
-                            What it costs to start
-                          </h2>
-                          <p className="mt-2 text-sm leading-relaxed blur-[6px] select-none opacity-60 pointer-events-none">{idea.startupCost}</p>
-                        </CardSpotlight>
-                      )}
-                      {idea.incomePotential && (
-                        <CardSpotlight className="p-5 relative overflow-hidden">
-                          <h2 className="text-sm font-semibold uppercase tracking-widest text-hl-green">
-                            What you can earn
-                          </h2>
-                          <p className="mt-2 text-sm leading-relaxed blur-[6px] select-none opacity-60 pointer-events-none">{idea.incomePotential}</p>
-                        </CardSpotlight>
-                      )}
-                    </div>
-                  )}
-                </div>
-
-                {idea.gettingStartedSteps.length > 0 && (
-                  <section className="mt-10" data-anchor="steps" data-anchor-label="Steps">
-                    <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">
-                      How to start
-                    </h2>
-                    <ol className="mt-4 space-y-3">
-                      {idea.gettingStartedSteps.map((step, i) => (
-                        <li key={step} className="flex gap-3 text-sm leading-relaxed blur-[6px] select-none opacity-60 pointer-events-none">
-                          <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-[11px] font-bold text-primary-foreground">
-                            {i + 1}
-                          </span>
-                          <span>{step}</span>
-                        </li>
-                      ))}
-                    </ol>
-                  </section>
-                )}
-
-                {idea.toolsNeeded.length > 0 && (
-                  <section className="mt-10">
-                    <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">
-                      What you need
-                    </h2>
-                    <ul className="mt-3 flex flex-wrap gap-2 blur-[6px] select-none opacity-60 pointer-events-none">
-                      {idea.toolsNeeded.map((tool) => (
-                        <li
-                          key={tool}
-                          className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground"
-                        >
-                          {tool}
-                        </li>
-                      ))}
-                    </ul>
-                  </section>
-                )}
-
-                <RichSection title="Time to first customer" body={idea.timeToFirstCustomer} />
-
-                {faqAbove.length > 0 && (
-                  <section className="mt-10 relative overflow-hidden">
-                    <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">
-                      Questions people ask
-                    </h2>
-                    <div className="mt-4 space-y-3">
-                      {faqAbove.map((item) => (
-                        <details
-                          key={item.q}
-                          className="rounded-lg border border-border bg-card p-4 text-sm"
-                        >
-                          <summary className="cursor-pointer font-semibold blur-[6px] select-none opacity-60 pointer-events-none">{item.q}</summary>
-                          <p className="mt-2 leading-relaxed text-muted-foreground blur-[6px] select-none opacity-60 pointer-events-none">{item.a}</p>
-                        </details>
-                      ))}
-                    </div>
-                  </section>
-                )}
+                <details className="group rounded-2xl border border-border bg-card overflow-hidden mt-10"><summary className="cursor-pointer font-semibold px-6 py-4 flex items-center justify-between text-lg select-none hover:bg-muted/50 transition-colors"><div className="flex items-center gap-3 text-muted-foreground group-hover:text-foreground transition-colors"><Lock className="h-5 w-5 text-accent" /><span>Researched Details (Locked)</span></div><span className="text-muted-foreground group-open:rotate-180 transition-transform duration-300">▼</span></summary><div className="border-t border-border bg-background/50 pb-8"><LockedResearchBlock idea={idea} /></div></details>
 
                 {idea.externalLinks.length > 0 && (
                   <section className="mt-10">
@@ -669,7 +565,7 @@ function IdeaPage() {
                 Free, on your own account, as many times as you want.
               </p>
               <div className="mt-6">
-                <ValidateButton slug={idea.slug} />
+                <ValidateButton ideaPath={`/idea/${idea.slug}`} getUrl={(platform, ctx) => buildValidationUrl(idea, platform, ctx)} />
               </div>
             </section>
 
@@ -834,4 +730,55 @@ function IdeaPage() {
       </SiteShell>
     </>
   );
+}
+
+function platformUrl(platform: ValidatePlatform, prompt: string): string {
+  const encoded = encodeURIComponent(prompt);
+  if (platform === "claude") return `https://claude.ai/new?q=${encoded}`;
+  if (platform === "gemini") return `https://gemini.google.com/app?q=${encoded}`;
+  if (platform === "grok") return `https://grok.com/?text=${encoded}`;
+  if (platform === "chatgpt") return `https://chatgpt.com/?q=${encoded}`;
+  return `https://www.perplexity.ai/search?q=${encoded}`;
+}
+
+export function buildValidationUrl(idea: IdeaDetail, platform: ValidatePlatform, extraContext?: string): string {
+  const lines = [
+    "Act as a blunt, operator-grade startup analyst. Produce a complete, structured, markdown-formatted validation report for the business idea below. Be specific to this idea and its actual market — no generic startup platitudes, no hedging, no marketing language.",
+    "",
+    `Idea: ${idea.title}`,
+    `Category: ${idea.categoryName} / ${idea.subcategoryName}`,
+    `Business description: ${idea.businessDescription || idea.summary}`,
+  ];
+
+  if (idea.pros.length > 0) lines.push(`Claimed strengths on file: ${idea.pros.join("; ")}`);
+  if (idea.cons.length > 0) lines.push(`Claimed risks on file: ${idea.cons.join("; ")}`);
+
+  const trimmedContext = extraContext?.trim();
+  if (trimmedContext) {
+    lines.push(
+      "",
+      "The user added this context themselves before sending — it's real signal, not filler. Weave it into whichever sections above it actually bears on, rather than tacking it on as an afterthought:",
+      trimmedContext,
+    );
+  }
+
+  lines.push(
+    "",
+    "I need you to thoroughly research and fill out the following specific aspects of this business idea to validate it completely:",
+    "",
+    "1. Why this still works right now (Market Opportunity)",
+    "2. Who actually opens their wallet (Target Customer)",
+    "3. Exactly how the cash arrives (How You Make Money)",
+    "4. Why you can beat the obvious version (Competition Edge)",
+    "5. What you really need to begin (Startup Cost)",
+    "6. What the money looks like early vs later (Income Potential)",
+    "7. First moves that actually get you paid (Getting Started Steps)",
+    "8. The real tools (nothing fancy) (Tools Needed)",
+    "9. How long until the first real payment (Time to First Customer)",
+    "10. Straight answers to the real doubts (FAQs)",
+    "",
+    "If your platform can generate an accompanying chart, diagram or other visual (market sizing, a roadmap timeline, competitive positioning), generate one alongside the written report rather than plain paragraphs only."
+  );
+
+  return platformUrl(platform, lines.join("\n"));
 }
