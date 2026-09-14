@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require("fs");
 let content = `import { createFileRoute, redirect } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/useful-tools/")({
@@ -12,4 +12,4 @@ export const Route = createFileRoute("/useful-tools/")({
 });
 `;
 
-fs.writeFileSync('src/routes/useful-tools.index.tsx', content);
+fs.writeFileSync("src/routes/useful-tools.index.tsx", content);

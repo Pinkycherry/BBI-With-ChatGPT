@@ -7,13 +7,13 @@ for (const calc of CALCULATORS) {
   }
   try {
     const readings = calc.compute(input);
-    const keys = readings.map(r => r.key);
+    const keys = readings.map((r) => r.key);
     const counts = {};
-    keys.forEach(k => counts[k] = (counts[k] || 0) + 1);
-    const dups = Object.keys(counts).filter(k => counts[k] > 1);
+    keys.forEach((k) => (counts[k] = (counts[k] || 0) + 1));
+    const dups = Object.keys(counts).filter((k) => counts[k] > 1);
     if (dups.length > 0) {
       console.log(`Duplicate keys in ${calc.slug}:`, dups);
     }
-  } catch(e) {}
+  } catch (e) {}
 }
 console.log("Done checking calculator keys.");

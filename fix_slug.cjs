@@ -1,12 +1,12 @@
-const fs = require('fs');
-const { parse } = require('csv-parse/sync');
-const { stringify } = require('csv-stringify/sync');
+const fs = require("fs");
+const { parse } = require("csv-parse/sync");
+const { stringify } = require("csv-stringify/sync");
 
-const csvData = fs.readFileSync('Superbase_Ideas_Filled.csv', 'utf8');
+const csvData = fs.readFileSync("Superbase_Ideas_Filled.csv", "utf8");
 const records = parse(csvData, { columns: true, skip_empty_lines: true });
 
 const slugCounts = {};
-records.forEach(r => {
+records.forEach((r) => {
   if (!slugCounts[r.slug]) {
     slugCounts[r.slug] = 0;
   }
@@ -18,5 +18,5 @@ records.forEach(r => {
 });
 
 const output = stringify(records, { header: true });
-fs.writeFileSync('Superbase_Ideas_Filled_Fixed.csv', output);
+fs.writeFileSync("Superbase_Ideas_Filled_Fixed.csv", output);
 console.log("Fixed CSV created.");

@@ -136,7 +136,7 @@ function StartupGuideDetailPage() {
           {/* Markdown Content */}
           <article className="prose prose-neutral dark:prose-invert max-w-none text-base leading-relaxed text-foreground [&_img]:rounded-xl [&_img]:shadow-md [&_img]:border [&_img]:border-border/50 [&_img]:my-8 [&_img]:w-full [&_img]:object-cover [&_img]:aspect-[1200/630]">
             <div className="space-y-6 [&_h1]:hidden [&_h2]:mt-10 [&_h2]:font-display [&_h2]:text-2xl [&_h2]:font-bold [&_h2]:tracking-tight [&_h2]:text-foreground [&_h3]:mt-6 [&_h3]:font-display [&_h3]:text-lg [&_h3]:font-bold [&_h3]:text-foreground [&_p]:text-[1.05rem] [&_p]:leading-relaxed [&_p]:text-foreground/90 [&_ul]:space-y-2 [&_ul]:pl-5 [&_li]:text-foreground/90 [&_strong]:font-bold [&_strong]:text-foreground [&_code]:rounded [&_code]:bg-muted/70 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-sm [&_hr]:my-8 [&_hr]:border-border/70">
-              <Markdown 
+              <Markdown
                 rehypePlugins={[rehypeRaw]}
                 components={{
                   img: ({ node, ...props }) => (

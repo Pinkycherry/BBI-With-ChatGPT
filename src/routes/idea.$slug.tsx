@@ -288,7 +288,9 @@ function RichSection({ title, body }: { title: string; body: string }) {
       <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">
         {title}
       </h2>
-      <p className="mt-3 whitespace-pre-line leading-relaxed blur-[6px] select-none opacity-60 pointer-events-none">{body}</p>
+      <p className="mt-3 whitespace-pre-line leading-relaxed blur-[6px] select-none opacity-60 pointer-events-none">
+        {body}
+      </p>
     </section>
   );
 }
@@ -469,7 +471,20 @@ function IdeaPage() {
                   <p className="mt-3 whitespace-pre-line leading-relaxed">{idea.summary}</p>
                 </section>
 
-                <details className="group rounded-2xl border border-border bg-card overflow-hidden mt-10"><summary className="cursor-pointer font-semibold px-6 py-4 flex items-center justify-between text-lg select-none hover:bg-muted/50 transition-colors"><div className="flex items-center gap-3 text-muted-foreground group-hover:text-foreground transition-colors"><Lock className="h-5 w-5 text-accent" /><span>Researched Details (Locked)</span></div><span className="text-muted-foreground group-open:rotate-180 transition-transform duration-300">▼</span></summary><div className="border-t border-border bg-background/50 pb-8"><LockedResearchBlock idea={idea} /></div></details>
+                <details className="group rounded-2xl border border-border bg-card overflow-hidden mt-10">
+                  <summary className="cursor-pointer font-semibold px-6 py-4 flex items-center justify-between text-lg select-none hover:bg-muted/50 transition-colors">
+                    <div className="flex items-center gap-3 text-muted-foreground group-hover:text-foreground transition-colors">
+                      <Lock className="h-5 w-5 text-accent" />
+                      <span>Researched Details (Locked)</span>
+                    </div>
+                    <span className="text-muted-foreground group-open:rotate-180 transition-transform duration-300">
+                      ▼
+                    </span>
+                  </summary>
+                  <div className="border-t border-border bg-background/50 pb-8">
+                    <LockedResearchBlock idea={idea} />
+                  </div>
+                </details>
 
                 {idea.externalLinks.length > 0 && (
                   <section className="mt-10">
@@ -516,7 +531,11 @@ function IdeaPage() {
             <DemandBlock score={idea.trendScore} />
 
             {faqBelow.length > 0 && (
-              <section className="mt-10 relative overflow-hidden" data-anchor="faq" data-anchor-label="FAQ">
+              <section
+                className="mt-10 relative overflow-hidden"
+                data-anchor="faq"
+                data-anchor-label="FAQ"
+              >
                 <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">
                   More questions
                 </h2>
@@ -526,8 +545,12 @@ function IdeaPage() {
                       key={item.q}
                       className="rounded-lg border border-border bg-card p-4 text-sm"
                     >
-                      <summary className="cursor-pointer font-semibold blur-[6px] select-none opacity-60 pointer-events-none">{item.q}</summary>
-                      <p className="mt-2 leading-relaxed text-muted-foreground blur-[6px] select-none opacity-60 pointer-events-none">{item.a}</p>
+                      <summary className="cursor-pointer font-semibold blur-[6px] select-none opacity-60 pointer-events-none">
+                        {item.q}
+                      </summary>
+                      <p className="mt-2 leading-relaxed text-muted-foreground blur-[6px] select-none opacity-60 pointer-events-none">
+                        {item.a}
+                      </p>
                     </details>
                   ))}
                 </div>
@@ -565,7 +588,10 @@ function IdeaPage() {
                 Free, on your own account, as many times as you want.
               </p>
               <div className="mt-6">
-                <ValidateButton ideaPath={`/idea/${idea.slug}`} getUrl={(platform, ctx) => buildValidationUrl(idea, platform, ctx)} />
+                <ValidateButton
+                  ideaPath={`/idea/${idea.slug}`}
+                  getUrl={(platform, ctx) => buildValidationUrl(idea, platform, ctx)}
+                />
               </div>
             </section>
 
@@ -741,7 +767,11 @@ function platformUrl(platform: ValidatePlatform, prompt: string): string {
   return `https://www.perplexity.ai/search?q=${encoded}`;
 }
 
-export function buildValidationUrl(idea: IdeaDetail, platform: ValidatePlatform, extraContext?: string): string {
+function buildValidationUrl(
+  idea: IdeaDetail,
+  platform: ValidatePlatform,
+  extraContext?: string,
+): string {
   const lines = [
     "Act as a blunt, operator-grade startup analyst. Produce a complete, structured, markdown-formatted validation report for the business idea below. Be specific to this idea and its actual market — no generic startup platitudes, no hedging, no marketing language.",
     "",
@@ -777,7 +807,7 @@ export function buildValidationUrl(idea: IdeaDetail, platform: ValidatePlatform,
     "9. How long until the first real payment (Time to First Customer)",
     "10. Straight answers to the real doubts (FAQs)",
     "",
-    "If your platform can generate an accompanying chart, diagram or other visual (market sizing, a roadmap timeline, competitive positioning), generate one alongside the written report rather than plain paragraphs only."
+    "If your platform can generate an accompanying chart, diagram or other visual (market sizing, a roadmap timeline, competitive positioning), generate one alongside the written report rather than plain paragraphs only.",
   );
 
   return platformUrl(platform, lines.join("\n"));

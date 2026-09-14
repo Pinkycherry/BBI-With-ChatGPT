@@ -1,5 +1,5 @@
-const fs = require('fs');
-let content = fs.readFileSync('src/routes/calculator.$slug.tsx', 'utf-8');
+const fs = require("fs");
+let content = fs.readFileSync("src/routes/calculator.$slug.tsx", "utf-8");
 
 // Replace FieldInput rendering
 const fieldInputReplaced = `
@@ -20,7 +20,10 @@ const fieldInputReplaced = `
           aria-describedby={issue ? \`\${helpId} \${errorId}\` : helpId}
           className="w-full bg-transparent py-1.5 text-base font-semibold outline-none placeholder:text-muted-foreground"
 `;
-content = content.replace(/<div className="mt-1\.5 flex items-center gap-2 rounded-md border border-input bg-card px-3 focus-within:border-primary">[\s\S]*?<input[\s\S]*?aria-describedby=\{issue \? `\$\{helpId\} \$\{errorId\}` : helpId\}/, fieldInputReplaced);
+content = content.replace(
+  /<div className="mt-1\.5 flex items-center gap-2 rounded-md border border-input bg-card px-3 focus-within:border-primary">[\s\S]*?<input[\s\S]*?aria-describedby=\{issue \? `\$\{helpId\} \$\{errorId\}` : helpId\}/,
+  fieldInputReplaced,
+);
 
 // Replace ResultRow rendering
 const resultRowReplaced = `
@@ -44,6 +47,9 @@ const resultRowReplaced = `
     </li>
   );
 `;
-content = content.replace(/function ResultRow[\s\S]*?<\/li>\n  \);\n}/, 'function ResultRow({ reading }: { reading: Reading }) {' + resultRowReplaced + '\n}');
+content = content.replace(
+  /function ResultRow[\s\S]*?<\/li>\n  \);\n}/,
+  "function ResultRow({ reading }: { reading: Reading }) {" + resultRowReplaced + "\n}",
+);
 
-fs.writeFileSync('src/routes/calculator.$slug.tsx', content);
+fs.writeFileSync("src/routes/calculator.$slug.tsx", content);

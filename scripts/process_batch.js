@@ -1,7 +1,7 @@
-import fs from 'fs';
-import { parse } from 'csv-parse/sync';
-import { stringify } from 'csv-stringify/sync';
-import { GoogleGenAI } from '@google/genai';
+import fs from "fs";
+import { parse } from "csv-parse/sync";
+import { stringify } from "csv-stringify/sync";
+import { GoogleGenAI } from "@google/genai";
 
 const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
 
@@ -59,65 +59,71 @@ Return ONLY a raw JSON object containing ALL these fields (including research_fa
 `;
 
 async function processBatch(batchSize = 5) {
-  console.log('Reading CSV...');
-  const csvContent = fs.readFileSync('data/sheet_full.csv', 'utf-8');
+  console.log("Reading CSV...");
+  const csvContent = fs.readFileSync("data/sheet_full.csv", "utf-8");
   const records = parse(csvContent, { columns: false, skip_empty_lines: true });
-  
+
   const headers = records[0];
   const rows = records.slice(1);
-  
+
   // Find rows where AK (index 36) is empty
-  const pendingRows = rows.filter(r => !r[36] || r[36].trim() === '');
+  const pendingRows = rows.filter((r) => !r[36] || r[36].trim() === "");
   console.log(`Found ${pendingRows.length} rows to process. Processing first ${batchSize}.`);
-  
+
   const toProcess = pendingRows.slice(0, batchSize);
   const updatedRows = [...records];
   let processedCount = 0;
   const reportLines = [];
-  
+
   for (const row of toProcess) {
     console.log(`Processing ${row[0]}...`);
-    const prompt = PROMPT_TEMPLATE
-      .replace('{idea_id}', row[0])
-      .replace('{category_name}', row[2])
-      .replace('{subcategory_name}', row[5])
-      .replace('{title}', row[13])
-      .replace('{business_description}', row[10])
-      .replace('{summary}', row[14])
-      .replace('{verdict}', row[18])
-      .replace('{how_you_make_money}', row[26])
-      .replace('{startup_cost}', row[27])
-      .replace('{income_potential}', row[28])
-      .replace('{competition_edge}', row[29]);
-      
+    const prompt = PROMPT_TEMPLATE.replace("{idea_id}", row[0])
+      .replace("{category_name}", row[2])
+      .replace("{subcategory_name}", row[5])
+      .replace("{title}", row[13])
+      .replace("{business_description}", row[10])
+      .replace("{summary}", row[14])
+      .replace("{verdict}", row[18])
+      .replace("{how_you_make_money}", row[26])
+      .replace("{startup_cost}", row[27])
+      .replace("{income_potential}", row[28])
+      .replace("{competition_edge}", row[29]);
+
     try {
       const response = await ai.models.generateContent({
-        model: 'gemini-2.5-flash',
+        model: "gemini-2.5-flash",
         contents: prompt,
         config: {
           tools: [{ googleSearch: {} }],
-        }
+        },
       });
-      
+
       let jsonText = response.text;
-      if (jsonText.startsWith('```')) {
-        jsonText = jsonText.replace(/^```(json)?\n/, '').replace(/\n```$/, '');
+      if (jsonText.startsWith("```")) {
+        jsonText = jsonText.replace(/^```(json)?\n/, "").replace(/\n```$/, "");
       }
       const data = JSON.parse(jsonText);
-      
-      const rowIndex = updatedRows.findIndex(r => r[0] === row[0]);
+
+      const rowIndex = updatedRows.findIndex((r) => r[0] === row[0]);
       if (rowIndex !== -1) {
         // Map data back to row array
         // Never touch A-G (0-6), L (11), M (12), AJ (35)
         if (data.focus_keyword) updatedRows[rowIndex][7] = data.focus_keyword;
         if (data.additional_keyword_1) updatedRows[rowIndex][8] = data.additional_keyword_1;
         if (data.additional_keyword_2) updatedRows[rowIndex][9] = data.additional_keyword_2;
-        if (data.business_description && !row[10]) updatedRows[rowIndex][10] = data.business_description;
+        if (data.business_description && !row[10])
+          updatedRows[rowIndex][10] = data.business_description;
         if (data.title && !row[13]) updatedRows[rowIndex][13] = data.title;
         if (data.summary) updatedRows[rowIndex][14] = data.summary;
-        if (data.tags) updatedRows[rowIndex][15] = typeof data.tags === 'string' ? data.tags : JSON.stringify(data.tags);
-        if (data.pros_json) updatedRows[rowIndex][16] = typeof data.pros_json === 'string' ? data.pros_json : JSON.stringify(data.pros_json);
-        if (data.cons_json) updatedRows[rowIndex][17] = typeof data.cons_json === 'string' ? data.cons_json : JSON.stringify(data.cons_json);
+        if (data.tags)
+          updatedRows[rowIndex][15] =
+            typeof data.tags === "string" ? data.tags : JSON.stringify(data.tags);
+        if (data.pros_json)
+          updatedRows[rowIndex][16] =
+            typeof data.pros_json === "string" ? data.pros_json : JSON.stringify(data.pros_json);
+        if (data.cons_json)
+          updatedRows[rowIndex][17] =
+            typeof data.cons_json === "string" ? data.cons_json : JSON.stringify(data.cons_json);
         if (data.verdict) updatedRows[rowIndex][18] = data.verdict;
         if (data.trend_score) updatedRows[rowIndex][19] = String(data.trend_score);
         if (data.tier) updatedRows[rowIndex][20] = data.tier;
@@ -130,44 +136,76 @@ async function processBatch(batchSize = 5) {
         if (data.startup_cost) updatedRows[rowIndex][27] = data.startup_cost;
         if (data.income_potential) updatedRows[rowIndex][28] = data.income_potential;
         if (data.competition_edge) updatedRows[rowIndex][29] = data.competition_edge;
-        if (data.getting_started_steps) updatedRows[rowIndex][30] = typeof data.getting_started_steps === 'string' ? data.getting_started_steps : JSON.stringify(data.getting_started_steps);
-        if (data.tools_needed) updatedRows[rowIndex][31] = typeof data.tools_needed === 'string' ? data.tools_needed : JSON.stringify(data.tools_needed);
+        if (data.getting_started_steps)
+          updatedRows[rowIndex][30] =
+            typeof data.getting_started_steps === "string"
+              ? data.getting_started_steps
+              : JSON.stringify(data.getting_started_steps);
+        if (data.tools_needed)
+          updatedRows[rowIndex][31] =
+            typeof data.tools_needed === "string"
+              ? data.tools_needed
+              : JSON.stringify(data.tools_needed);
         if (data.time_to_first_customer) updatedRows[rowIndex][32] = data.time_to_first_customer;
-        if (data.faq_json) updatedRows[rowIndex][33] = typeof data.faq_json === 'string' ? data.faq_json : JSON.stringify(data.faq_json);
-        if (data.external_links) updatedRows[rowIndex][34] = typeof data.external_links === 'string' ? data.external_links : JSON.stringify(data.external_links);
-        
-        if (data.research_facts) updatedRows[rowIndex][36] = typeof data.research_facts === 'string' ? data.research_facts : JSON.stringify(data.research_facts);
-        
+        if (data.faq_json)
+          updatedRows[rowIndex][33] =
+            typeof data.faq_json === "string" ? data.faq_json : JSON.stringify(data.faq_json);
+        if (data.external_links)
+          updatedRows[rowIndex][34] =
+            typeof data.external_links === "string"
+              ? data.external_links
+              : JSON.stringify(data.external_links);
+
+        if (data.research_facts)
+          updatedRows[rowIndex][36] =
+            typeof data.research_facts === "string"
+              ? data.research_facts
+              : JSON.stringify(data.research_facts);
+
         processedCount++;
-        
+
         // Reporting logic
-        const blanks = Object.keys(data).filter(k => !data[k] || data[k].length === 0);
+        const blanks = Object.keys(data).filter((k) => !data[k] || data[k].length === 0);
         if (blanks.length > 0) {
-          reportLines.push(`- ${row[0]}: Left blank (${blanks.join(', ')}) because it could not be sourced.`);
+          reportLines.push(
+            `- ${row[0]}: Left blank (${blanks.join(", ")}) because it could not be sourced.`,
+          );
         }
-        
+
         // Log if we rewrote an existing field
-        const fieldsMap = { summary: 14, verdict: 18, how_you_make_money: 26, startup_cost: 27, income_potential: 28, competition_edge: 29 };
+        const fieldsMap = {
+          summary: 14,
+          verdict: 18,
+          how_you_make_money: 26,
+          startup_cost: 27,
+          income_potential: 28,
+          competition_edge: 29,
+        };
         for (const [f, index] of Object.entries(fieldsMap)) {
-          const oldVal = String(row[index] || '').trim();
-          const newVal = String(data[f] || '').trim();
+          const oldVal = String(row[index] || "").trim();
+          const newVal = String(data[f] || "").trim();
           if (oldVal && newVal && oldVal !== newVal) {
-            reportLines.push(`- ${row[0]} (rewrote ${f}): Old value had numbers. Changed to qualitative text.`);
+            reportLines.push(
+              `- ${row[0]} (rewrote ${f}): Old value had numbers. Changed to qualitative text.`,
+            );
           }
         }
-      
+
         // Wait 45 seconds to avoid rate limits
-        console.log('Waiting 45s to respect rate limits...');
-        await new Promise(resolve => setTimeout(resolve, 45000));
+        console.log("Waiting 45s to respect rate limits...");
+        await new Promise((resolve) => setTimeout(resolve, 45000));
       }
     } catch (err) {
       console.error(`Error processing ${row[0]}:`, err.message);
     }
   }
-  
+
   const outCsv = stringify(updatedRows);
-  fs.writeFileSync('public/completed_batch.csv', outCsv);
-  fs.writeFileSync('public/report.txt', `Processed ${processedCount} rows.\n\n` + reportLines.join('\n'));
+  fs.writeFileSync("public/completed_batch.csv", outCsv);
+  fs.writeFileSync(
+    "public/report.txt",
+    `Processed ${processedCount} rows.\n\n` + reportLines.join("\n"),
+  );
   console.log(`\nProcessed ${processedCount} rows. Saved to public/completed_batch.csv`);
 }
 

@@ -1,5 +1,5 @@
-const fs = require('fs');
-let content = fs.readFileSync('src/routes/calculator.index.tsx', 'utf-8');
+const fs = require("fs");
+let content = fs.readFileSync("src/routes/calculator.index.tsx", "utf-8");
 
 // The original grid card:
 // <Link
@@ -22,6 +22,9 @@ const enhancedCard = `
                 </h2>
 `;
 
-content = content.replace(/<Link[\s\S]*?className="glass mo-card flex h-full flex-col gap-3 rounded-2xl p-6"\n\s*>\n\s*<h2 className="font-display text-xl font-bold tracking-tight">\n\s*\{calculator\.title\} <span className="text-accent">\{calculator\.highlight\}<\/span>\n\s*<\/h2>/, enhancedCard);
+content = content.replace(
+  /<Link[\s\S]*?className="glass mo-card flex h-full flex-col gap-3 rounded-2xl p-6"\n\s*>\n\s*<h2 className="font-display text-xl font-bold tracking-tight">\n\s*\{calculator\.title\} <span className="text-accent">\{calculator\.highlight\}<\/span>\n\s*<\/h2>/,
+  enhancedCard,
+);
 
-fs.writeFileSync('src/routes/calculator.index.tsx', content);
+fs.writeFileSync("src/routes/calculator.index.tsx", content);

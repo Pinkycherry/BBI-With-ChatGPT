@@ -2,23 +2,26 @@ import fs from "fs";
 import path from "path";
 
 const guideDir = path.join(process.cwd(), "content", "guides");
-const mdFiles = fs.readdirSync(guideDir).filter(f => f.endsWith('.md'));
+const mdFiles = fs.readdirSync(guideDir).filter((f) => f.endsWith(".md"));
 
 let imports = [];
 let objects = [];
 
 mdFiles.forEach((file, i) => {
   const varName = "guide" + i;
-  const slug = file.replace('.md', '');
+  const slug = file.replace(".md", "");
   imports.push(`import ${varName} from "../../content/guides/${file}?raw";`);
-  
+
   // Read frontmatter to get title, description, category, keywords, wordCount, etc.
   const content = fs.readFileSync(path.join(guideDir, file), "utf-8");
-  
-  let title = "", description = "", category = "Launch & Ops", wordCount = 750;
+
+  let title = "",
+    description = "",
+    category = "Launch & Ops",
+    wordCount = 750;
   let keywords = [];
-  
-  const lines = content.split('\n');
+
+  const lines = content.split("\n");
   let inFrontmatter = false;
   for (let line of lines) {
     if (line.trim() === "---") {
@@ -26,22 +29,48 @@ mdFiles.forEach((file, i) => {
       continue;
     }
     if (inFrontmatter) {
-      if (line.startsWith("title:")) title = line.split("title:")[1].trim().replace(/^"|"$/g, '');
-      if (line.startsWith("description:")) description = line.split("description:")[1].trim().replace(/^"|"$/g, '');
+      if (line.startsWith("title:")) title = line.split("title:")[1].trim().replace(/^"|"$/g, "");
+      if (line.startsWith("description:"))
+        description = line.split("description:")[1].trim().replace(/^"|"$/g, "");
       if (line.startsWith("word_count:")) wordCount = parseInt(line.split("word_count:")[1].trim());
       if (line.startsWith("keywords:")) {
-        const kwString = line.split("keywords:")[1].trim().replace(/^\[|\]$/g, '');
-        keywords = kwString.split(",").map(k => k.trim().replace(/^"|"$/g, ''));
+        const kwString = line
+          .split("keywords:")[1]
+          .trim()
+          .replace(/^\[|\]$/g, "");
+        keywords = kwString.split(",").map((k) => k.trim().replace(/^"|"$/g, ""));
       }
     }
   }
 
   // Derive category loosely based on keywords or default
-  if (slug.includes("pricing") || slug.includes("validation") || slug.includes("mvp")) category = "Validation";
-  if (slug.includes("market") || slug.includes("tam") || slug.includes("competitor") || slug.includes("cltv") || slug.includes("lifetime")) category = "Market Sizing";
+  if (slug.includes("pricing") || slug.includes("validation") || slug.includes("mvp"))
+    category = "Validation";
+  if (
+    slug.includes("market") ||
+    slug.includes("tam") ||
+    slug.includes("competitor") ||
+    slug.includes("cltv") ||
+    slug.includes("lifetime")
+  )
+    category = "Market Sizing";
   if (slug.includes("zero") || slug.includes("bootstrapped")) category = "Bootstrapping";
-  if (slug.includes("growth") || slug.includes("churn") || slug.includes("retention") || slug.includes("metrics") || slug.includes("email")) category = "Growth & PMF";
-  if (slug.includes("cash") || slug.includes("hiring") || slug.includes("equity") || slug.includes("pre-launch") || slug.includes("strategy")) category = "Launch & Ops";
+  if (
+    slug.includes("growth") ||
+    slug.includes("churn") ||
+    slug.includes("retention") ||
+    slug.includes("metrics") ||
+    slug.includes("email")
+  )
+    category = "Growth & PMF";
+  if (
+    slug.includes("cash") ||
+    slug.includes("hiring") ||
+    slug.includes("equity") ||
+    slug.includes("pre-launch") ||
+    slug.includes("strategy")
+  )
+    category = "Launch & Ops";
 
   objects.push(`  {
     slug: "${slug}",
@@ -52,9 +81,9 @@ mdFiles.forEach((file, i) => {
     readTime: "5 min read",
     publishedDate: "2026-09-14",
     author: "BBI Research Team",
-    keywords: [${keywords.map(k => `"${k}"`).join(', ')}],
+    keywords: [${keywords.map((k) => `"${k}"`).join(", ")}],
     rawMarkdown: extractBody(${varName}),
-    keyTakeaways: ["${keywords[0] || 'Strategy'}", "Execution", "Optimization"],
+    keyTakeaways: ["${keywords[0] || "Strategy"}", "Execution", "Optimization"],
   }`);
 });
 

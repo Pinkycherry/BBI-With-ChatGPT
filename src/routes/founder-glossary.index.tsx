@@ -12,10 +12,12 @@ export const Route = createFileRoute("/founder-glossary/")({
       { title: `Founder Glossary — ${GLOSSARY_DATA.length} Essential Startup Terms | BBI` },
       {
         name: "description",
-        content:
-          `Clear, practical definitions and formulas for ${GLOSSARY_DATA.length} essential startup, unit economics, fundraising, and venture metrics.`,
+        content: `Clear, practical definitions and formulas for ${GLOSSARY_DATA.length} essential startup, unit economics, fundraising, and venture metrics.`,
       },
-      { property: "og:title", content: `Founder Glossary — ${GLOSSARY_DATA.length} Essential Startup Terms | BBI` },
+      {
+        property: "og:title",
+        content: `Founder Glossary — ${GLOSSARY_DATA.length} Essential Startup Terms | BBI`,
+      },
       {
         property: "og:description",
         content:
@@ -94,8 +96,8 @@ export function FounderGlossaryPage() {
                 </span>
               </h1>
               <p className="mt-3 max-w-2xl text-base leading-relaxed text-muted-foreground">
-                {GLOSSARY_DATA.length} operator-tested terms covering venture financing, unit economics, product-market
-                fit, and market sizing with exact mathematical formulas.
+                {GLOSSARY_DATA.length} operator-tested terms covering venture financing, unit
+                economics, product-market fit, and market sizing with exact mathematical formulas.
               </p>
             </div>
             <div className="flex shrink-0 items-center gap-2">

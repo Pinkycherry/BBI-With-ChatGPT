@@ -143,7 +143,10 @@ export type Calculator = {
   readonly seoKeywords?: readonly string[];
   readonly fields: readonly CalculatorField[];
   readonly compute: (values: CalculatorValues) => readonly Reading[];
-  readonly mentorAnalysis?: (values: CalculatorValues, readings: readonly Reading[]) => {
+  readonly mentorAnalysis?: (
+    values: CalculatorValues,
+    readings: readonly Reading[],
+  ) => {
     header: string;
     tips: readonly string[];
   };
@@ -637,7 +640,6 @@ export function fundingNeeded(input: FundingNeededInput): readonly Reading[] {
 const RUPEE_MAX = 1_000_000_000;
 
 export const CALCULATORS: readonly Calculator[] = [
-
   {
     slug: "break-even",
     title: "Break-even",
@@ -972,7 +974,7 @@ export const CALCULATORS: readonly Calculator[] = [
         monthsToCover: at(v, "monthsToCover"),
       }),
   },
-  ...GENERATED_CALCULATORS
+  ...GENERATED_CALCULATORS,
 ];
 
 export function findCalculator(slug: string): Calculator | undefined {

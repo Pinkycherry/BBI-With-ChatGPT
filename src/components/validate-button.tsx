@@ -61,10 +61,10 @@ function PlatformButton({
   );
 }
 
-export function ValidateButton({ 
-  ideaPath, 
-  getUrl 
-}: { 
+export function ValidateButton({
+  ideaPath,
+  getUrl,
+}: {
   ideaPath: string;
   getUrl: (platform: ValidatePlatform, context: string) => string;
 }) {
