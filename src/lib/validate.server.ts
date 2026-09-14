@@ -30,14 +30,20 @@ function buildValidationPrompt(idea: IdeaDetail, extraContext?: string): string 
   }
   lines.push(
     "",
-    "Structure the report with these sections, each with real substance:",
-    "1. Market analysis — real demand signals, market size context, competitive density and timing for this specific niche.",
-    "2. Target buyer — the exact customer, what they do today instead, and what would make them switch.",
-    "3. Revenue model — how this makes money, realistic pricing, and the path to first revenue.",
-    "4. Key risks — the 3-4 things most likely to kill this, stated plainly.",
-    "5. Launch roadmap — a concrete plan from zero to first paying customer.",
+    "I need you to thoroughly research and fill out the following specific aspects of this business idea to validate it completely:",
     "",
-    "If your platform can generate an accompanying chart, diagram or other visual (market sizing, a roadmap timeline, competitive positioning), generate one alongside the written report rather than plain paragraphs only.",
+    "1. Market Opportunity: Explain why this market exists and is growing right now.",
+    "2. Target Customer: Who specifically is buying this? Give a realistic persona.",
+    "3. How You Make Money: Pricing model and revenue streams.",
+    "4. Startup Cost: Realistic required initial investment.",
+    "5. Income Potential: Realistic earning potential once established.",
+    "6. Competition Edge: How this idea stands out against existing solutions.",
+    "7. Time to First Customer: Realistic timeline to land the first paying client.",
+    "8. Getting Started Steps: 5 to 7 concrete, actionable steps to start this exact business.",
+    "9. Tools Needed: 4 to 6 specific tools, software, or equipment needed.",
+    "10. FAQs: 3 frequently asked questions (and detailed answers) a potential founder would have about this business.",
+    "",
+    "If your platform can generate an accompanying chart, diagram or other visual (market sizing, a roadmap timeline, competitive positioning), generate one alongside the written report rather than plain paragraphs only."
   );
   return lines.join("\n");
 }
@@ -45,6 +51,9 @@ function buildValidationPrompt(idea: IdeaDetail, extraContext?: string): string 
 function platformUrl(platform: ValidatePlatform, prompt: string): string {
   const encoded = encodeURIComponent(prompt);
   if (platform === "claude") return `https://claude.ai/new?q=${encoded}`;
+  if (platform === "gemini") return `https://gemini.google.com/app?q=${encoded}`;
+  if (platform === "grok") return `https://grok.com/?text=${encoded}`;
+  if (platform === "chatgpt") return `https://chatgpt.com/?q=${encoded}`;
   return `https://www.perplexity.ai/search?q=${encoded}`;
 }
 

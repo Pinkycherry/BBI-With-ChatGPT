@@ -3,7 +3,8 @@ import { useMutation } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
 import { useNavigate } from "@tanstack/react-router";
 import type { IconType } from "react-icons";
-import { SiClaude, SiPerplexity } from "react-icons/si";
+import { SiClaude, SiPerplexity, SiGooglegemini } from "react-icons/si";
+import { RiOpenaiFill, RiGrokAiFill } from "react-icons/ri";
 
 import { getValidateUrl } from "@/lib/validate.functions";
 import { VALIDATE_PLATFORMS, type ValidatePlatform } from "@/lib/validate-shared";
@@ -23,17 +24,13 @@ import { useMagnet } from "@/motion";
  * picker (the mechanism-hiding rule is about marketing copy elsewhere on
  * the site, not this screen, which the user only reaches by already using
  * the feature).
- *
- * No Gemini button here — explicitly deferred by the founder, see
- * PENDING.md. Real brand marks reuse the same react-icons/si pattern as
- * site-shell.tsx's "Built With" section rather than inventing a new one;
- * unlike that section's ChatGPT/Grok gap, react-icons/si does carry a real
- * Perplexity mark (`SiPerplexity`), so both buttons below show a genuine
- * logo — no text-only fallback needed for either.
  */
 const PLATFORM_ICONS: Record<ValidatePlatform, IconType> = {
+  gemini: SiGooglegemini,
   claude: SiClaude,
   perplexity: SiPerplexity,
+  grok: RiGrokAiFill,
+  chatgpt: RiOpenaiFill,
 };
 
 /**

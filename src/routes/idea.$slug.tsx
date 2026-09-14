@@ -282,11 +282,11 @@ function ComputedVerdictPanel({ idea }: { idea: IdeaDetail }) {
 function RichSection({ title, body }: { title: string; body: string }) {
   if (!body) return null;
   return (
-    <section className="mt-10">
+    <section className="mt-10 relative overflow-hidden">
       <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">
         {title}
       </h2>
-      <p className="mt-3 whitespace-pre-line leading-relaxed">{body}</p>
+      <p className="mt-3 whitespace-pre-line leading-relaxed blur-[6px] select-none opacity-60 pointer-events-none">{body}</p>
     </section>
   );
 }
@@ -489,7 +489,9 @@ function IdeaPage() {
                       .map((entry) => ({
                         title: entry.title,
                         description: (
-                          <p className="whitespace-pre-line leading-relaxed">{entry.body}</p>
+                          <p className="whitespace-pre-line leading-relaxed blur-[6px] select-none opacity-60 pointer-events-none">
+                            {entry.body}
+                          </p>
                         ),
                       }))}
                   />
@@ -497,19 +499,19 @@ function IdeaPage() {
                   {(idea.startupCost || idea.incomePotential) && (
                     <div className="mt-6 grid grid-cols-[repeat(auto-fit,minmax(19rem,1fr))] gap-4">
                       {idea.startupCost && (
-                        <CardSpotlight className="p-5">
+                        <CardSpotlight className="p-5 relative overflow-hidden">
                           <h2 className="text-sm font-semibold uppercase tracking-widest text-hl-coral">
                             What it costs to start
                           </h2>
-                          <p className="mt-2 text-sm leading-relaxed">{idea.startupCost}</p>
+                          <p className="mt-2 text-sm leading-relaxed blur-[6px] select-none opacity-60 pointer-events-none">{idea.startupCost}</p>
                         </CardSpotlight>
                       )}
                       {idea.incomePotential && (
-                        <CardSpotlight className="p-5">
+                        <CardSpotlight className="p-5 relative overflow-hidden">
                           <h2 className="text-sm font-semibold uppercase tracking-widest text-hl-green">
                             What you can earn
                           </h2>
-                          <p className="mt-2 text-sm leading-relaxed">{idea.incomePotential}</p>
+                          <p className="mt-2 text-sm leading-relaxed blur-[6px] select-none opacity-60 pointer-events-none">{idea.incomePotential}</p>
                         </CardSpotlight>
                       )}
                     </div>
@@ -523,7 +525,7 @@ function IdeaPage() {
                     </h2>
                     <ol className="mt-4 space-y-3">
                       {idea.gettingStartedSteps.map((step, i) => (
-                        <li key={step} className="flex gap-3 text-sm leading-relaxed">
+                        <li key={step} className="flex gap-3 text-sm leading-relaxed blur-[6px] select-none opacity-60 pointer-events-none">
                           <span className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary text-[11px] font-bold text-primary-foreground">
                             {i + 1}
                           </span>
@@ -539,7 +541,7 @@ function IdeaPage() {
                     <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">
                       What you need
                     </h2>
-                    <ul className="mt-3 flex flex-wrap gap-2">
+                    <ul className="mt-3 flex flex-wrap gap-2 blur-[6px] select-none opacity-60 pointer-events-none">
                       {idea.toolsNeeded.map((tool) => (
                         <li
                           key={tool}
@@ -555,7 +557,7 @@ function IdeaPage() {
                 <RichSection title="Time to first customer" body={idea.timeToFirstCustomer} />
 
                 {faqAbove.length > 0 && (
-                  <section className="mt-10">
+                  <section className="mt-10 relative overflow-hidden">
                     <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">
                       Questions people ask
                     </h2>
@@ -565,8 +567,8 @@ function IdeaPage() {
                           key={item.q}
                           className="rounded-lg border border-border bg-card p-4 text-sm"
                         >
-                          <summary className="cursor-pointer font-semibold">{item.q}</summary>
-                          <p className="mt-2 leading-relaxed text-muted-foreground">{item.a}</p>
+                          <summary className="cursor-pointer font-semibold blur-[6px] select-none opacity-60 pointer-events-none">{item.q}</summary>
+                          <p className="mt-2 leading-relaxed text-muted-foreground blur-[6px] select-none opacity-60 pointer-events-none">{item.a}</p>
                         </details>
                       ))}
                     </div>
@@ -618,7 +620,7 @@ function IdeaPage() {
             <DemandBlock score={idea.trendScore} />
 
             {faqBelow.length > 0 && (
-              <section className="mt-10" data-anchor="faq" data-anchor-label="FAQ">
+              <section className="mt-10 relative overflow-hidden" data-anchor="faq" data-anchor-label="FAQ">
                 <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">
                   More questions
                 </h2>
@@ -628,8 +630,8 @@ function IdeaPage() {
                       key={item.q}
                       className="rounded-lg border border-border bg-card p-4 text-sm"
                     >
-                      <summary className="cursor-pointer font-semibold">{item.q}</summary>
-                      <p className="mt-2 leading-relaxed text-muted-foreground">{item.a}</p>
+                      <summary className="cursor-pointer font-semibold blur-[6px] select-none opacity-60 pointer-events-none">{item.q}</summary>
+                      <p className="mt-2 leading-relaxed text-muted-foreground blur-[6px] select-none opacity-60 pointer-events-none">{item.a}</p>
                     </details>
                   ))}
                 </div>
@@ -648,6 +650,28 @@ function IdeaPage() {
                 ))}
               </div>
             )}
+
+            {/* The page's actual close, per the Live Surface grammar: an actual
+                input the visitor puts a cursor in, not a button pointing back
+                at one. ValidateButton already opens Claude/Perplexity/Gemini with a
+                real prompt and an optional free-text context field — this IS
+                the ending, not a decoration in front of it. */}
+            <section
+              id="validate"
+              data-anchor="validate"
+              data-anchor-label="Validate"
+              className="mt-16 rounded-2xl border border-border bg-card p-6 sm:p-9"
+            >
+              <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">
+                Run it before you commit
+              </h2>
+              <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">
+                Free, on your own account, as many times as you want.
+              </p>
+              <div className="mt-6">
+                <ValidateButton slug={idea.slug} />
+              </div>
+            </section>
 
             {subcategoryLink && (
               <section className="mt-8 rounded-lg border border-border bg-card p-5">
@@ -768,33 +792,14 @@ function IdeaPage() {
               </section>
             )}
 
-            {/* The page's actual close, per the Live Surface grammar: an actual
-                input the visitor puts a cursor in, not a button pointing back
-                at one. ValidateButton already opens Claude/Perplexity with a
-                real prompt and an optional free-text context field — this IS
-                the ending, not a decoration in front of it. */}
-            <section
-              id="validate"
-              data-anchor="validate"
-              data-anchor-label="Validate"
-              className="mt-16 rounded-2xl border border-border bg-card p-6 sm:p-9"
-            >
-              <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">
-                Run it before you commit
-              </h2>
-              <p className="mt-2 max-w-xl text-sm leading-relaxed text-muted-foreground">
-                Free, on your own account, as many times as you want.
-              </p>
-              <div className="mt-6">
-                <ValidateButton slug={idea.slug} />
-              </div>
+            <div className="mt-16 text-center">
               <Link
                 to="/browse"
-                className="mt-6 inline-block text-xs font-semibold uppercase tracking-widest text-primary underline decoration-border underline-offset-4 hover:text-accent"
+                className="inline-block text-xs font-semibold uppercase tracking-widest text-primary underline decoration-border underline-offset-4 hover:text-accent"
               >
                 Browse more blueprints
               </Link>
-            </section>
+            </div>
             {/* EDITABLE SECTION END */}
           </article>
 

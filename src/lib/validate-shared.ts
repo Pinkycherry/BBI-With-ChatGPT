@@ -1,8 +1,11 @@
-export type ValidatePlatform = "claude" | "perplexity";
+export type ValidatePlatform = "claude" | "perplexity" | "gemini" | "grok" | "chatgpt";
 
 export const VALIDATE_PLATFORMS: { id: ValidatePlatform; label: string }[] = [
+  { id: "gemini", label: "Gemini" },
   { id: "claude", label: "Claude" },
   { id: "perplexity", label: "Perplexity" },
+  { id: "grok", label: "Grok" },
+  { id: "chatgpt", label: "ChatGPT" },
 ];
 
 /**
