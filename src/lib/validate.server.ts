@@ -43,7 +43,7 @@ function buildValidationPrompt(idea: IdeaDetail, extraContext?: string): string 
     "9. How long until the first real payment (Time to First Customer)",
     "10. Straight answers to the real doubts (FAQs)",
     "",
-    "If your platform can generate an accompanying chart, diagram or other visual (market sizing, a roadmap timeline, competitive positioning), generate one alongside the written report rather than plain paragraphs only."
+    "If your platform can generate an accompanying chart, diagram or other visual (market sizing, a roadmap timeline, competitive positioning), generate one alongside the written report rather than plain paragraphs only.",
   );
   return lines.join("\n");
 }

@@ -51,7 +51,7 @@ function PlatformButton({
 
 export function ValidateButton({ 
   ideaPath, 
-  getUrl 
+  getUrl,
 }: { 
   ideaPath: string;
   getUrl: (platform: ValidatePlatform, context: string) => string;

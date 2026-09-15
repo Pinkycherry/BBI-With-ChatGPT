@@ -8,6 +8,7 @@
   --mo-radius: 24px;
 }
 .mo-shell {
+  --mo-nav-filter: blur(12px);
   background: radial-gradient(ellipse at 100% 0, var(--mo-halo), transparent 33rem),
     radial-gradient(ellipse at 0 30rem, color-mix(in srgb, var(--violet-soft) 14%, transparent), transparent 38rem), var(--background);
 }
@@ -65,12 +66,13 @@
 }
 @media (max-width: 640px) {
   :root { --mo-radius: 18px; }
+  .mo-shell { --mo-nav-filter: none; }
   .mo-shell .glass-nav { backdrop-filter: none; background: var(--card); }
   .mo-shell .mo-header-bar { padding-inline: 16px; }
   .mo-shell .mo-card { box-shadow: inset 0 1px 0 var(--card), 0 10px 24px -18px var(--mo-shadow); }
 }
 @media (prefers-reduced-motion: reduce) {
   .mo-menu-enter { animation: none; }
-  .mo-shell .mo-card, .mo-card::after, .mo-shell .bbi-footer a { transition: none; }
+  .mo-shell .mo-card, .mo-card::after, .mo-shell .bbi-footer a, .mo-shell .mo-media img { transition: none; }
   .mo-card::after { opacity: 0; transform: none; }
 }

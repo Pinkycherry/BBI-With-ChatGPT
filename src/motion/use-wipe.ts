@@ -7,12 +7,15 @@
 import { useEffect, useRef, type RefObject } from "react";
 
 import { loadGsap } from "./gsap";
-import { observeMotionPreference } from "./preferences";
+import { observeMotionPreference, preserveStyles } from "./preferences";
 
 export type WipeDirection = "up" | "down" | "left" | "right" | "iris";
 const FROM: Record<WipeDirection, gsap.TweenVars> = {
-  up: { y: 24 }, down: { y: -24 },
-  left: { x: 24 }, right: { x: -24 }, iris: { scale: 0.96 },
+  up: { y: 24 },
+  down: { y: -24 },
+  left: { x: 24 },
+  right: { x: -24 },
+  iris: { scale: 0.96 },
 };
 export type WipeOptions = {
   direction?: WipeDirection;
@@ -33,22 +36,45 @@ export function useWipe<T extends HTMLElement = HTMLElement>(
     return observeMotionPreference(() => {
       let cancelled = false;
       let context: gsap.Context | undefined;
-      loadGsap().then(({ gsap }) => {
-        if (cancelled) return;
-        context = gsap.context(() => {});
-        context.add(() => {
-          gsap.fromTo(el, { opacity: 0, ...FROM[direction] }, {
-            opacity: 1, x: 0, y: 0, scale: 1,
-            duration, delay, ease: "power3.out", immediateRender: false,
-            scrollTrigger: { trigger: el, start, toggleActions: "restart none restart none" },
+      const restore = preserveStyles(
+        [el],
+        ["opacity", "transform", "translate", "rotate", "scale"],
+      );
+      loadGsap()
+        .then(({ gsap }) => {
+          if (cancelled) return;
+          context = gsap.context(() => {});
+          context.add(() => {
+            gsap.fromTo(
+              el,
+              { opacity: 0, ...FROM[direction] },
+              {
+                opacity: 1,
+                x: 0,
+                y: 0,
+                scale: 1,
+                duration,
+                delay,
+                ease: "power3.out",
+                immediateRender: false,
+                scrollTrigger: { trigger: el, start, toggleActions: "restart none restart none" },
+                // Release the reveal's inline styles so CSS hover/parallax can
+                // take over again after every playback.
+                onComplete: restore,
+              },
+            );
           });
+        })
+        .catch(() => {
+          if (!cancelled) {
+            context?.revert();
+            restore();
+          }
         });
-      }).catch(() => {
-        if (!cancelled) context?.revert();
-      });
       return () => {
         cancelled = true;
         context?.revert();
+        restore();
       };
     });
   }, [direction, duration, delay, start]);

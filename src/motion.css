@@ -259,6 +259,7 @@
   .mo-media > :where(img, video, picture),
   .mo-media:hover > :where(img, video, picture) {
     transform: none;
+    transition: none;
   }
 
   .mo-drift {
@@ -420,8 +421,10 @@
     transform: none;
   }
 
+  .cx-press,
   .cx-press:active {
     transform: none;
+    transition: none;
   }
 }
 

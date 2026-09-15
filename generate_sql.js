@@ -1,10 +1,10 @@
-const fs = require('fs');
-const { parse } = require('csv-parse/sync');
+const fs = require("fs");
+const { parse } = require("csv-parse/sync");
 
-const csvData = fs.readFileSync('public/completed_batch.csv', 'utf8');
+const csvData = fs.readFileSync("public/completed_batch.csv", "utf8");
 const records = parse(csvData, {
   columns: true,
-  skip_empty_lines: true
+  skip_empty_lines: true,
 });
 
 let sql = `CREATE TABLE IF NOT EXISTS public.updated_ideas (

@@ -199,7 +199,8 @@ function LearningResourcesIndexPage() {
                   Founder Case Studies
                 </h2>
                 <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                  Illustrative case studies of bootstrapped business models, execution timelines, and practical takeaways.
+                  Illustrative case studies of bootstrapped business models, execution timelines,
+                  and practical takeaways.
                 </p>
               </div>
               <div className="mt-6 flex items-center justify-between border-t border-border/60 pt-3 text-xs font-bold uppercase tracking-wider text-emerald-600">
@@ -221,8 +222,8 @@ function LearningResourcesIndexPage() {
                   Startup Glossary
                 </h2>
                 <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
-                  {GLOSSARY_DATA.length} essential venture terms, financial ratios, and unit economics formulas with
-                  operator rules of thumb.
+                  {GLOSSARY_DATA.length} essential venture terms, financial ratios, and unit
+                  economics formulas with operator rules of thumb.
                 </p>
               </div>
               <div className="mt-6 flex items-center justify-between border-t border-border/60 pt-3 text-xs font-bold uppercase tracking-wider text-indigo-600">

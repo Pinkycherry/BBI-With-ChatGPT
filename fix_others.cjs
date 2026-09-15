@@ -1,5 +1,5 @@
-const fs = require('fs');
-let content = fs.readFileSync('src/routes/calculator.$slug.tsx', 'utf-8');
+const fs = require("fs");
+let content = fs.readFileSync("src/routes/calculator.$slug.tsx", "utf-8");
 
 const otherCalculatorsReplaced = `
           <div className="mt-16">
@@ -46,6 +46,9 @@ const otherCalculatorsReplaced = `
           </div>
 `;
 
-content = content.replace(/<div className="glass mt-10 rounded-2xl px-5 py-6 sm:px-7">[\s\S]*?<\/ul>\s*<\/div>/, otherCalculatorsReplaced);
+content = content.replace(
+  /<div className="glass mt-10 rounded-2xl px-5 py-6 sm:px-7">[\s\S]*?<\/ul>\s*<\/div>/,
+  otherCalculatorsReplaced,
+);
 
-fs.writeFileSync('src/routes/calculator.$slug.tsx', content);
+fs.writeFileSync("src/routes/calculator.$slug.tsx", content);

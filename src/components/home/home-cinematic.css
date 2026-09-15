@@ -53,7 +53,9 @@
   font-size: clamp(56px, 6.25vw, 94px); letter-spacing: -.065em;
   margin: 54px 0 26px; line-height: 1.04;
 }
-#bbi-home.nh-cinematic .nh-hero h1 > span { color: var(--nh-accent); }
+#bbi-home.nh-cinematic .nh-hero h1 > span,
+#bbi-home.nh-cinematic .nh-hero h1 .nh-headline-accent,
+#bbi-home.nh-cinematic .nh-hero h1 .nh-headline-accent * { color: var(--nh-accent); }
 #bbi-home.nh-cinematic .nh-hero-subtitle { font-size: clamp(17px, 1.5vw, 22px); }
 #bbi-home.nh-cinematic .nh-hero-description { margin: 16px 0 32px; font-size: 15px; max-width: 540px; }
 #bbi-home.nh-cinematic .nh-dark-badge {
@@ -71,7 +73,6 @@
 #bbi-home.nh-cinematic .nh-hero-reassurance { justify-content: flex-start; flex-wrap: wrap; gap: 11px; }
 #bbi-home.nh-cinematic .nh-hero-visual {
   position: absolute; width: 54%; height: 610px; right: 0; top: 145px;
-  perspective: 1300px; isolation: isolate;
 }
 #bbi-home.nh-cinematic .nh-light-orbit {
   position: absolute; width: 76%; aspect-ratio: 1; top: 0; left: 12%; border-radius: 50%;
@@ -83,7 +84,7 @@
   content: ""; position: absolute; inset: 11%; border: 1px solid var(--nh-line); border-radius: inherit;
 }
 #bbi-home.nh-cinematic .nh-hero-tree {
-  position: absolute; inset: 25px -6% 55px -12%; border-radius: 0; mix-blend-mode: screen;
+  position: absolute; inset: 25px -6% 55px -12%; border-radius: 0; mix-blend-mode: screen; pointer-events: none;
 }
 #bbi-home.nh-cinematic .nh-hero-tree img { object-fit: contain; }
 #bbi-home.nh-cinematic .nh-hero-blueprint {
@@ -152,7 +153,7 @@
     transform: translate3d(calc(var(--el-ptr-x, 0) * 10px), calc((var(--sc-p, .5) - .5) * -150px + var(--el-ptr-y, 0) * 8px), 0) scale(calc(1 + var(--sc-p, 0) * .1));
   }
   #bbi-home.nh-cinematic:not(.nh-motion-paused) .nh-hero-blueprint {
-    transform: translate3d(calc(var(--el-ptr-x, 0) * -12px), calc((var(--sc-p, .5) - .5) * 90px), 35px) rotateY(calc(var(--el-ptr-x, 0) * 3deg)) rotate(-4deg);
+    transform: perspective(1300px) translate3d(calc(var(--el-ptr-x, 0) * -12px), calc((var(--sc-p, .5) - .5) * 90px), 35px) rotateY(calc(var(--el-ptr-x, 0) * 3deg)) rotate(-4deg);
   }
   #bbi-home.nh-cinematic:not(.nh-motion-paused) .nh-tree-image {
     transform: translate3d(calc(var(--el-ptr-x, 0) * 10px), calc((var(--sc-p, .5) - .5) * -60px), 0) scale(calc(.94 + var(--sc-p, .5) * .14));

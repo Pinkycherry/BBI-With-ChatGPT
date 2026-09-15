@@ -1,5 +1,5 @@
-const fs = require('fs');
-let content = fs.readFileSync('src/routes/calculator.$slug.tsx', 'utf-8');
+const fs = require("fs");
+let content = fs.readFileSync("src/routes/calculator.$slug.tsx", "utf-8");
 
 // The mentor block logic
 const mentorBlock = `
@@ -37,6 +37,9 @@ const mentorBlock = `
             </div>
 `;
 
-content = content.replace(/<p className="mt-5 border-t border-border pt-4 text-xs leading-relaxed text-muted-foreground">[\s\S]*?<\/div>[\s\S]*?<\/div>/, mentorBlock);
+content = content.replace(
+  /<p className="mt-5 border-t border-border pt-4 text-xs leading-relaxed text-muted-foreground">[\s\S]*?<\/div>[\s\S]*?<\/div>/,
+  mentorBlock,
+);
 
-fs.writeFileSync('src/routes/calculator.$slug.tsx', content);
+fs.writeFileSync("src/routes/calculator.$slug.tsx", content);

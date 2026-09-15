@@ -122,8 +122,7 @@ function FounderStoryDetailPage() {
 
             <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
               <span>
-                Founder:{" "}
-                <strong className="text-foreground">"Verified Operator"</strong>
+                Founder: <strong className="text-foreground">"Verified Operator"</strong>
               </span>
               <span>·</span>
               <span>Location: "Global"</span>
@@ -194,8 +193,6 @@ function FounderStoryDetailPage() {
               </div>
             </div>
           </section>
-
-          
 
           {/* Problem & Solution */}
           <section className="my-8 grid gap-6 md:grid-cols-2">

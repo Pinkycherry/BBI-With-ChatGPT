@@ -61,9 +61,7 @@ function PricingPage() {
                 : ""
             }`}
           >
-            <p className="t-eyebrow">
-              {plan.name}
-            </p>
+            <p className="t-eyebrow">{plan.name}</p>
             <p className="mt-4 flex items-baseline gap-2">
               <span className="text-5xl font-extrabold tracking-tight sm:text-6xl">{plan.price}</span>
               <span className="text-xs uppercase tracking-widest text-muted-foreground">

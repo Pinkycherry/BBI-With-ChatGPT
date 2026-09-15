@@ -221,8 +221,18 @@ function CalculatorPage({ calculator }: { calculator: Calculator }) {
                 <div className="glass mo-card mt-6 overflow-hidden rounded-2xl border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-accent/5 p-6 shadow-[0_8px_30px_rgba(0,0,0,0.12)]">
                   <div className="flex items-center gap-4 mb-4">
                     <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-tr from-primary to-accent shadow-[0_0_20px_rgba(200,80,20,0.3)]">
-                      <svg className="h-6 w-6 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z" />
+                      <svg
+                        className="h-6 w-6 text-white"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                        />
                       </svg>
                     </div>
                     <h3 className="font-display text-xl font-bold text-foreground">
@@ -231,7 +241,10 @@ function CalculatorPage({ calculator }: { calculator: Calculator }) {
                   </div>
                   <ul className="space-y-3 mt-4">
                     {calculator.mentorAnalysis(values, readings).tips.map((tip, i) => (
-                      <li key={i} className="flex items-start gap-3 text-sm leading-relaxed text-muted-foreground">
+                      <li
+                        key={i}
+                        className="flex items-start gap-3 text-sm leading-relaxed text-muted-foreground"
+                      >
                         <span className="mt-1.5 h-2 w-2 shrink-0 rounded-full bg-accent/80 shadow-[0_0_8px_rgba(200,80,20,0.8)]" />
                         <span>{tip}</span>
                       </li>
@@ -240,10 +253,8 @@ function CalculatorPage({ calculator }: { calculator: Calculator }) {
                 </div>
               )}
             </div>
-
           </div>
 
-          
           <div className="mt-16">
             <div className="flex items-center gap-4 mb-6">
               <h2 className="font-display text-2xl font-bold tracking-tight text-foreground">
@@ -271,8 +282,18 @@ function CalculatorPage({ calculator }: { calculator: Calculator }) {
                   </div>
                   <div className="mt-4 flex items-center text-xs font-semibold uppercase tracking-wider text-primary opacity-0 transition-opacity group-hover:opacity-100">
                     Open Analyzer
-                    <svg className="ml-1 h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                    <svg
+                      className="ml-1 h-3 w-3"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M14 5l7 7m0 0l-7 7m7-7H3"
+                      />
                     </svg>
                   </div>
                 </Link>
@@ -280,7 +301,10 @@ function CalculatorPage({ calculator }: { calculator: Calculator }) {
             </div>
             {others.length > 6 && (
               <div className="mt-8 text-center">
-                <Link to="/calculator" className="inline-flex items-center justify-center rounded-full bg-primary/10 px-6 py-2.5 text-sm font-semibold text-primary transition-colors hover:bg-primary/20">
+                <Link
+                  to="/calculator"
+                  className="inline-flex items-center justify-center rounded-full bg-primary/10 px-6 py-2.5 text-sm font-semibold text-primary transition-colors hover:bg-primary/20"
+                >
                   View all {others.length + 1} calculators
                 </Link>
               </div>
@@ -361,15 +385,22 @@ function ResultRow({ reading }: { reading: Reading }) {
         <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground">
           {reading.label}
         </p>
-        <p className={reading.primary ? "mt-1 font-display text-4xl font-extrabold tracking-tight text-primary drop-shadow-sm" : "mt-1 text-2xl font-bold tracking-tight text-foreground"}>
+        <p
+          className={
+            reading.primary
+              ? "mt-1 font-display text-4xl font-extrabold tracking-tight text-primary drop-shadow-sm"
+              : "mt-1 text-2xl font-bold tracking-tight text-foreground"
+          }
+        >
           {reading.display}
         </p>
         <p className="mt-3 rounded-md bg-muted/50 px-2.5 py-1.5 text-xs font-medium text-muted-foreground">
           {reading.formula}
         </p>
-        {reading.note && <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{reading.note}</p>}
+        {reading.note && (
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{reading.note}</p>
+        )}
       </div>
     </li>
   );
-
 }

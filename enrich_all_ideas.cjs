@@ -1,8 +1,9 @@
 const { GoogleGenAI, Type } = require("@google/genai");
-const { createClient } = require('@supabase/supabase-js');
+const { createClient } = require("@supabase/supabase-js");
 
 const SUPABASE_URL = "https://jqzadwobnfypmytcbpkw.supabase.co";
-const SUPABASE_SERVICE_ROLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpxemFkd29ibmZ5cG15dGNicGt3Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4NTQ0MTY0MiwiZXhwIjoyMTAxMDE3NjQyfQ.ov5ldXay1LkY4tQYgxlGww2Cr4jtT5ROyspzxL4YYUg";
+const SUPABASE_SERVICE_ROLE_KEY =
+  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImpxemFkd29ibmZ5cG15dGNicGt3Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc4NTQ0MTY0MiwiZXhwIjoyMTAxMDE3NjQyfQ.ov5ldXay1LkY4tQYgxlGww2Cr4jtT5ROyspzxL4YYUg";
 const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
 
 const ai = new GoogleGenAI();
@@ -21,11 +22,11 @@ const responseSchema = {
     time_to_first_customer: { type: Type.STRING },
     getting_started_steps: {
       type: Type.ARRAY,
-      items: { type: Type.STRING }
+      items: { type: Type.STRING },
     },
     tools_needed: {
       type: Type.ARRAY,
-      items: { type: Type.STRING }
+      items: { type: Type.STRING },
     },
     faq_json: {
       type: Type.ARRAY,
@@ -33,17 +34,26 @@ const responseSchema = {
         type: Type.OBJECT,
         properties: {
           q: { type: Type.STRING },
-          a: { type: Type.STRING }
+          a: { type: Type.STRING },
         },
-        required: ["q", "a"]
-      }
-    }
+        required: ["q", "a"],
+      },
+    },
   },
   required: [
-    "seo_title", "meta_description", "market_opportunity", "target_customer", 
-    "how_you_make_money", "startup_cost", "income_potential", "competition_edge", 
-    "time_to_first_customer", "getting_started_steps", "tools_needed", "faq_json"
-  ]
+    "seo_title",
+    "meta_description",
+    "market_opportunity",
+    "target_customer",
+    "how_you_make_money",
+    "startup_cost",
+    "income_potential",
+    "competition_edge",
+    "time_to_first_customer",
+    "getting_started_steps",
+    "tools_needed",
+    "faq_json",
+  ],
 };
 
 async function generateData(idea) {
@@ -71,15 +81,15 @@ Provide:
 
   try {
     const response = await ai.models.generateContent({
-      model: 'gemini-2.5-flash',
+      model: "gemini-2.5-flash",
       contents: prompt,
       config: {
-        responseMimeType: 'application/json',
+        responseMimeType: "application/json",
         responseSchema: responseSchema,
         temperature: 0.7,
-      }
+      },
     });
-    
+
     return JSON.parse(response.text);
   } catch (e) {
     console.error(`Error generating for ${idea.idea_id}:`, e.message);
@@ -89,33 +99,35 @@ Provide:
 
 async function run() {
   console.log("Fetching all ideas...");
-  const { data: ideas, error } = await supabase.from('ideas').select('*');
-  
+  const { data: ideas, error } = await supabase.from("ideas").select("*");
+
   if (error) {
     console.error("Error fetching ideas:", error);
     process.exit(1);
   }
-  
+
   console.log(`Found ${ideas.length} ideas. Starting enrichment process...`);
-  
+
   let successCount = 0;
-  
+
   // We process in batches of 5 to avoid rate limits while remaining fast
   const CONCURRENCY = 5;
   for (let i = 0; i < ideas.length; i += CONCURRENCY) {
     const batch = ideas.slice(i, i + CONCURRENCY);
-    console.log(`Processing batch ${Math.floor(i / CONCURRENCY) + 1} of ${Math.ceil(ideas.length / CONCURRENCY)}...`);
-    
+    console.log(
+      `Processing batch ${Math.floor(i / CONCURRENCY) + 1} of ${Math.ceil(ideas.length / CONCURRENCY)}...`,
+    );
+
     const promises = batch.map(async (idea) => {
-      // Optional: Check if the idea is already enriched (e.g. unique seo_title). 
+      // Optional: Check if the idea is already enriched (e.g. unique seo_title).
       // If the current target_customer is exactly equal to the template string, or we just want to force regenerate all.
       // The user wants to replace all templated ones. Let's just process all to be sure.
-      
+
       const generated = await generateData(idea);
       if (generated) {
         // Update the idea in Supabase
         const { error: updateError } = await supabase
-          .from('ideas')
+          .from("ideas")
           .update({
             seo_title: generated.seo_title,
             meta_description: generated.meta_description,
@@ -128,10 +140,10 @@ async function run() {
             time_to_first_customer: generated.time_to_first_customer,
             getting_started_steps: generated.getting_started_steps, // Array goes natively to JSONB
             tools_needed: generated.tools_needed,
-            faq_json: generated.faq_json
+            faq_json: generated.faq_json,
           })
-          .eq('idea_id', idea.idea_id);
-          
+          .eq("idea_id", idea.idea_id);
+
         if (updateError) {
           console.error(`Error updating DB for ${idea.idea_id}:`, updateError.message);
         } else {
@@ -139,11 +151,13 @@ async function run() {
         }
       }
     });
-    
+
     await Promise.all(promises);
   }
-  
-  console.log(`Finished processing. Successfully updated ${successCount} out of ${ideas.length} ideas.`);
+
+  console.log(
+    `Finished processing. Successfully updated ${successCount} out of ${ideas.length} ideas.`,
+  );
 }
 
 run();

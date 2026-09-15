@@ -1,13 +1,19 @@
-const fs = require('fs');
-let content = fs.readFileSync('src/routes/calculator.index.tsx', 'utf-8');
+const fs = require("fs");
+let content = fs.readFileSync("src/routes/calculator.index.tsx", "utf-8");
 
 // We need to import useState
 if (!content.includes('import { useState } from "react";')) {
-  content = content.replace('import { createFileRoute', 'import { useState } from "react";\nimport { createFileRoute');
+  content = content.replace(
+    "import { createFileRoute",
+    'import { useState } from "react";\nimport { createFileRoute',
+  );
 }
 
 // Add state to component
-content = content.replace('function CalculatorIndex() {', 'function CalculatorIndex() {\n  const [search, setSearch] = useState("");');
+content = content.replace(
+  "function CalculatorIndex() {",
+  'function CalculatorIndex() {\n  const [search, setSearch] = useState("");',
+);
 
 // Add search input before the grid
 const searchInput = `
@@ -29,12 +35,18 @@ const searchInput = `
           <div
 `;
 
-content = content.replace('<div\n            ref={(node) => {', searchInput + '            ref={(node) => {');
+content = content.replace(
+  "<div\n            ref={(node) => {",
+  searchInput + "            ref={(node) => {",
+);
 
 // Filter the array
-content = content.replace('{CALCULATORS.map((calculator)', `{CALCULATORS.filter(c => {
+content = content.replace(
+  "{CALCULATORS.map((calculator)",
+  `{CALCULATORS.filter(c => {
               const q = search.toLowerCase();
               return c.title.toLowerCase().includes(q) || c.answers.toLowerCase().includes(q) || c.description.toLowerCase().includes(q);
-            }).map((calculator)`);
+            }).map((calculator)`,
+);
 
-fs.writeFileSync('src/routes/calculator.index.tsx', content);
+fs.writeFileSync("src/routes/calculator.index.tsx", content);

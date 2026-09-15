@@ -5,18 +5,20 @@ import { GoogleGenAI } from "@google/genai";
 const ai = new GoogleGenAI({});
 const guideDir = path.join(process.cwd(), "content", "guides");
 
-const mdFiles = fs.readdirSync(guideDir).filter(f => f.endsWith('.md'));
+const mdFiles = fs.readdirSync(guideDir).filter((f) => f.endsWith(".md"));
 
 async function delay(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
 async function rewriteGuide(file) {
   const content = fs.readFileSync(path.join(guideDir, file), "utf-8");
-  const slug = file.replace('.md', '');
-  
-  let title = "", description = "", keywords = [];
-  const lines = content.split('\n');
+  const slug = file.replace(".md", "");
+
+  let title = "",
+    description = "",
+    keywords = [];
+  const lines = content.split("\n");
   let inFrontmatter = false;
   for (let line of lines) {
     if (line.trim() === "---") {
@@ -24,11 +26,15 @@ async function rewriteGuide(file) {
       continue;
     }
     if (inFrontmatter) {
-      if (line.startsWith("title:")) title = line.split("title:")[1].trim().replace(/^"|"$/g, '');
-      if (line.startsWith("description:")) description = line.split("description:")[1].trim().replace(/^"|"$/g, '');
+      if (line.startsWith("title:")) title = line.split("title:")[1].trim().replace(/^"|"$/g, "");
+      if (line.startsWith("description:"))
+        description = line.split("description:")[1].trim().replace(/^"|"$/g, "");
       if (line.startsWith("keywords:")) {
-        const kwString = line.split("keywords:")[1].trim().replace(/^\[|\]$/g, '');
-        keywords = kwString.split(",").map(k => k.trim().replace(/^"|"$/g, ''));
+        const kwString = line
+          .split("keywords:")[1]
+          .trim()
+          .replace(/^\[|\]$/g, "");
+        keywords = kwString.split(",").map((k) => k.trim().replace(/^"|"$/g, ""));
       }
     }
   }
@@ -38,7 +44,7 @@ You are an elite startup operator and BBI research analyst.
 Write a highly actionable, unique, tactical 800-word guide on the following topic.
 Title: ${title}
 Description: ${description}
-Keywords: ${keywords.join(', ')}
+Keywords: ${keywords.join(", ")}
 
 Guidelines:
 1. Write in a sophisticated, authoritative, and direct tone (no generic fluff, no "In today's fast-paced digital world").
@@ -53,11 +59,11 @@ Guidelines:
       contents: prompt,
       config: {
         temperature: 0.7,
-      }
+      },
     });
 
     let newBody = response.text;
-    
+
     // Calculate new word count
     const wordCount = newBody.split(/\s+/).length + 50;
 
@@ -65,7 +71,7 @@ Guidelines:
 title: "${title.replace(/"/g, '\\"')}"
 slug: "${slug}"
 description: "${description.replace(/"/g, '\\"')}"
-keywords: [${keywords.map(k => `"${k}"`).join(', ')}]
+keywords: [${keywords.map((k) => `"${k}"`).join(", ")}]
 word_count: ${wordCount}
 status: "completed"
 data_level: "ACTUAL"
@@ -76,7 +82,7 @@ author: "BBI Research Team"
 
 # ${title}
 
-![BBI - Hero illustration for ${title.replace(/"/g, '')}](https://picsum.photos/seed/${slug}/1200/630)
+![BBI - Hero illustration for ${title.replace(/"/g, "")}](https://picsum.photos/seed/${slug}/1200/630)
 
 ${newBody}
 `;

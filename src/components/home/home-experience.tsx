@@ -774,11 +774,14 @@ function OperatorToolkitSection() {
             >
               {CALCULATORS.length} Live Calculators
             </span>
-            <h3 style={{ fontSize: "21px", fontWeight: 600, marginTop: "12px", marginBottom: "8px" }}>
+            <h3
+              style={{ fontSize: "21px", fontWeight: 600, marginTop: "12px", marginBottom: "8px" }}
+            >
               Useful Calculators
             </h3>
             <p style={{ fontSize: "14px", color: "var(--nh-muted)", lineHeight: 1.6 }}>
-              Interactive TAM/SAM/SOM, runway, break-even units, CAC, and LTV models with real-time feedback.
+              Interactive TAM/SAM/SOM, runway, break-even units, CAC, and LTV models with real-time
+              feedback.
             </p>
           </div>
           <span
@@ -826,11 +829,14 @@ function OperatorToolkitSection() {
             >
               {STARTUP_GUIDES.length} Tactical Playbooks
             </span>
-            <h3 style={{ fontSize: "21px", fontWeight: 600, marginTop: "12px", marginBottom: "8px" }}>
+            <h3
+              style={{ fontSize: "21px", fontWeight: 600, marginTop: "12px", marginBottom: "8px" }}
+            >
               Startup Guides
             </h3>
             <p style={{ fontSize: "14px", color: "var(--nh-muted)", lineHeight: 1.6 }}>
-              Empirical customer discovery without pitching, bottom-up TAM calculation, and lean launch systems.
+              Empirical customer discovery without pitching, bottom-up TAM calculation, and lean
+              launch systems.
             </p>
           </div>
           <span
@@ -878,11 +884,14 @@ function OperatorToolkitSection() {
             >
               Illustrative Case Studies
             </span>
-            <h3 style={{ fontSize: "21px", fontWeight: 600, marginTop: "12px", marginBottom: "8px" }}>
+            <h3
+              style={{ fontSize: "21px", fontWeight: 600, marginTop: "12px", marginBottom: "8px" }}
+            >
               Founder Stories
             </h3>
             <p style={{ fontSize: "14px", color: "var(--nh-muted)", lineHeight: 1.6 }}>
-              Illustrative case studies of bootstrapped business models, execution timelines, and practical takeaways.
+              Illustrative case studies of bootstrapped business models, execution timelines, and
+              practical takeaways.
             </p>
           </div>
           <span
@@ -930,11 +939,14 @@ function OperatorToolkitSection() {
             >
               Essential Terms
             </span>
-            <h3 style={{ fontSize: "21px", fontWeight: 600, marginTop: "12px", marginBottom: "8px" }}>
+            <h3
+              style={{ fontSize: "21px", fontWeight: 600, marginTop: "12px", marginBottom: "8px" }}
+            >
               Founder Glossary
             </h3>
             <p style={{ fontSize: "14px", color: "var(--nh-muted)", lineHeight: 1.6 }}>
-              Venture metrics, unit economics ratios, and financial terms with formulas and operator benchmarks.
+              Venture metrics, unit economics ratios, and financial terms with formulas and operator
+              benchmarks.
             </p>
           </div>
           <span
@@ -1056,7 +1068,7 @@ export function HomeExperience({
             <h1 ref={title} id="nh-hero-title" className="nh-hero-reveal">
               From what if,
               <br />
-              <span>to what’s next.</span>
+              <span className="nh-headline-accent">to what’s next.</span>
             </h1>
             <p className="nh-hero-subtitle nh-hero-reveal">
               Business ideas. With the honest research.
