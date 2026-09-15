@@ -4,8 +4,18 @@
  * businessidea.io domain is live; falls back to the current Lovable domain.
  */
 export function siteUrl(): string {
-  const fromEnv = typeof process !== "undefined" ? process.env?.["SITE_URL"] : undefined;
-  return (fromEnv?.trim() || "https://newbusinessideas3.lovable.app").replace(/\/+$/, "");
+  const fromEnv =
+    (typeof process !== "undefined" ? process.env?.["SITE_URL"] : undefined) ||
+    (typeof import.meta !== "undefined" && import.meta.env
+      ? (import.meta.env["VITE_SITE_URL"] as string)
+      : undefined);
+  if (fromEnv?.trim()) {
+    return fromEnv.trim().replace(/\/+$/, "");
+  }
+  if (typeof window !== "undefined" && window.location?.origin) {
+    return window.location.origin.replace(/\/+$/, "");
+  }
+  return "https://bbi-with-chatgpt.spandhana1212.workers.dev";
 }
 
 /**
