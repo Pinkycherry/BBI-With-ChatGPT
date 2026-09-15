@@ -1,6 +1,5 @@
 import { Link, useLoaderData } from "@tanstack/react-router";
 import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { User } from "lucide-react";
 import type { IconType } from "react-icons";
 import {
@@ -304,9 +303,7 @@ function NavDropdown({
         {/* One marker element shared across every dropdown trigger, so moving
             along the bar slides a single plate rather than fading N of them. */}
         {open ? (
-          <motion.span
-            layoutId="ac-nav-marker"
-            transition={{ type: "spring", stiffness: 340, damping: 30 }}
+          <span
             className="absolute inset-0 rounded-[calc(var(--radius)-2px)] bg-primary/10"
           />
         ) : null}
@@ -318,22 +315,16 @@ function NavDropdown({
           ▾
         </span>
       </button>
-      <AnimatePresence>
         {open && (
-          <motion.div
+          <div
             role="menu"
-            initial={{ opacity: 0, y: -8, scale: 0.9, filter: "blur(8px)" }}
-            animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
-            exit={{ opacity: 0, y: -8, scale: 0.9, filter: "blur(8px)" }}
-            transition={{ type: "spring", stiffness: 260, damping: 26 }}
             onMouseEnter={openNow}
             onMouseLeave={closeSoon}
-            className={`iv-nav-panel ${panelClassName}`}
+            className={`iv-nav-panel mo-menu-enter ${panelClassName}`}
           >
             {children(() => setOpen(false))}
-          </motion.div>
+          </div>
         )}
-      </AnimatePresence>
     </div>
   );
 }
@@ -485,21 +476,13 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
 
   return (
     <div className="fixed inset-0 z-50 lg:hidden">
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-        transition={{ duration: 0.2 }}
-        className="absolute inset-0 bg-black/60"
+      <div
+        className="mo-menu-enter absolute inset-0 bg-black/60"
         onClick={onClose}
         aria-hidden
       />
-      <motion.div
-        initial={{ x: "100%" }}
-        animate={{ x: 0 }}
-        exit={{ x: "100%" }}
-        transition={{ duration: 0.34, ease: [0.16, 1, 0.3, 1] }}
-        className="glass-nav absolute right-0 top-0 flex h-full w-[min(22rem,92vw)] flex-col overflow-y-auto px-4 py-4"
+      <div
+        className="glass-nav mo-mobile-panel mo-menu-enter absolute right-0 top-0 flex h-full w-[min(22rem,92vw)] flex-col overflow-y-auto px-4 py-4"
       >
         <div className="flex items-center justify-between">
           <span className="text-xs font-semibold uppercase tracking-[0.25em] text-accent">
@@ -625,7 +608,7 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
         <div className="mt-auto grid gap-2 pt-8">
           <AuthButtons onNavigate={onClose} full />
         </div>
-      </motion.div>
+      </div>
     </div>
   );
 }
@@ -758,14 +741,14 @@ export function SiteShell({ children }: { children: ReactNode }) {
   // uncapped, this block was 3,300px of footer per page at 200 categories.
   const footerCategories = topCategories(allCategories, 5);
   return (
-    <div className="relative flex min-h-screen flex-col text-foreground">
+    <div className="mo-shell relative flex min-h-screen flex-col text-foreground">
       <header className="sticky top-0 z-40 px-3 pt-2 sm:px-4 sm:pt-5">
         {/* Reading position for the whole document. One composited transform
             per frame, driven from --page-p — no layout, no repaint. */}
         <div aria-hidden className="mx-auto h-px max-w-6xl overflow-hidden rounded-full bg-border">
           <div className="mo-page-rail h-full w-full bg-accent" />
         </div>
-        <div className="glass-nav mx-auto mt-2 flex max-w-6xl items-center justify-between gap-3 rounded-md border border-border px-4 py-2.5 sm:gap-5 sm:px-6 sm:py-3">
+        <div className="glass-nav mo-header-bar mx-auto mt-2 flex max-w-6xl items-center justify-between gap-3 rounded-md border border-border px-4 py-2.5 sm:gap-5 sm:px-6 sm:py-3">
           <Link
             to="/"
             onClick={() => setMobileOpen(false)}
@@ -785,7 +768,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
               <Link
                 key={link.to}
                 to={link.to}
-                className="relative transition-colors duration-300 hover:text-foreground after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-primary after:transition-all after:duration-500 hover:after:w-full"
+                className="mo-link hover:text-foreground"
               >
                 {link.label}
               </Link>
@@ -814,9 +797,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
           </button>
         </div>
       </header>
-      <AnimatePresence>
         {mobileOpen && <MobileMenu onClose={() => setMobileOpen(false)} />}
-      </AnimatePresence>
       <main className="flex-1">{children}</main>
       <FloatingDock />
       <BuiltWithSection />

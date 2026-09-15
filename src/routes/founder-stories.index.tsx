@@ -4,6 +4,7 @@ import { DollarSign, TrendingUp, Clock, ArrowRight, ShieldCheck, Zap } from "luc
 import { SiteShell, Breadcrumbs } from "@/components/site-shell";
 import { JsonLd, breadcrumbSchema, collectionPageSchema } from "@/lib/schema";
 import { CASE_STUDIES, type CaseStudy } from "@/lib/case-studies-data";
+import { useElementPointerGroup, useStaggerReveal, useTextReveal } from "@/motion";
 
 export const Route = createFileRoute("/founder-stories/")({
   head: () => ({
@@ -34,6 +35,9 @@ function formatUsd(val: number): string {
 }
 
 function FounderStoriesIndexPage() {
+  const titleRef = useTextReveal<HTMLHeadingElement>();
+  const pointerRef = useElementPointerGroup<HTMLDivElement>(".mo-card");
+  const gridRef = useStaggerReveal<HTMLDivElement>({ stagger: 0.03, distance: 16 });
   return (
     <>
       <JsonLd
@@ -52,13 +56,13 @@ function FounderStoriesIndexPage() {
         ]}
       />
       <SiteShell>
-        <div className="mx-auto max-w-6xl px-3 py-10 sm:px-4 sm:py-14">
+        <div ref={pointerRef} className="mx-auto max-w-6xl px-3 py-10 sm:px-4 sm:py-14">
           <Breadcrumbs items={[{ label: "Home", to: "/" }, { label: "Founder Stories" }]} />
 
           <div className="mt-6 flex flex-col justify-between gap-4 md:flex-row md:items-end">
             <div>
               <p className="t-eyebrow">Real Operator Breakdowns</p>
-              <h1 className="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
+              <h1 ref={titleRef} className="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
                 Founder Stories &{" "}
                 <span className="bg-gradient-to-r from-primary via-accent to-warm bg-clip-text text-transparent">
                   Case Studies
@@ -81,11 +85,11 @@ function FounderStoriesIndexPage() {
           </div>
 
           {/* Stories Grid */}
-          <div className="mt-10 grid gap-8 md:grid-cols-2 lg:grid-cols-3">
+          <div ref={gridRef} className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {CASE_STUDIES.map((study) => (
               <article
                 key={study.slug}
-                className="glass group flex flex-col justify-between rounded-2xl p-6 transition-all hover:border-primary/50 hover:shadow-xl sm:p-7"
+                className="glass mo-card group flex flex-col justify-between rounded-3xl p-6 sm:p-7"
               >
                 <div>
                   <div className="flex items-center justify-between">
@@ -99,7 +103,7 @@ function FounderStoriesIndexPage() {
                   </div>
 
                   <h2 className="mt-4 font-display text-xl font-bold tracking-tight text-foreground group-hover:text-primary transition-colors">
-                    <Link to="/founder-stories/$slug" params={{ slug: study.slug }}>
+                    <Link className="mo-link" to="/founder-stories/$slug" params={{ slug: study.slug }}>
                       {study.title}
                     </Link>
                   </h2>
@@ -171,7 +175,7 @@ function FounderStoriesIndexPage() {
                   <Link
                     to="/founder-stories/$slug"
                     params={{ slug: study.slug }}
-                    className="flex items-center gap-1 text-xs font-bold uppercase tracking-[0.16em] text-primary transition-colors hover:underline"
+                    className="mo-link flex items-center gap-1 text-xs font-bold uppercase tracking-[0.16em] text-primary"
                   >
                     <span>Breakdown</span>
                     <ArrowRight className="h-3.5 w-3.5" />

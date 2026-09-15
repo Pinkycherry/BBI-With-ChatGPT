@@ -1,10 +1,9 @@
 import { Link } from "@tanstack/react-router";
-import { Lock } from "lucide-react";
-
-import CardSpotlight from "@/components/aceternity/card-spotlight";
+import { ArrowUpRight, Lock } from "lucide-react";
 
 import type { IdeaCard as IdeaCardData } from "@/lib/ideas-shared";
 import { useAuth } from "@/hooks/use-auth";
+import "@/components/catalog-ui.css";
 
 export function IdeaCard({
   idea,
@@ -32,23 +31,27 @@ export function IdeaCard({
   const locked = auth.status === "anonymous";
 
   return (
-    <CardSpotlight className={`mo-card h-full ${featured ? "sm:col-span-2" : ""}`}>
+    <article
+      className={`mo-card catalog-idea-card h-full ${featured ? "catalog-idea-featured sm:col-span-2" : ""}`}
+    >
       <Link
         to="/idea/$slug"
         params={{ slug: idea.slug }}
-        className="group relative flex h-full min-w-0 flex-col p-4 sm:p-5"
+        className="group relative z-10 flex h-full min-w-0 flex-col p-5 sm:p-6"
       >
         <div
-          className={`flex h-full flex-col gap-2.5 ${locked ? "pointer-events-none select-none blur-sm" : ""}`}
+          className={`flex h-full flex-col gap-4 ${locked ? "pointer-events-none select-none blur-sm" : ""}`}
         >
           <div className="flex items-center justify-between gap-3 text-[11px] uppercase tracking-widest text-muted-foreground">
             <span className="truncate">{idea.subcategoryName}</span>
             {idea.trendScore !== null && (
-              <span className="shrink-0 tabular-nums text-hl-teal">Trend {idea.trendScore}</span>
+              <span className="catalog-trend shrink-0 tabular-nums text-hl-teal">
+                Trend {idea.trendScore}
+              </span>
             )}
           </div>
           <h3
-            className={`break-words font-semibold leading-snug transition-colors duration-300 group-hover:text-accent ${
+            className={`break-words font-semibold leading-snug tracking-tight ${
               featured ? "text-2xl" : "text-lg"
             }`}
           >
@@ -61,19 +64,24 @@ export function IdeaCard({
           >
             {idea.summary}
           </p>
-          <div className="mt-auto flex flex-wrap gap-1.5 pt-2">
-            {idea.tags.slice(0, featured ? 5 : 3).map((tag) => (
-              <span
-                key={tag}
-                className="max-w-full truncate rounded-full border border-border px-2.5 py-0.5 text-[11px] text-muted-foreground"
-              >
-                {tag}
-              </span>
-            ))}
+          <div className="catalog-card-footer mt-auto flex items-end justify-between gap-3 pt-4">
+            <div className="flex min-w-0 flex-wrap gap-1.5">
+              {idea.tags.slice(0, featured ? 5 : 3).map((tag) => (
+                <span
+                  key={tag}
+                  className="catalog-tag max-w-full truncate rounded-full px-2.5 py-1 text-[11px] text-muted-foreground"
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+            <span className="catalog-card-arrow" aria-hidden="true">
+              <ArrowUpRight className="h-4 w-4" />
+            </span>
           </div>
         </div>
         {locked && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 bg-background/45">
+          <div className="catalog-card-lock absolute inset-0 flex flex-col items-center justify-center gap-1.5 bg-background/45">
             <Lock className="h-4 w-4 text-accent" aria-hidden />
             <span className="text-[10px] font-semibold uppercase tracking-widest text-foreground">
               Sign in to view
@@ -81,6 +89,6 @@ export function IdeaCard({
           </div>
         )}
       </Link>
-    </CardSpotlight>
+    </article>
   );
 }

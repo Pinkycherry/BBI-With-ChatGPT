@@ -1,0 +1,394 @@
+/* The blueprint stays a light reading surface. Depth belongs to its real
+   metrics and evidence, while paragraphs and form controls stay stationary. */
+.cinematic-blueprint {
+  --blueprint-glass: color-mix(in oklab, var(--card) 88%, transparent);
+  --blueprint-edge: color-mix(in oklab, var(--primary) 16%, var(--border));
+  --blueprint-shadow: color-mix(in oklab, var(--foreground) 9%, transparent);
+  isolation: isolate;
+}
+
+.cinematic-blueprint .idea-shell::before {
+  inset-inline: -1rem;
+  height: 48rem;
+}
+
+.cinematic-masthead {
+  align-items: center;
+  padding-block: clamp(1.5rem, 4vw, 3.5rem);
+}
+
+.cinematic-masthead h1 {
+  font-size: clamp(2.35rem, 4vw, 4rem);
+  line-height: 1.06;
+  font-weight: 500;
+  letter-spacing: -0.055em;
+  text-wrap: balance;
+}
+
+.cinematic-masthead > div > p {
+  line-height: 1.75;
+  text-wrap: pretty;
+}
+
+.cinematic-masthead .idea-hero-aside {
+  perspective: 1200px;
+}
+
+.cinematic-blueprint .cinematic-metrics {
+  min-height: 13rem;
+  overflow: hidden;
+  border: 1px solid color-mix(in oklab, var(--card) 70%, var(--primary));
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  background:
+    radial-gradient(ellipse at 100% 100%, color-mix(in oklab, var(--hl-teal) 15%, transparent), transparent 75%),
+    linear-gradient(135deg, var(--card), color-mix(in oklab, var(--card) 80%, var(--background-2)));
+  box-shadow:
+    inset 0 1px 0 var(--card),
+    0 26px 50px -28px color-mix(in oklab, var(--primary) 30%, transparent),
+    0 6px 14px -8px var(--blueprint-shadow);
+  transform: translate3d(0, calc((var(--sc-p, 0.5) - 0.5) * -24px), 0);
+  text-align: left;
+}
+
+.cinematic-metrics::before {
+  content: "";
+  position: absolute;
+  right: -2.5rem;
+  bottom: -3.5rem;
+  width: 12rem;
+  aspect-ratio: 1;
+  border: 1.5rem solid color-mix(in oklab, var(--card) 70%, transparent);
+  border-radius: 50%;
+  box-shadow:
+    inset 1px 1px 0 var(--card),
+    1px 1px 0 color-mix(in oklab, var(--primary) 14%, transparent);
+  pointer-events: none;
+  transform:
+    translate3d(calc(var(--el-ptr-x, 0) * -8px), calc(var(--el-ptr-y, 0) * -6px), 0)
+    rotateX(40deg) rotateY(-20deg);
+}
+
+.cinematic-metrics > * {
+  position: relative;
+  z-index: 1;
+}
+
+.cinematic-metrics-readout dt {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--muted-foreground);
+}
+
+.cinematic-metrics-readout dd {
+  margin: 1.15rem 0 0;
+}
+
+.cinematic-metrics-readout dd > span:first-child {
+  font-family: var(--font-sans);
+  font-size: clamp(3.5rem, 5.5vw, 5.25rem);
+  font-weight: 400;
+  letter-spacing: -0.075em;
+}
+
+.cinematic-momentum-track {
+  height: 0.35rem;
+  margin-block: 1.5rem 0.5rem;
+  overflow: hidden;
+  border-radius: 1rem;
+  background: color-mix(in oklab, var(--primary) 8%, transparent);
+}
+
+.cinematic-momentum-track > span {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: inherit;
+  transform-origin: left;
+  background: linear-gradient(90deg, var(--primary), var(--hl-teal));
+}
+
+.cinematic-verdict,
+.cinematic-demand,
+.cinematic-explore,
+.cinematic-trend-card,
+.cinematic-faq {
+  position: relative;
+  border: 1px solid var(--blueprint-edge);
+  border-radius: 1.5rem;
+  background: var(--blueprint-glass);
+  box-shadow: inset 0 1px 0 var(--card), 0 16px 38px -28px var(--blueprint-shadow);
+}
+
+.cinematic-verdict {
+  isolation: isolate;
+  scroll-margin-top: 6rem;
+}
+
+.cinematic-verdict::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 2rem;
+  right: 2rem;
+  height: 2px;
+  border-radius: 1rem;
+  background: linear-gradient(90deg, var(--hl-green), var(--primary), var(--hl-coral));
+  transform: scaleX(clamp(0.15, var(--sc-p, 1), 1));
+  transform-origin: left;
+  pointer-events: none;
+}
+
+.cinematic-evidence {
+  padding: 1.2rem;
+  border: 1px solid color-mix(in oklab, var(--evidence-color) 12%, transparent);
+  border-radius: 1rem;
+  background: linear-gradient(145deg, color-mix(in oklab, var(--evidence-color) 5%, var(--card)), var(--card));
+}
+
+.cinematic-evidence-pro { --evidence-color: var(--hl-green); }
+.cinematic-evidence-con { --evidence-color: var(--hl-coral); }
+
+.cinematic-evidence li {
+  border-radius: 0.4rem;
+  line-height: 1.7;
+}
+
+.cinematic-evidence li > span:first-child {
+  flex-shrink: 0;
+  width: 1.2rem;
+  font-size: 1.1rem;
+}
+
+.cinematic-verdict-resolution {
+  padding: 1.5rem;
+  border: 1px solid color-mix(in oklab, var(--primary) 18%, transparent);
+  border-radius: 1rem;
+  background: linear-gradient(125deg, color-mix(in oklab, var(--primary) 7%, var(--card)), var(--card));
+  opacity: clamp(0.72, calc(var(--sc-p, 1) * 2.5), 1);
+  transform: translate3d(0, calc((1 - clamp(0, calc(var(--sc-p, 1) * 2.5), 1)) * 12px), 0);
+}
+
+.cinematic-verdict-resolution p {
+  font-size: clamp(1rem, 1.5vw, 1.2rem);
+  line-height: 1.75;
+}
+
+.cinematic-breakdown {
+  padding-inline: clamp(0.25rem, 2vw, 1.5rem);
+}
+
+.cinematic-breakdown p {
+  line-height: 1.85;
+}
+
+.cinematic-sign-in-gate {
+  border-radius: 1.5rem;
+}
+
+.cinematic-sign-in-gate > p {
+  max-width: 24rem;
+  padding-inline: 1rem;
+  font-size: 1rem;
+}
+
+.cinematic-research-details {
+  border-color: var(--blueprint-edge);
+  border-radius: 1.5rem;
+  background: var(--blueprint-glass);
+  box-shadow: inset 0 1px 0 var(--card);
+}
+
+.cinematic-research-details summary {
+  list-style: none;
+}
+
+.cinematic-research-details summary::-webkit-details-marker {
+  display: none;
+}
+
+.cinematic-research-chevron {
+  transition: transform var(--mo-dur-2) var(--mo-ease-out);
+}
+
+.cinematic-research-details[open] .cinematic-research-chevron {
+  transform: rotate(180deg);
+}
+
+.cinematic-demand {
+  padding: clamp(1.5rem, 3vw, 2rem);
+  background:
+    radial-gradient(ellipse at 100% 0, color-mix(in oklab, var(--hl-teal) 10%, transparent), transparent 75%),
+    var(--blueprint-glass);
+}
+
+.cinematic-demand .demand-gauge-track {
+  height: 0.7rem;
+  margin-block: 1.5rem 1rem;
+  box-shadow: inset 0 1px 2px color-mix(in oklab, var(--foreground) 8%, transparent);
+}
+
+.cinematic-demand-fill {
+  background: linear-gradient(90deg, var(--primary), var(--hl-teal));
+}
+
+.cinematic-blueprint .cinematic-validate {
+  isolation: isolate;
+  scroll-margin-top: 6rem;
+  border-color: color-mix(in oklab, var(--primary) 28%, var(--border));
+  border-radius: 2rem;
+  background:
+    radial-gradient(ellipse at 0 0, color-mix(in oklab, var(--primary) 11%, transparent), transparent 65%),
+    radial-gradient(ellipse at 100% 100%, color-mix(in oklab, var(--hl-teal) 9%, transparent), transparent 60%),
+    var(--card);
+  box-shadow:
+    inset 0 1px 0 var(--card),
+    0 30px 65px -42px color-mix(in oklab, var(--primary) 40%, transparent);
+}
+
+.cinematic-validate > h2 {
+  color: var(--foreground);
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  font-weight: 500;
+  letter-spacing: -0.04em;
+  text-transform: none;
+}
+
+.cinematic-validate-console {
+  margin-top: 0;
+  border: 1px solid color-mix(in oklab, var(--card) 70%, var(--border));
+  background: color-mix(in oklab, var(--card) 78%, transparent);
+  box-shadow: inset 0 1px 0 var(--card);
+}
+
+.cinematic-validate-console > h2 {
+  font-size: 1.6rem;
+  font-weight: 500;
+}
+
+.cinematic-validate-console .cinematic-validate-platform {
+  min-height: 3.25rem;
+  border: 1px solid var(--blueprint-edge, var(--border));
+  border-radius: 0.9rem;
+  background: var(--card);
+  color: var(--foreground);
+  box-shadow: inset 0 1px 0 var(--card), 0 6px 14px -10px var(--blueprint-shadow, transparent);
+  transition: transform var(--mo-dur-2) var(--mo-ease-out), opacity var(--mo-dur-2) var(--mo-ease);
+}
+
+.cinematic-validate-console .cinematic-validate-platform[data-primary] {
+  background: var(--primary);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
+  box-shadow: 0 10px 20px -14px var(--primary);
+}
+
+.cinematic-trending {
+  scroll-padding-inline: 0.25rem;
+  padding: 0.25rem 0.25rem 1rem;
+}
+
+.cinematic-blueprint .cinematic-trend-card {
+  padding: 1.5rem;
+  background:
+    radial-gradient(ellipse at 100% 0, color-mix(in oklab, var(--hl-teal) 7%, transparent), transparent 70%),
+    var(--blueprint-glass);
+}
+
+.cinematic-trend-card > p:nth-child(2) {
+  font-size: 1rem;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.cinematic-blueprint-sidebar .cinematic-explore a {
+  padding-block: 0.6rem;
+  border-bottom: 1px solid var(--border);
+}
+
+/* The existing evidence planes arrive at slightly different depths. Keep
+   the section in flow and never displace the mobile reading column. */
+@media (min-width: 768px) and (prefers-reduced-motion: no-preference) {
+  .cinematic-evidence-pro {
+    transform: translate3d(0, calc((1 - clamp(0, calc(var(--sc-p, 1) * 2), 1)) * 8px), 0);
+  }
+
+  .cinematic-evidence-con {
+    transform: translate3d(0, calc((1 - clamp(0, calc(var(--sc-p, 1) * 2), 1)) * 18px), 0);
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .cinematic-blueprint .cinematic-metrics,
+  .cinematic-blueprint .cinematic-metrics:hover {
+    transform:
+      translate3d(0, calc((var(--sc-p, 0.5) - 0.5) * -24px), 0)
+      rotateX(calc(var(--el-ptr-y, 0) * -3deg))
+      rotateY(calc(var(--el-ptr-x, 0) * 3deg));
+  }
+
+  .cinematic-validate-platform:not([data-primary]):not(:disabled):hover {
+    transform: translate3d(0, calc(var(--mo-lift-2) * -1), 0);
+  }
+
+  .cinematic-blueprint .cinematic-validate:hover {
+    transform: none;
+  }
+}
+
+@media (max-width: 639px) {
+  .cinematic-masthead {
+    padding-block: 1rem 0.5rem;
+  }
+
+  .cinematic-blueprint .cinematic-metrics,
+  .cinematic-blueprint .cinematic-metrics:hover {
+    min-height: 11rem;
+    transform: none;
+  }
+
+  .cinematic-evidence {
+    padding: 1rem;
+  }
+
+  .cinematic-blueprint .cinematic-validate,
+  .cinematic-validate-console {
+    padding: 1.25rem;
+    border-radius: 1.25rem;
+  }
+
+  .cinematic-validate-platforms {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .cinematic-validate-console .cinematic-validate-platform {
+    width: 100%;
+    justify-content: center;
+    padding-inline: 0.75rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cinematic-blueprint .cinematic-metrics,
+  .cinematic-blueprint .cinematic-metrics:hover,
+  .cinematic-metrics::before,
+  .cinematic-verdict-resolution,
+  .cinematic-validate-platform:not([data-primary]):not(:disabled):hover {
+    transform: none;
+  }
+
+  .cinematic-verdict-resolution {
+    opacity: 1;
+  }
+
+  .cinematic-verdict::before {
+    transform: none;
+  }
+
+  .cinematic-validate-console .cinematic-validate-platform,
+  .cinematic-research-chevron {
+    transition: none;
+  }
+}

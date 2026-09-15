@@ -18,6 +18,7 @@ import { STARTUP_GUIDES } from "@/lib/guides-data";
 import { CALCULATORS } from "@/lib/calculators";
 import { CASE_STUDIES } from "@/lib/case-studies-data";
 import { GLOSSARY_DATA } from "@/lib/glossary-data";
+import { useElementPointerGroup, useStaggerReveal, useTextReveal } from "@/motion";
 
 export const Route = createFileRoute("/learning-resources/")({
   head: () => ({
@@ -97,6 +98,11 @@ const RECOMMENDED_BOOKS = [
 ];
 
 function LearningResourcesIndexPage() {
+  const titleRef = useTextReveal<HTMLHeadingElement>();
+  const pointerRef = useElementPointerGroup<HTMLDivElement>(".mo-card");
+  const pillarsRef = useStaggerReveal<HTMLDivElement>({ stagger: 0.03, distance: 16 });
+  const frameworksRef = useStaggerReveal<HTMLDivElement>({ stagger: 0.03, distance: 12 });
+  const booksRef = useStaggerReveal<HTMLDivElement>({ stagger: 0.03, distance: 12 });
   return (
     <>
       <JsonLd
@@ -114,12 +120,12 @@ function LearningResourcesIndexPage() {
         ]}
       />
       <SiteShell>
-        <div className="mx-auto max-w-6xl px-3 py-10 sm:px-4 sm:py-14">
+        <div ref={pointerRef} className="mx-auto max-w-6xl px-3 py-10 sm:px-4 sm:py-14">
           <Breadcrumbs items={[{ label: "Home", to: "/" }, { label: "Learning Resources" }]} />
 
           <div className="mt-6">
             <p className="t-eyebrow">Curated Knowledge Base</p>
-            <h1 className="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
+            <h1 ref={titleRef} className="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
               Operator Learning Resources &{" "}
               <span className="bg-gradient-to-r from-primary via-accent to-warm bg-clip-text text-transparent">
                 Founder Toolkit
@@ -133,11 +139,11 @@ function LearningResourcesIndexPage() {
           </div>
 
           {/* 4 Core Pillars Bento Grid */}
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+          <div ref={pillarsRef} className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {/* Pillar 1: Useful Tools */}
             <Link
               to="/calculator"
-              className="glass group flex flex-col justify-between rounded-2xl p-6 transition-all hover:border-primary/50 hover:shadow-lg"
+              className="glass mo-card group flex min-w-0 flex-col justify-between rounded-3xl p-6"
             >
               <div>
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary/10 text-primary">
@@ -160,7 +166,7 @@ function LearningResourcesIndexPage() {
             {/* Pillar 2: Startup Guides */}
             <Link
               to="/startup-guides"
-              className="glass group flex flex-col justify-between rounded-2xl p-6 transition-all hover:border-primary/50 hover:shadow-lg"
+              className="glass mo-card group flex min-w-0 flex-col justify-between rounded-3xl p-6"
             >
               <div>
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-accent/10 text-accent">
@@ -183,7 +189,7 @@ function LearningResourcesIndexPage() {
             {/* Pillar 3: Founder Stories */}
             <Link
               to="/founder-stories"
-              className="glass group flex flex-col justify-between rounded-2xl p-6 transition-all hover:border-primary/50 hover:shadow-lg"
+              className="glass mo-card group flex min-w-0 flex-col justify-between rounded-3xl p-6"
             >
               <div>
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-emerald-500/10 text-emerald-600">
@@ -205,7 +211,7 @@ function LearningResourcesIndexPage() {
             {/* Pillar 4: Founder Glossary */}
             <Link
               to="/founder-glossary"
-              className="glass group flex flex-col justify-between rounded-2xl p-6 transition-all hover:border-primary/50 hover:shadow-lg"
+              className="glass mo-card group flex min-w-0 flex-col justify-between rounded-3xl p-6"
             >
               <div>
                 <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-indigo-500/10 text-indigo-600">
@@ -236,9 +242,9 @@ function LearningResourcesIndexPage() {
               scaling:
             </p>
 
-            <div className="mt-6 grid gap-5 sm:grid-cols-2">
+            <div ref={frameworksRef} className="mt-6 grid gap-5 sm:grid-cols-2">
               {OPERATOR_FRAMEWORKS.map((fw) => (
-                <div key={fw.name} className="glass rounded-2xl p-6">
+                <div key={fw.name} className="glass mo-card rounded-3xl p-6">
                   <h3 className="font-display text-lg font-bold text-foreground">{fw.name}</h3>
                   <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{fw.summary}</p>
                   <div className="mt-4 rounded-xl border border-border/70 bg-background/50 p-3.5">
@@ -263,11 +269,11 @@ function LearningResourcesIndexPage() {
               Books that contain high signal-to-noise ratios for modern operators:
             </p>
 
-            <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+            <div ref={booksRef} className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
               {RECOMMENDED_BOOKS.map((book) => (
                 <div
                   key={book.title}
-                  className="glass flex flex-col justify-between rounded-2xl p-5"
+                  className="glass mo-card flex flex-col justify-between rounded-3xl p-5"
                 >
                   <div>
                     <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">

@@ -21,7 +21,8 @@
  */
 import { useEffect, useRef, type RefObject } from "react";
 
-import { loadGsap, prefersReducedMotion } from "./gsap";
+import { loadGsap } from "./gsap";
+import { observeMotionPreference, preserveStyles } from "./preferences";
 
 export type ScrollProgressOptions = {
   mode?: "pinned" | "unpinned";
@@ -62,14 +63,16 @@ export function useScrollProgress<T extends HTMLElement = HTMLElement>(
     const el = ref.current;
     if (!el) return;
 
-    if (prefersReducedMotion()) {
+    const settle = () => {
       el.style.setProperty("--sc-p", String(reducedValue));
-      return;
-    }
+      cbRef.current?.(reducedValue);
+    };
 
-    el.style.setProperty("--sc-p", "0");
+    // Keep CSS-driven content settled while the optional chunk downloads.
+    settle();
+    return observeMotionPreference(() => {
     let cancelled = false;
-    let trigger: { kill: (revert?: boolean) => void } | undefined;
+    let trigger: import("gsap/ScrollTrigger").ScrollTrigger | undefined;
 
     loadGsap().then(({ ScrollTrigger }) => {
       if (cancelled || !ref.current) return;
@@ -104,13 +107,21 @@ export function useScrollProgress<T extends HTMLElement = HTMLElement>(
           cbRef.current?.(self.progress);
         },
       });
+      el.style.setProperty("--sc-p", trigger.progress.toFixed(4));
+      cbRef.current?.(trigger.progress);
+    }).catch(() => {
+      if (!cancelled) {
+        trigger?.kill(true);
+        settle();
+      }
     });
 
     return () => {
       cancelled = true;
-      trigger?.kill();
-      el.style.removeProperty("--sc-p");
+      trigger?.kill(true);
+      settle();
     };
+    }, { settle });
   }, [mode, spanVh, scrub, reducedValue]);
 
   return ref;
@@ -125,17 +136,16 @@ export function usePageScrollProgress() {
   useEffect(() => {
     if (typeof window === "undefined") return;
     const root = document.documentElement;
-    if (prefersReducedMotion()) {
-      root.style.setProperty("--page-p", "0");
-      return;
-    }
+    const restore = preserveStyles([root], ["--page-p"]);
+    const settle = () => root.style.setProperty("--page-p", "0");
+    const stop = observeMotionPreference(() => {
     let raf = 0;
     let queued = false;
     const write = () => {
       raf = 0;
       queued = false;
       const max = root.scrollHeight - window.innerHeight;
-      root.style.setProperty("--page-p", max > 0 ? (window.scrollY / max).toFixed(4) : "0");
+      root.style.setProperty("--page-p", max > 0 ? Math.max(0, Math.min(1, window.scrollY / max)).toFixed(4) : "0");
     };
     const onScroll = () => {
       if (queued) return;
@@ -145,11 +155,15 @@ export function usePageScrollProgress() {
     write();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll, { passive: true });
+    const resize = typeof ResizeObserver === "undefined" ? null : new ResizeObserver(onScroll);
+    resize?.observe(root);
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
-      root.style.removeProperty("--page-p");
+      resize?.disconnect();
     };
+    }, { settle });
+    return () => { stop(); restore(); };
   }, []);
 }

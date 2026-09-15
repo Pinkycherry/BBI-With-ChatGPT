@@ -3,7 +3,6 @@ import { queryOptions } from "@tanstack/react-query";
 import { HomeExperience } from "@/components/home/home-experience";
 import { catalogQuery, getFeaturedIdeas, getTrendingIdeas } from "@/lib/ideas.functions";
 import { FEATURED_IDEA_IDS } from "@/config/featured";
-import homeStyles from "@/components/home/home.css?url";
 
 const featuredQuery = queryOptions({
   queryKey: ["featured", FEATURED_IDEA_IDS],
@@ -36,7 +35,7 @@ export const Route = createFileRoute("/")({
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ],
-    links: [{ rel: "stylesheet", href: homeStyles }],
+    links: [],
   }),
   component: HomePage,
   errorComponent: () => (

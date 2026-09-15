@@ -1,35 +1,19 @@
 /**
- * Wipe — a directional clip-path reveal on scroll-into-view.
- *
- * Apply to a wrapper around media or a panel, never directly to tight-set
- * type: clip-path is relative to the border box, not the ink, so a headline
- * gets sheared at the descenders. `iris` reads loudest — once per page at
- * most.
- *
- * clip-path is compositor-friendly here because nothing else about the box
- * changes. No width/height/top/left, no box-shadow animation.
+ * Directional media reveal using transform and opacity only. The public wipe
+ * API is retained, but no animated clip-path or layout property is needed.
+ * Content stays visible until the animation is ready and always flattens when
+ * reduced motion is enabled, including a preference change during playback.
  */
 import { useEffect, useRef, type RefObject } from "react";
 
-import { loadGsap, prefersReducedMotion } from "./gsap";
+import { loadGsap } from "./gsap";
+import { observeMotionPreference } from "./preferences";
 
 export type WipeDirection = "up" | "down" | "left" | "right" | "iris";
-
-const FROM: Record<WipeDirection, string> = {
-  up: "inset(100% 0 0 0)",
-  down: "inset(0 0 100% 0)",
-  left: "inset(0 100% 0 0)",
-  right: "inset(0 0 0 100%)",
-  iris: "circle(0% at 50% 50%)",
+const FROM: Record<WipeDirection, gsap.TweenVars> = {
+  up: { y: 24 }, down: { y: -24 },
+  left: { x: 24 }, right: { x: -24 }, iris: { scale: 0.96 },
 };
-const TO: Record<WipeDirection, string> = {
-  up: "inset(0% 0 0 0)",
-  down: "inset(0 0 0% 0)",
-  left: "inset(0 0% 0 0)",
-  right: "inset(0 0 0 0%)",
-  iris: "circle(78% at 50% 50%)",
-};
-
 export type WipeOptions = {
   direction?: WipeDirection;
   duration?: number;
@@ -46,34 +30,27 @@ export function useWipe<T extends HTMLElement = HTMLElement>(
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    if (prefersReducedMotion()) {
-      el.style.removeProperty("clip-path");
-      return;
-    }
-    el.style.clipPath = FROM[direction];
-
-    let cancelled = false;
-    let tween: gsap.core.Tween | null = null;
-    loadGsap().then(({ gsap }) => {
-      if (cancelled || !ref.current) return;
-      tween = gsap.to(el, {
-        clipPath: TO[direction],
-        duration,
-        delay,
-        ease: "power3.inOut",
-        // No `onComplete` clip-path removal: it stripped the very property
-        // the reverse needs to animate back, so a two-way wipe would play
-        // once and then have nothing to return to.
-        scrollTrigger: { trigger: el, start, toggleActions: "restart reverse restart reverse" },
+    return observeMotionPreference(() => {
+      let cancelled = false;
+      let context: gsap.Context | undefined;
+      loadGsap().then(({ gsap }) => {
+        if (cancelled) return;
+        context = gsap.context(() => {});
+        context.add(() => {
+          gsap.fromTo(el, { opacity: 0, ...FROM[direction] }, {
+            opacity: 1, x: 0, y: 0, scale: 1,
+            duration, delay, ease: "power3.out", immediateRender: false,
+            scrollTrigger: { trigger: el, start, toggleActions: "restart none restart none" },
+          });
+        });
+      }).catch(() => {
+        if (!cancelled) context?.revert();
       });
+      return () => {
+        cancelled = true;
+        context?.revert();
+      };
     });
-
-    return () => {
-      cancelled = true;
-      tween?.scrollTrigger?.kill();
-      tween?.kill();
-      el.style.removeProperty("clip-path");
-    };
   }, [direction, duration, delay, start]);
 
   return ref;

@@ -11,8 +11,12 @@ import { useEffect, type ReactNode } from "react";
 
 import "../styles.css";
 import "../motion.css";
-import { PointerChannelProvider, PageTransition } from "../motion";
-import { SiteTextMotion } from "@/components/site-text-motion";
+import "../cinematic.css";
+import "../components/home/home.css";
+import "../components/home/home-cinematic.css";
+import "../components/catalog-ui.css";
+import "../components/idea-experience.css";
+import { PointerChannelProvider, PageTransition } from "@/motion";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { catalogQuery } from "../lib/ideas.functions";
 
@@ -136,8 +140,7 @@ function RootComponent() {
           Renders no DOM of its own and holds no React state. */}
       <PointerChannelProvider />
       {/* Desktop-only custom pointer; refuses to run on touch or reduced motion. */}
-      {/* Wave word-reveal on every heading, and anything with data-wave. */}
-      <SiteTextMotion />
+      {/* Page-owned @/motion refs prevent duplicate headline animation. */}
       <PageTransition>
         {/* Required: nested routes render here. Removing <Outlet /> breaks all child routes. */}
         <Outlet />

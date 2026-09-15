@@ -1,7 +1,8 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 
 import { ContentPage, Section, metaFor } from "@/components/page-layout";
-import { useStaggerReveal } from "@/motion";
+import { useCallback } from "react";
+import { useElementPointerGroup, useStaggerReveal } from "@/motion";
 
 export const Route = createFileRoute("/pricing")({
   head: () =>
@@ -32,7 +33,12 @@ const plans = [
 function PricingPage() {
   // Split stage: the two plans arrive in sequence rather than landing as one
   // block, so the comparison reads left to right instead of all at once.
-  const plansRef = useStaggerReveal<HTMLDivElement>({ direction: "up" });
+  const revealRef = useStaggerReveal<HTMLDivElement>({ direction: "up", distance: 20, stagger: 0.08 });
+  const pointerRef = useElementPointerGroup<HTMLDivElement>(".mo-plan");
+  const plansRef = useCallback((node: HTMLDivElement | null) => {
+    revealRef.current = node;
+    pointerRef.current = node;
+  }, [revealRef, pointerRef]);
 
   return (
     <ContentPage
@@ -41,13 +47,15 @@ function PricingPage() {
       highlight="No subscription."
       intro="Browsing is free, no account needed. Sign in with Google (free) to read full blueprints. ₹199 or ₹399 unlocks the Validate button — validation itself stays free, forever."
       wide
+      tone="brief"
     >
       {/* EDITABLE SECTION START — safe to add, remove, or reorder sections below without breaking routing or data fetching. */}
-      <div ref={plansRef} className="grid grid-cols-[repeat(auto-fit,minmax(20rem,1fr))] gap-5">
+      <div ref={plansRef} className="grid gap-5 sm:grid-cols-2 sm:gap-7">
         {plans.map((plan) => (
           <div
             key={plan.name}
-            className={`glass mo-card flex h-full flex-col rounded-3xl px-6 py-8 ${
+            data-featured={plan.highlighted || undefined}
+            className={`glass mo-card mo-plan relative isolate flex h-full min-w-0 flex-col overflow-hidden rounded-3xl px-6 py-8 sm:px-8 sm:py-10 ${
               plan.highlighted
                 ? "border-primary/60 shadow-[0_20px_60px_color-mix(in_oklab,var(--primary)_25%,transparent)]"
                 : ""
@@ -57,7 +65,7 @@ function PricingPage() {
               {plan.name}
             </p>
             <p className="mt-4 flex items-baseline gap-2">
-              <span className="text-5xl font-extrabold tracking-tight">{plan.price}</span>
+              <span className="text-5xl font-extrabold tracking-tight sm:text-6xl">{plan.price}</span>
               <span className="text-xs uppercase tracking-widest text-muted-foreground">
                 {plan.cadence}
               </span>

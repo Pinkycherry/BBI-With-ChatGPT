@@ -21,7 +21,7 @@
  */
 import { useCallback, useEffect, useRef, type RefObject } from "react";
 
-import { pointerMotionEnabled } from "./gsap";
+import { observeMotionPreference } from "./preferences";
 
 export type ElementPointerOptions = {
   mode?: "hover" | "window";
@@ -39,7 +39,9 @@ export function useElementPointer<T extends HTMLElement = HTMLElement>(
 
   useEffect(() => {
     const el = ref.current;
-    if (!el || !pointerMotionEnabled()) return;
+    if (!el) return;
+
+    return observeMotionPreference(() => {
 
     let raf = 0;
     let running = false;
@@ -142,6 +144,7 @@ export function useElementPointer<T extends HTMLElement = HTMLElement>(
         el.style.removeProperty(p);
       }
     };
+    }, { pointer: true });
   }, [mode, radius, ease]);
 
   return ref;
@@ -165,7 +168,9 @@ export function useElementPointerGroup<T extends HTMLElement = HTMLElement>(
 
   useEffect(() => {
     const root = ref.current;
-    if (!root || !pointerMotionEnabled()) return;
+    if (!root) return;
+
+    return observeMotionPreference(() => {
 
     let current: HTMLElement | null = null;
     let raf = 0;
@@ -186,12 +191,16 @@ export function useElementPointerGroup<T extends HTMLElement = HTMLElement>(
     };
 
     const onMove = (e: PointerEvent) => {
-      const target = (e.target as HTMLElement | null)?.closest<HTMLElement>(itemSelector) ?? null;
+      const match = (e.target as HTMLElement | null)?.closest<HTMLElement>(itemSelector) ?? null;
+      const target = match && match !== root && root.contains(match) ? match : null;
       if (target !== current) {
         if (current) clear(current);
         current = target;
       }
-      if (!target) return;
+      if (!target) {
+        pending = null;
+        return;
+      }
       pending = { el: target, cx: e.clientX, cy: e.clientY };
       if (!raf) raf = requestAnimationFrame(apply);
     };
@@ -210,7 +219,9 @@ export function useElementPointerGroup<T extends HTMLElement = HTMLElement>(
       root.removeEventListener("pointerleave", onLeave);
       if (current) clear(current);
     };
+    }, { pointer: true });
   }, [itemSelector, clear]);
 
   return ref;
 }
+

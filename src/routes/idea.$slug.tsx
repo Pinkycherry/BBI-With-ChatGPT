@@ -1,10 +1,7 @@
 import { createFileRoute, notFound, Link } from "@tanstack/react-router";
 import ShareLinks from "@/components/effects/share-links";
-import StickyScroll from "@/components/aceternity/sticky-scroll";
-import CardSpotlight from "@/components/aceternity/card-spotlight";
 import { queryOptions } from "@tanstack/react-query";
 import { Lock } from "lucide-react";
-import type { CSSProperties } from "react";
 
 import { IdeaCard } from "@/components/idea-card";
 import { ValidateButton } from "@/components/validate-button";
@@ -21,7 +18,7 @@ import { type IdeaCard as IdeaCardType, type IdeaDetail } from "@/lib/ideas-shar
 import { JsonLd, articleSchema, breadcrumbSchema } from "@/lib/schema";
 import { useAuth } from "@/hooks/use-auth";
 import type { ValidatePlatform } from "@/lib/validate-shared";
-import { useDepthScene, useElementPointerGroup, useScrollProgress, useTextReveal } from "@/motion";
+import { useElementPointer, useElementPointerGroup, useScrollProgress, useStaggerReveal, useTextReveal } from "@/motion";
 
 type IdeaDetailData = {
   idea: IdeaDetail;
@@ -171,7 +168,7 @@ function DemandBlock({ score }: { score: number | null }) {
   const pct = Math.max(0, Math.min(100, score));
   const band = pct >= 85 ? "Strong momentum" : pct >= 70 ? "Steady demand" : "Niche, but real";
   return (
-    <section ref={sectionRef} className="mt-10 rounded-lg border border-border bg-card p-5">
+    <section ref={sectionRef} className="cinematic-demand mt-10 rounded-lg border border-border bg-card p-5">
       <div className="flex flex-wrap items-baseline justify-between gap-2">
         <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">
           Demand signal
@@ -190,7 +187,7 @@ function DemandBlock({ score }: { score: number | null }) {
             settled one: --sc-p falls back to 1 and the fill sits at the real
             score rather than at zero. */}
         <div
-          className="h-full w-full origin-left rounded-full bg-hl-teal"
+          className="cinematic-demand-fill h-full w-full origin-left rounded-full bg-hl-teal"
           style={{
             transform: `scaleX(calc(${(pct / 100).toFixed(4)} * clamp(0, calc(var(--sc-p, 1) * 1.6), 1)))`,
           }}
@@ -205,39 +202,29 @@ function DemandBlock({ score }: { score: number | null }) {
 }
 
 /**
- * The blueprint's real pros/cons/verdict, computed state advancing while the
- * frame holds — the `pin` device (devices.md §2), the one leaned on hardest
- * by the Live Surface grammar. Three real panels, not a fake sequence: pros
- * and cons are both visible from the start (nothing here is hidden to force
- * a reveal), the verdict crossfades in as `--sc-p` passes its threshold. No
- * invented copy — every word is the idea's own `pros`/`cons`/`verdict` data.
- *
- * Migrated from `lib/scroll-devices`' `usePinProgress` to `@/motion`'s
- * `useScrollProgress({ mode: "pinned" })` — the same device, same `--sc-p`
- * contract, so the calc()-driven verdict cue below is untouched. One real
- * behaviour change came with it: the old hook parked `--sc-p` at 0 under
- * reduced motion, which drove this panel's own `clamp()` to zero opacity and
- * hid the verdict outright for those readers. The shared hook parks at its
- * settled value instead, so the verdict is simply there.
+ * The real evidence and verdict share a scroll playhead. The panel remains
+ * in document flow: its content has no fixed length and can exceed a mobile
+ * viewport. Pinning that whole panel would trap its lower evidence off-screen.
+ * Under reduced motion the hook settles at 1, leaving every word readable.
  */
 function ComputedVerdictPanel({ idea }: { idea: IdeaDetail }) {
-  const stageRef = useScrollProgress<HTMLElement>({ mode: "pinned", spanVh: 1.6 });
+  const stageRef = useScrollProgress<HTMLElement>();
 
   return (
     <section
       ref={stageRef}
       data-anchor="verdict"
       data-anchor-label="Verdict"
-      className="mt-10 flex min-h-[1px] flex-col justify-center rounded-lg border border-border bg-card p-5 sm:p-7"
+      className="cinematic-verdict mt-10 flex min-h-[1px] flex-col justify-center rounded-lg border border-border bg-card p-5 sm:p-7"
     >
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(19rem,1fr))] gap-4">
-        <div>
+      <div className="cinematic-verdict-columns grid gap-4 sm:grid-cols-2">
+        <div className="cinematic-evidence cinematic-evidence-pro">
           <h2 className="text-sm font-semibold uppercase tracking-widest text-hl-green">
             Why it works
           </h2>
           <ul className="mt-3 space-y-3 text-sm">
             {idea.pros.map((pro) => (
-              <li key={pro} className="flex gap-2">
+              <li key={pro} className="mo-row flex gap-2">
                 <span aria-hidden className="text-hl-green">
                   +
                 </span>
@@ -246,13 +233,13 @@ function ComputedVerdictPanel({ idea }: { idea: IdeaDetail }) {
             ))}
           </ul>
         </div>
-        <div>
+        <div className="cinematic-evidence cinematic-evidence-con">
           <h2 className="text-sm font-semibold uppercase tracking-widest text-hl-coral">
             What will hurt
           </h2>
           <ul className="mt-3 space-y-3 text-sm">
             {idea.cons.map((con) => (
-              <li key={con} className="flex gap-2">
+              <li key={con} className="mo-row flex gap-2">
                 <span aria-hidden className="text-hl-coral">
                   −
                 </span>
@@ -265,12 +252,7 @@ function ComputedVerdictPanel({ idea }: { idea: IdeaDetail }) {
 
       {idea.verdict && (
         <div
-          className="mt-6 border-t border-primary/30 pt-5"
-          style={{
-            opacity: "clamp(0, calc((var(--sc-p, 1) - 0.55) * 4), 1)",
-            transform:
-              "translateY(calc((1 - clamp(0, calc((var(--sc-p, 1) - 0.55) * 4), 1)) * 10px))",
-          }}
+          className="cinematic-verdict-resolution mt-6 border-t border-primary/30 pt-5"
         >
           <h2 className="text-sm font-semibold uppercase tracking-widest text-primary">Verdict</h2>
           <p className="mt-2 leading-relaxed">{idea.verdict}</p>
@@ -313,12 +295,14 @@ function IdeaPage() {
   // MOTION_SPEC §2.3 — the page's single headline reveal, on the idea title.
   const titleRef = useTextReveal<HTMLHeadingElement>();
   // One delegated pointer listener per rail rather than one per card.
-  const relatedRailRef = useElementPointerGroup<HTMLDivElement>("a");
-  const trendingRailRef = useElementPointerGroup<HTMLDivElement>("a");
-  // The blueprint masthead is a depth scene: the title plane and the sidebar
-  // plane sit at different depths, so the page has somewhere to stand rather
-  // than reading as one flat column of panels.
-  const mastheadRef = useDepthScene<HTMLDivElement>({ strength: 0.5, weight: 0.14 });
+  const relatedRailRef = useElementPointerGroup<HTMLDivElement>(".mo-card");
+  const trendingRailRef = useElementPointerGroup<HTMLDivElement>(".mo-card");
+  const relatedRevealRef = useStaggerReveal<HTMLDivElement>({ stagger: 0.03, distance: 12 });
+  const trendingRevealRef = useStaggerReveal<HTMLDivElement>({ stagger: 0.03, distance: 12 });
+  // Scope depth to the existing KPI, keeping the long reading column still.
+  const mastheadRef = useScrollProgress<HTMLDivElement>({ reducedValue: 0.5 });
+  const metricsRef = useElementPointer<HTMLDivElement>();
+  const validateRef = useElementPointer<HTMLElement>();
   if (!data) return null;
   const { idea, related, relatedCategories, trending, variant, gradient } = data;
   // PROJECT_BRIEF.md Section 3.2 — full blueprint content is blurred behind
@@ -362,13 +346,9 @@ function IdeaPage() {
         ]}
       />
       <SiteShell>
-        <div
-          ref={mastheadRef}
-          className="cx-scene mx-auto grid max-w-6xl gap-10 px-4 py-12 lg:grid-cols-[minmax(0,1fr)_20rem]"
-        >
+        <div className="cinematic-blueprint mx-auto grid max-w-6xl gap-10 px-4 py-12 lg:grid-cols-[minmax(0,1fr)_20rem]">
           <article
-            className="idea-shell cx-layer min-w-0"
-            style={{ "--z": 0.12 } as CSSProperties}
+            className="idea-shell min-w-0"
             data-variant={variant}
             data-gradient={gradient}
           >
@@ -400,7 +380,7 @@ function IdeaPage() {
                 "validate" action lives at the page's actual close instead). The
                 wrapper classes let the chosen layout variant genuinely restructure
                 this block (see styles.css). */}
-            <div className="idea-hero mt-5" data-anchor="top" data-anchor-label="Top">
+            <div ref={mastheadRef} className="idea-hero cinematic-masthead mt-5" data-anchor="top" data-anchor-label="Top">
               <div className="min-w-0">
                 <div className="idea-hero-meta flex flex-wrap items-center gap-3 text-xs uppercase tracking-widest">
                   <span className="rounded-sm bg-secondary px-2 py-1 font-mono text-secondary-foreground">
@@ -428,11 +408,11 @@ function IdeaPage() {
                   own trend_score, already computed, with the verdict's status
                   read alongside it. */}
               <div className="idea-hero-aside">
-                <div className="glass rounded-2xl p-5">
-                  <dl className="sc-spec-label !text-[10px]">
+                <div ref={metricsRef} className="mo-card cinematic-metrics rounded-2xl p-5">
+                  <dl className="cinematic-metrics-readout">
                     <div className="w-full">
                       <dt>Momentum</dt>
-                      <dd className="!ml-0 block">
+                      <dd className="block">
                         <span className="font-mono text-4xl font-bold leading-none tabular-nums text-foreground">
                           {idea.trendScore ?? "—"}
                         </span>
@@ -440,6 +420,11 @@ function IdeaPage() {
                       </dd>
                     </div>
                   </dl>
+                  {idea.trendScore !== null && (
+                    <div className="cinematic-momentum-track" aria-hidden="true">
+                      <span style={{ transform: `scaleX(${Math.max(0, Math.min(100, idea.trendScore)) / 100})` }} />
+                    </div>
+                  )}
                   {idea.keywords.length > 0 && (
                     <div className="mt-4 flex flex-wrap gap-1.5">
                       {idea.keywords.slice(0, 3).map((k) => (
@@ -456,20 +441,31 @@ function IdeaPage() {
               </div>
             </div>
 
-            <div className="relative">
+            <div className="cinematic-research-gate relative">
               <div
                 className={contentLocked ? "pointer-events-none select-none blur-sm" : undefined}
               >
                 <ComputedVerdictPanel idea={idea} />
 
-                <section className="mt-10" data-anchor="breakdown" data-anchor-label="Breakdown">
+                <section className="cinematic-breakdown mt-10" data-anchor="breakdown" data-anchor-label="Breakdown">
                   <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">
                     The breakdown
                   </h2>
                   <p className="mt-3 whitespace-pre-line leading-relaxed">{idea.summary}</p>
                 </section>
 
-                <details className="group rounded-2xl border border-border bg-card overflow-hidden mt-10"><summary className="cursor-pointer font-semibold px-6 py-4 flex items-center justify-between text-lg select-none hover:bg-muted/50 transition-colors"><div className="flex items-center gap-3 text-muted-foreground group-hover:text-foreground transition-colors"><Lock className="h-5 w-5 text-accent" /><span>Researched Details (Locked)</span></div><span className="text-muted-foreground group-open:rotate-180 transition-transform duration-300">▼</span></summary><div className="border-t border-border bg-background/50 pb-8"><LockedResearchBlock idea={idea} /></div></details>
+                <details className="cinematic-research-details group mt-10 overflow-hidden rounded-2xl border border-border bg-card">
+                  <summary className="flex cursor-pointer select-none items-center justify-between gap-3 px-6 py-4 text-lg font-semibold">
+                    <span className="flex items-center gap-3 text-muted-foreground">
+                      <Lock className="h-5 w-5 shrink-0 text-accent" aria-hidden />
+                      <span>Researched Details (Locked)</span>
+                    </span>
+                    <span className="cinematic-research-chevron text-muted-foreground" aria-hidden>▼</span>
+                  </summary>
+                  <div className="border-t border-border bg-background/50 pb-8">
+                    <LockedResearchBlock idea={idea} />
+                  </div>
+                </details>
 
                 {idea.externalLinks.length > 0 && (
                   <section className="mt-10">
@@ -483,7 +479,7 @@ function IdeaPage() {
                             href={link.url}
                             target="_blank"
                             rel="nofollow noopener"
-                            className="font-semibold text-primary underline decoration-border underline-offset-4 hover:text-accent"
+                            className="mo-link font-semibold text-primary hover:text-accent"
                           >
                             {link.label}
                           </a>
@@ -499,7 +495,7 @@ function IdeaPage() {
               </div>
 
               {contentLocked && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-3 bg-background/55 text-center">
+                <div className="cinematic-sign-in-gate absolute inset-0 flex flex-col items-center justify-center gap-3 bg-background/55 text-center">
                   <Lock className="h-6 w-6 text-accent" aria-hidden />
                   <p className="text-sm font-semibold">Sign in free to read the full blueprint</p>
                   <Link
@@ -524,7 +520,7 @@ function IdeaPage() {
                   {faqBelow.map((item) => (
                     <details
                       key={item.q}
-                      className="rounded-lg border border-border bg-card p-4 text-sm"
+                      className="cinematic-faq rounded-lg border border-border bg-card p-4 text-sm"
                     >
                       <summary className="cursor-pointer font-semibold blur-[6px] select-none opacity-60 pointer-events-none">{item.q}</summary>
                       <p className="mt-2 leading-relaxed text-muted-foreground blur-[6px] select-none opacity-60 pointer-events-none">{item.a}</p>
@@ -553,10 +549,11 @@ function IdeaPage() {
                 real prompt and an optional free-text context field — this IS
                 the ending, not a decoration in front of it. */}
             <section
+              ref={validateRef}
               id="validate"
               data-anchor="validate"
               data-anchor-label="Validate"
-              className="mt-16 rounded-2xl border border-border bg-card p-6 sm:p-9"
+              className="mo-card cinematic-validate mt-16 rounded-2xl border border-border bg-card p-6 sm:p-9"
             >
               <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">
                 Run it before you commit
@@ -570,7 +567,7 @@ function IdeaPage() {
             </section>
 
             {subcategoryLink && (
-              <section className="mt-8 rounded-lg border border-border bg-card p-5">
+              <section className="cinematic-explore mt-8 rounded-lg border border-border bg-card p-5">
                 <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">
                   Keep exploring
                 </h2>
@@ -579,7 +576,7 @@ function IdeaPage() {
                   <Link
                     to={subcategoryLink.to}
                     params={subcategoryLink.params as never}
-                    className="font-semibold text-foreground underline decoration-border underline-offset-4 transition-colors hover:text-primary"
+                    className="mo-link font-semibold text-foreground hover:text-primary"
                   >
                     {subcategoryLink.label}
                   </Link>
@@ -589,7 +586,7 @@ function IdeaPage() {
                       <Link
                         to={categoryLink.to}
                         params={categoryLink.params as never}
-                        className="font-semibold text-foreground underline decoration-border underline-offset-4 transition-colors hover:text-primary"
+                        className="mo-link font-semibold text-foreground hover:text-primary"
                       >
                         {categoryLink.label}
                       </Link>{" "}
@@ -602,7 +599,7 @@ function IdeaPage() {
                       <Link
                         to={matchedIdeaLink.to}
                         params={matchedIdeaLink.params as never}
-                        className="font-semibold text-foreground underline decoration-border underline-offset-4 transition-colors hover:text-primary"
+                        className="mo-link font-semibold text-foreground hover:text-primary"
                       >
                         {matchedIdeaLink.label}
                       </Link>{" "}
@@ -623,12 +620,11 @@ function IdeaPage() {
                 <h2 className="text-sm font-semibold uppercase tracking-widest text-muted-foreground">
                   More in {idea.categoryName}
                 </h2>
-                {/* `.mo-card` for these cells lives on IdeaCard itself, which
-                    is the listing agent's file — this rail supplies the single
-                    delegated pointer listener the sheen reads from. */}
+                {/* One delegated pointer listener and one short stagger for
+                    the whole rail, including the shared card wrappers. */}
                 <div
-                  ref={relatedRailRef}
-                  className="mt-4 grid grid-cols-[repeat(auto-fit,minmax(17rem,1fr))] gap-4"
+                  ref={(element) => { relatedRailRef.current = element; relatedRevealRef.current = element; }}
+                  className="cinematic-related mt-4 grid grid-cols-[repeat(auto-fit,minmax(min(100%,17rem),1fr))] gap-4"
                 >
                   {bottomRelated.map((r) => (
                     <IdeaCard key={r.ideaId} idea={r} />
@@ -663,15 +659,15 @@ function IdeaPage() {
                   Trending across the library
                 </h2>
                 <div
-                  ref={trendingRailRef}
-                  className="mt-4 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-3"
+                  ref={(element) => { trendingRailRef.current = element; trendingRevealRef.current = element; }}
+                  className="cinematic-trending mt-4 flex snap-x snap-mandatory gap-4 overflow-x-auto pb-3"
                 >
                   {trending.map((t) => (
                     <Link
                       key={t.ideaId}
                       to="/idea/$slug"
                       params={{ slug: t.slug }}
-                      className="mo-card glass glass-hover w-64 shrink-0 snap-start rounded-2xl p-4"
+                      className="mo-card cinematic-trend-card w-64 shrink-0 snap-start rounded-2xl p-4"
                     >
                       <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-accent">
                         {t.categoryName}
@@ -691,7 +687,7 @@ function IdeaPage() {
             <div className="mt-16 text-center">
               <Link
                 to="/browse"
-                className="inline-block text-xs font-semibold uppercase tracking-widest text-primary underline decoration-border underline-offset-4 hover:text-accent"
+                className="mo-link inline-block text-xs font-semibold uppercase tracking-widest text-primary hover:text-accent"
               >
                 Browse more blueprints
               </Link>
@@ -700,12 +696,12 @@ function IdeaPage() {
           </article>
 
           {/* Sticky right column — desktop only. Add or reorder blocks freely. */}
-          <aside className="cx-layer hidden lg:block" style={{ "--z": 0.42 } as CSSProperties}>
+          <aside className="cinematic-blueprint-sidebar hidden lg:block">
             <div className="sticky top-28 space-y-5">
               <AdSlot position="idea-detail-right-affiliate" size="rectangle" />
 
               {sidebarRelated.length > 0 && (
-                <div className="glass rounded-2xl px-5 py-5">
+                <div className="cinematic-explore rounded-2xl px-5 py-5">
                   <p className="text-[10px] font-semibold uppercase tracking-[0.25em] text-accent">
                     More in {idea.categoryName}
                   </p>
@@ -715,7 +711,7 @@ function IdeaPage() {
                         <Link
                           to="/idea/$slug"
                           params={{ slug: r.slug }}
-                          className="block text-sm font-semibold leading-snug text-muted-foreground transition-colors hover:text-primary"
+                          className="mo-row block text-sm font-semibold leading-snug text-muted-foreground hover:text-primary"
                         >
                           {r.title}
                         </Link>

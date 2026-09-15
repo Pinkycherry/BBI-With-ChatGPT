@@ -14,7 +14,8 @@
  */
 import { useEffect, useRef, type RefObject } from "react";
 
-import { loadGsap, prefersReducedMotion } from "./gsap";
+import { loadGsap } from "./gsap";
+import { observeMotionPreference } from "./preferences";
 
 export type TextRevealOptions = {
   /** "lines" (default) or "words" for shorter, punchier labels. */
@@ -36,9 +37,10 @@ export function useTextReveal<T extends HTMLElement = HTMLElement>(
 
   useEffect(() => {
     const el = ref.current;
-    if (!el || prefersReducedMotion()) return;
+    if (!el) return;
     if (!el.textContent?.trim()) return;
 
+    return observeMotionPreference(() => {
     let cancelled = false;
     // `SplitText` is declared as a class, so the bare type is already the
     // instance type — wrapping it in InstanceType<> does not typecheck.
@@ -60,24 +62,28 @@ export function useTextReveal<T extends HTMLElement = HTMLElement>(
               yPercent: 0,
               opacity: 1,
               duration,
+              immediateRender: false,
               delay,
               stagger,
               ease: "power3.out",
               scrollTrigger: {
                 trigger: el,
                 start,
-                toggleActions: "restart reverse restart reverse",
+                toggleActions: "restart none restart none",
               },
             },
           );
         },
       });
+    }).catch(() => {
+      if (!cancelled) split?.revert();
     });
 
     return () => {
       cancelled = true;
       split?.revert();
     };
+    });
   }, [type, stagger, duration, delay, start]);
 
   return ref;

@@ -19,7 +19,8 @@
  */
 import { useEffect, useRef, type RefObject } from "react";
 
-import { loadGsap, prefersReducedMotion } from "./gsap";
+import { loadGsap } from "./gsap";
+import { observeMotionPreference } from "./preferences";
 
 export type OdometerOptions = {
   /** Starting value. Default 0. */
@@ -50,13 +51,9 @@ export function useOdometer<T extends HTMLElement = HTMLElement>(
 
     const render = (n: number) => (formatRef.current ? formatRef.current(n) : n.toFixed(decimals));
 
-    if (prefersReducedMotion()) {
-      el.textContent = render(value);
-      return;
-    }
-
-    el.textContent = render(from);
-
+    const settle = () => { el.textContent = render(value); };
+    settle();
+    return observeMotionPreference(() => {
     let cancelled = false;
     let tween: gsap.core.Tween | null = null;
 
@@ -74,15 +71,19 @@ export function useOdometer<T extends HTMLElement = HTMLElement>(
         onComplete: () => {
           if (ref.current) ref.current.textContent = render(value);
         },
-        scrollTrigger: { trigger: el, start, toggleActions: "restart reverse restart reverse" },
+        scrollTrigger: { trigger: el, start, toggleActions: "restart none restart none" },
       });
+    }).catch(() => {
+      if (!cancelled) settle();
     });
 
     return () => {
       cancelled = true;
       tween?.scrollTrigger?.kill();
       tween?.kill();
+      settle();
     };
+    }, { settle });
   }, [value, from, decimals, duration, start]);
 
   return ref;

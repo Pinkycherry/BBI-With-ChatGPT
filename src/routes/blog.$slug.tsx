@@ -5,7 +5,7 @@ import { SiteShell, Breadcrumbs } from "@/components/site-shell";
 import { AdSlot } from "@/components/AdSlot";
 import { formatDate } from "@/lib/blog-shared";
 import { getBlogPost } from "@/lib/blog.functions";
-import { useDepthScene, useStaggerReveal, useTextReveal } from "@/motion";
+import { useElementPointerGroup, useScrollProgress, useStaggerReveal, useTextReveal } from "@/motion";
 
 /**
  * The sanitizer strips every class attribute off the stored article, so the
@@ -75,10 +75,8 @@ function BlogPostPage() {
   const { slug } = Route.useParams();
   const { data } = useSuspenseQuery(postQuery(slug));
   const titleRef = useTextReveal<HTMLHeadingElement>();
-  // Masthead depth scene: one shared observer + one shared frame callback
-  // for the whole header. Cursor depth on fine pointers, scroll depth on touch
-  // (see motion.css, coarse-pointer block).
-  const sceneRef = useDepthScene<HTMLDivElement>({ strength: 0.5 });
+  const pointerRef = useElementPointerGroup<HTMLElement>(".mo-card");
+  const mediaRef = useScrollProgress<HTMLDivElement>();
 
   const relatedRef = useStaggerReveal<HTMLDivElement>({ direction: "up", stagger: 0.05 });
   if (!data) return null;
@@ -93,7 +91,7 @@ function BlogPostPage() {
 
   return (
     <SiteShell>
-      <article ref={sceneRef} className="cx-scene mx-auto max-w-3xl px-3 py-12 sm:px-4">
+      <article ref={pointerRef} className="mo-document mx-auto max-w-3xl px-3 py-12 sm:px-4">
         {/* EDITABLE SECTION START — safe to add, remove, or reorder sections below without breaking routing or data fetching. */}
         {/* Reading progress lives in SiteShell (site-shell.tsx — the rail
             under the header, driven by the same --page-p). A second rail
@@ -121,7 +119,7 @@ function BlogPostPage() {
 
         <h1
           ref={titleRef}
-          className="cx-layer cx-z3 mt-4 text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl"
+          className="mt-4 text-3xl font-extrabold leading-tight tracking-tight sm:text-4xl"
         >
           {post.title}
         </h1>
@@ -130,10 +128,11 @@ function BlogPostPage() {
           // Keeps the page's own corner radius — the media slot supplies the
           // clip and the scale, not a new shape.
           <div
+            ref={mediaRef}
             style={{ borderRadius: "var(--radius-3xl)" }}
-            className="mo-media relative mt-8 aspect-video w-full border border-border"
+            className="mo-media mo-editorial-media relative mt-8 aspect-video w-full border border-border"
           >
-            <img src={post.image} alt={post.title} className="h-full w-full object-cover" />
+            <img src={post.image} alt={post.title} decoding="async" className="mo-drift h-full w-full object-cover" />
             {/* Subtle corner wash so the photo reads as art-directed, not a
                 raw drop-in (brief 12.8). */}
             <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/45 via-transparent to-transparent" />
@@ -142,7 +141,7 @@ function BlogPostPage() {
 
         {/* Content comes from our own CMS and is sanitized server-side
             (scripts, iframes, inline handlers and theme classes stripped). */}
-        <div className="wp-prose glass mt-8 rounded-3xl px-5 py-8 sm:px-8">
+        <div className="wp-prose mo-document-section glass mt-8 rounded-3xl px-5 py-8 sm:px-8">
           <div dangerouslySetInnerHTML={{ __html: firstBlock }} />
           <AdSlot position="blog-post-after-first-paragraph" size="banner" className="my-6" />
           <div dangerouslySetInnerHTML={{ __html: secondBlock }} />
@@ -159,7 +158,7 @@ function BlogPostPage() {
             </h2>
             <div
               ref={relatedRef}
-              className="mt-4 grid grid-cols-[repeat(auto-fit,minmax(15rem,1fr))] gap-4"
+              className="mt-4 grid grid-cols-[repeat(auto-fit,minmax(min(100%,15rem),1fr))] gap-4"
             >
               {related.map((r) => (
                 <Link

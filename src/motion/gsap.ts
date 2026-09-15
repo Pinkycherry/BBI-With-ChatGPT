@@ -43,7 +43,11 @@ export async function loadGsap(): Promise<GsapBundle> {
       ]);
       gsap.registerPlugin(ScrollTrigger, SplitText);
       return { gsap, ScrollTrigger, SplitText };
-    })();
+    })().catch((error: unknown) => {
+      // A transient download failure must not poison every later route.
+      bundlePromise = null;
+      throw error;
+    });
   }
   return bundlePromise;
 }

@@ -14,6 +14,7 @@ import {
 import { SiteShell, Breadcrumbs } from "@/components/site-shell";
 import { JsonLd, articleSchema, breadcrumbSchema } from "@/lib/schema";
 import { getGuideBySlug, STARTUP_GUIDES } from "@/lib/guides-data";
+import { useTextReveal, useStaggerReveal, useElementPointerGroup } from "@/motion";
 
 export const Route = createFileRoute("/startup-guides/$slug")({
   head: ({ params }) => {
@@ -36,6 +37,9 @@ export const Route = createFileRoute("/startup-guides/$slug")({
 function StartupGuideDetailPage() {
   const { slug } = Route.useParams();
   const guide = getGuideBySlug(slug);
+  const titleRef = useTextReveal<HTMLHeadingElement>();
+  const pointerRef = useElementPointerGroup<HTMLDivElement>(".mo-card");
+  const principlesRef = useStaggerReveal<HTMLDivElement>({ distance: 10, stagger: 0.03 });
 
   if (!guide) {
     return (
@@ -79,7 +83,7 @@ function StartupGuideDetailPage() {
         ]}
       />
       <SiteShell>
-        <div className="mx-auto max-w-4xl px-3 py-10 sm:px-6 sm:py-14">
+        <div ref={pointerRef} className="mo-document mx-auto max-w-4xl px-3 py-10 sm:px-6 sm:py-14">
           <Breadcrumbs
             items={[
               { label: "Home", to: "/" },
@@ -106,7 +110,7 @@ function StartupGuideDetailPage() {
               </div>
             </div>
 
-            <h1 className="mt-4 font-display text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
+            <h1 ref={titleRef} className="mt-4 font-display text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
               {guide.title}
             </h1>
 
@@ -116,15 +120,15 @@ function StartupGuideDetailPage() {
           </header>
 
           {/* Key Takeaways Callout Card */}
-          <section className="glass my-8 rounded-2xl border-l-4 border-primary p-6 sm:p-7">
+          <section className="mo-document-section glass my-8 rounded-2xl border-l-4 border-primary p-6 sm:p-7">
             <p className="text-xs font-bold uppercase tracking-[0.2em] text-primary">
               Core Framework Principles
             </p>
-            <div className="mt-4 space-y-3">
+            <div ref={principlesRef} className="mt-4 space-y-3">
               {guide.keyTakeaways.map((point, i) => (
                 <div
                   key={i}
-                  className="flex items-start gap-2.5 text-sm leading-relaxed text-foreground"
+                  className="mo-row flex items-start gap-2.5 rounded-lg text-sm leading-relaxed text-foreground"
                 >
                   <CheckCircle2 className="mt-1 h-4 w-4 shrink-0 text-primary" />
                   <span>{point}</span>
@@ -139,6 +143,7 @@ function StartupGuideDetailPage() {
               <Markdown 
                 rehypePlugins={[rehypeRaw]}
                 components={{
+                  a: ({ node, ...props }) => <a {...props} className="mo-link" />,
                   img: ({ node, ...props }) => (
                     <img {...props} loading="lazy" decoding="async" className="mx-auto" />
                   ),
@@ -176,7 +181,7 @@ function StartupGuideDetailPage() {
               <Link
                 to="/startup-guides/$slug"
                 params={{ slug: prevGuide.slug }}
-                className="glass flex flex-col rounded-xl p-4 transition-colors hover:border-primary/50"
+                className="glass mo-card flex flex-col rounded-2xl p-5"
               >
                 <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
                   ← Previous Guide
@@ -193,7 +198,7 @@ function StartupGuideDetailPage() {
               <Link
                 to="/startup-guides/$slug"
                 params={{ slug: nextGuide.slug }}
-                className="glass flex flex-col items-end rounded-xl p-4 text-right transition-colors hover:border-primary/50"
+                className="glass mo-card flex flex-col items-end rounded-2xl p-5 text-right"
               >
                 <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
                   Next Guide →

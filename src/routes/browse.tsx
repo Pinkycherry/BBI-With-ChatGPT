@@ -6,7 +6,6 @@ import { getCatalog } from "@/lib/ideas.functions";
 import FocusCards from "@/components/aceternity/focus-cards";
 import { photoAt } from "@/config/imagery";
 import { JsonLd, breadcrumbSchema, collectionPageSchema } from "@/lib/schema";
-import { usePillInteraction } from "@/hooks/use-pill-interaction";
 import { useScrollProgress, useTextReveal } from "@/motion";
 
 const catalogQuery = queryOptions({ queryKey: ["catalog"], queryFn: () => getCatalog() });
@@ -54,17 +53,11 @@ function SubcategoryPill({
   subcategorySlug: string;
   label: string;
 }) {
-  const pill = usePillInteraction<HTMLAnchorElement>();
   return (
     <Link
       to="/category/$categorySlug/$subcategorySlug"
       params={{ categorySlug, subcategorySlug }}
-      className="glass-pill iv-tag px-4 py-2 text-sm"
-      ref={pill.ref}
-      onMouseEnter={pill.onMouseEnter}
-      onMouseLeave={pill.onMouseLeave}
-      onPointerDown={pill.onPointerDown}
-      onPointerUp={pill.onPointerUp}
+      className="mo-row glass-pill iv-tag px-4 py-2 text-sm"
     >
       {label}
     </Link>
@@ -92,9 +85,10 @@ function BrowsePage() {
         ]}
       />
       <SiteShell>
-        <div ref={depthRef} className="bbi-depth mx-auto max-w-6xl px-4 py-12">
+        <div ref={depthRef} className="catalog-page mx-auto max-w-6xl px-4 py-12">
+          <div className="catalog-ambient mo-drift" aria-hidden="true" />
           <Breadcrumbs items={[{ label: "Home", to: "/" }, { label: "Browse" }]} />
-          <div className="bbi-depth-back">
+          <div className="catalog-masthead">
             <h1 ref={headingRef} className="mt-4 text-3xl font-bold tracking-tight">
               The full idea library
             </h1>
@@ -102,18 +96,14 @@ function BrowsePage() {
               which was the idea count wearing a different label —
               subcategory_name is byte-identical to title, so there are exactly
               as many subcategories as ideas and the number said nothing. */}
-            <p className="mt-2 text-sm text-muted-foreground">
+            <p className="catalog-count mt-4 text-sm text-muted-foreground">
               {data.totalIdeas} researched blueprints across {data.totalCategories} categories
             </p>
           </div>
-          {/* Was `space-y-6`: fourteen full-width bars, each holding a single
-              line of text and a count, roughly 1,600px of page to say what a
-              grid says in 400. FocusCards instead: hovering one category pulls
-              it forward and lets the rest fall back, so a long grid answers
-              where the reader is looking. Photography comes from
-              ethicalfounder.com, BBI's parent site — see src/config/imagery.ts. */}
+          {/* Existing category photography stays in fixed media slots; the
+              shared gallery owns one pointer listener and short stagger. */}
           <FocusCards
-            className="bbi-depth-front mt-8"
+            className="mt-8"
             cards={data.categories.map((category, index) => {
               const photo = photoAt(index);
               return {

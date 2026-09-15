@@ -1,0 +1,76 @@
+/* One material system. Paint stays static; only transforms and opacity move. */
+:root {
+  --mo-glass: color-mix(in srgb, var(--card) 86%, transparent);
+  --mo-edge: color-mix(in srgb, var(--primary) 15%, var(--card));
+  --mo-reflection: color-mix(in srgb, var(--card) 92%, transparent);
+  --mo-shadow: color-mix(in srgb, var(--foreground) 9%, transparent);
+  --mo-halo: color-mix(in srgb, var(--hl-teal) 13%, transparent);
+  --mo-radius: 24px;
+}
+.mo-shell {
+  background: radial-gradient(ellipse at 100% 0, var(--mo-halo), transparent 33rem),
+    radial-gradient(ellipse at 0 30rem, color-mix(in srgb, var(--violet-soft) 14%, transparent), transparent 38rem), var(--background);
+}
+.mo-shell .mo-card,
+.mo-shell .glass,
+.mo-shell .glass-nav,
+.mo-shell .iv-nav-panel,
+.mo-shell .bbi-footer {
+  background: linear-gradient(135deg, var(--mo-reflection), var(--mo-glass));
+  border: 1px solid var(--mo-edge);
+  border-radius: var(--mo-radius);
+  box-shadow: inset 0 1px 0 var(--card), 0 12px 30px -20px var(--mo-shadow), 0 32px 64px -46px var(--mo-shadow);
+}
+.mo-shell .glass-nav,
+.mo-shell .iv-nav-panel {
+  background: color-mix(in srgb, var(--card) 92%, transparent);
+  backdrop-filter: blur(12px);
+}
+.mo-shell .mo-card {
+  isolation: isolate;
+  transition: transform var(--mo-dur-3) var(--mo-ease-out), opacity var(--mo-dur-3) var(--mo-ease);
+}
+.mo-card::after {
+  background: radial-gradient(ellipse at center, var(--mo-halo), transparent 65%);
+  transform: translate3d(calc(var(--el-ptr-x, 0) * 15%), calc(var(--el-ptr-y, 0) * 15%), 0);
+  opacity: calc(var(--el-ptr-in, 0) * .45);
+  transition: opacity var(--mo-dur-3) var(--mo-ease);
+}
+.mo-shell .mo-card:focus-within { outline: 2px solid var(--ring); outline-offset: 4px; }
+.mo-shell .mo-media { border-radius: 18px; }
+.mo-shell .mo-media img { transition: transform var(--mo-dur-4) var(--mo-ease-out); }
+.mo-shell .mo-page-rail {
+  background: linear-gradient(90deg, var(--hl-teal), var(--primary), var(--violet-soft));
+}
+.mo-shell > header { padding-bottom: 10px; }
+.mo-shell .mo-header-bar { border-radius: 999px; }
+.mo-shell .iv-nav-panel { padding: 22px; margin-top: 12px; }
+.mo-menu-enter { animation: mo-route-enter var(--mo-dur-2) var(--mo-ease-out); }
+.mo-shell .mo-mobile-panel { border-radius: 24px 0 0 24px; }
+.mo-shell .mo-nav-link { position: relative; }
+.mo-shell .mo-document { position: relative; }
+.mo-shell .mo-document-section {
+  border-top: 1px solid var(--mo-edge);
+  padding-top: clamp(24px, 4vw, 44px);
+  scroll-margin-top: 120px;
+}
+.mo-shell .mo-document-section + .mo-document-section { margin-top: 36px; }
+.mo-shell .mo-plan { box-shadow: inset 0 1px 0 var(--card), 0 28px 60px -35px var(--mo-shadow); }
+.mo-shell .mo-plan:nth-child(2) { border-color: color-mix(in srgb, var(--primary) 42%, var(--card)); }
+.mo-shell .mo-editorial-media { box-shadow: 0 28px 60px -35px var(--mo-shadow); }
+.mo-shell .bbi-footer a { transition: transform var(--mo-dur-2) var(--mo-ease-out), opacity var(--mo-dur-2); }
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .mo-shell .mo-card:hover { transform: translate3d(0, -3px, 0); }
+  .mo-shell .bbi-footer a:hover { transform: translateX(3px); }
+}
+@media (max-width: 640px) {
+  :root { --mo-radius: 18px; }
+  .mo-shell .glass-nav { backdrop-filter: none; background: var(--card); }
+  .mo-shell .mo-header-bar { padding-inline: 16px; }
+  .mo-shell .mo-card { box-shadow: inset 0 1px 0 var(--card), 0 10px 24px -18px var(--mo-shadow); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .mo-menu-enter { animation: none; }
+  .mo-shell .mo-card, .mo-card::after, .mo-shell .bbi-footer a { transition: none; }
+  .mo-card::after { opacity: 0; transform: none; }
+}

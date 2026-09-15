@@ -1,7 +1,8 @@
 import { useEffect, useRef } from "react";
 
 import { approach, clamp01, onFrame, onScroll, onVisible } from "./engine";
-import { prefersReducedMotion, pointerMotionEnabled } from "./gsap";
+import { pointerMotionEnabled } from "./gsap";
+import { observeMotionPreference, preserveStyles } from "./preferences";
 
 export type DepthSceneOptions = {
   /** How hard the scene leans toward the cursor. 1 is the house default. */
@@ -34,8 +35,10 @@ export function useDepthScene<T extends HTMLElement>(opts: DepthSceneOptions = {
 
   useEffect(() => {
     const el = ref.current;
-    if (!el || prefersReducedMotion()) return;
+    if (!el) return;
 
+    return observeMotionPreference(() => {
+    const restore = preserveStyles([el], ["--dx", "--dy", "--dv", "--din", "--sc-p"]);
     const pointer = pointerMotionEnabled();
     let visible = false;
     let tx = 0;
@@ -126,7 +129,10 @@ export function useDepthScene<T extends HTMLElement>(opts: DepthSceneOptions = {
         el.removeEventListener("pointerleave", onPointerLeave);
         stopScroll?.();
         stopScroll = null;
-        onPointerLeave();
+        stopFrame?.();
+        stopFrame = null;
+        tx = ty = x = y = v = tv = inside = tin = 0;
+        ["--dx", "--dy", "--dv", "--din"].forEach((property) => style.setProperty(property, "0"));
       }
     });
 
@@ -136,7 +142,9 @@ export function useDepthScene<T extends HTMLElement>(opts: DepthSceneOptions = {
       stopFrame?.();
       el.removeEventListener("pointermove", onPointerMove);
       el.removeEventListener("pointerleave", onPointerLeave);
+      restore();
     };
+    }, { watchPointer: true });
   }, [strength, weight, scroll]);
 
   return ref;

@@ -11,7 +11,7 @@
  */
 import { useEffect, useRef, type RefObject } from "react";
 
-import { pointerMotionEnabled } from "./gsap";
+import { observeMotionPreference, preserveStyles } from "./preferences";
 
 export type TiltOptions = {
   /** Maximum rotation in degrees on each axis. Default 6. Keep under 9. */
@@ -30,25 +30,30 @@ export function useTilt<T extends HTMLElement = HTMLElement>(
 
   useEffect(() => {
     const el = ref.current;
-    if (!el || !pointerMotionEnabled()) return;
+    if (!el) return;
+
+    return observeMotionPreference(() => {
+    const restore = preserveStyles([el], ["transform"]);
+    const rotation = Math.max(0, Math.min(9, degrees));
 
     let raf = 0;
     const onMove = (e: PointerEvent) => {
       const r = el.getBoundingClientRect();
+      if (!r.width || !r.height) return;
       const px = (e.clientX - r.left) / r.width - 0.5;
       const py = (e.clientY - r.top) / r.height - 0.5;
       cancelAnimationFrame(raf);
       raf = requestAnimationFrame(() => {
         el.style.transform =
           `perspective(${perspective}px) ` +
-          `rotateX(${(-py * degrees).toFixed(2)}deg) ` +
-          `rotateY(${(px * degrees).toFixed(2)}deg)` +
+          `rotateX(${(-py * rotation).toFixed(2)}deg) ` +
+          `rotateY(${(px * rotation).toFixed(2)}deg)` +
           (lift ? ` translate3d(0, ${-lift}px, 0)` : "");
       });
     };
     const onLeave = () => {
       cancelAnimationFrame(raf);
-      el.style.transform = "";
+      restore();
     };
 
     el.addEventListener("pointermove", onMove, { passive: true });
@@ -57,9 +62,11 @@ export function useTilt<T extends HTMLElement = HTMLElement>(
       cancelAnimationFrame(raf);
       el.removeEventListener("pointermove", onMove);
       el.removeEventListener("pointerleave", onLeave);
-      el.style.removeProperty("transform");
+      restore();
     };
+    }, { pointer: true });
   }, [degrees, perspective, lift]);
 
   return ref;
 }
+

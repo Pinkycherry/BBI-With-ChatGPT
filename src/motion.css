@@ -9,7 +9,7 @@
    Colours come only from the tokens already defined in styles.css. No
    hex value appears in this file.
 
-   Everything animates transform, opacity, colour or clip-path — never
+   Everything animates transform and opacity — never
    width, height, top, left or box-shadow geometry — so it composites
    off the main thread and holds frame rate on a low-end phone.
 
@@ -83,9 +83,6 @@
 
 :where(a, button, [role="button"], summary, label[for]) {
   transition:
-    color var(--mo-dur-2) var(--mo-ease),
-    background-color var(--mo-dur-2) var(--mo-ease),
-    border-color var(--mo-dur-2) var(--mo-ease),
     opacity var(--mo-dur-2) var(--mo-ease),
     transform var(--mo-dur-2) var(--mo-ease-out);
 }
@@ -116,7 +113,7 @@
    useElementPointerGroup to get the cursor-tracking half. */
 .mo-card {
   position: relative;
-  transition: border-color var(--mo-dur-3) var(--mo-ease);
+  transition: transform var(--mo-dur-3) var(--mo-ease), opacity var(--mo-dur-3) var(--mo-ease);
   will-change: auto;
 }
 
@@ -140,18 +137,18 @@
     opacity: calc(var(--el-ptr-in, 0) * 0.5);
     transition: opacity var(--mo-dur-3) var(--mo-ease);
     background: radial-gradient(
-      42% 42% at calc(50% + var(--el-ptr-x, 0) * 50%) calc(50% + var(--el-ptr-y, 0) * 50%),
+      42% 42% at 50% 50%,
       var(--muted) 0%,
       transparent 70%
     );
+    transform: translate3d(calc(var(--el-ptr-x, 0) * 18%), calc(var(--el-ptr-y, 0) * 18%), 0);
   }
 }
 
 /* A row in a list, table, nav dropdown or footer column. */
 .mo-row {
   transition:
-    color var(--mo-dur-2) var(--mo-ease),
-    background-color var(--mo-dur-2) var(--mo-ease),
+    opacity var(--mo-dur-2) var(--mo-ease),
     transform var(--mo-dur-2) var(--mo-ease-out);
 }
 
@@ -230,8 +227,7 @@
 /* Reads --sc-p published by useScrollProgress on the same element or an
    ancestor. Gives a section a slow parallax drift without any per-page JS. */
 .mo-drift {
-  transform: translate3d(0, calc((var(--sc-p, 0) - 0.5) * -24px), 0);
-  will-change: transform;
+  transform: translate3d(0, calc((var(--sc-p, 0.5) - 0.5) * -24px), 0);
 }
 
 /* A progress rail that fills with whole-page scroll. Uses scaleX, so it
@@ -273,16 +269,18 @@
     transition: none;
   }
 
-  /* Colour, background and border still transition. Only the MOVEMENT is
-     removed above. Cutting every transition to 1ms made hover states snap,
-     which reads as a broken site rather than a calm one - and `reduce` is
-     about vestibular motion, not about removing all feedback. */
+  /* Preference changes flatten immediately; focus and hover remain visible. */
   :where(a, button, [role="button"], summary, label[for]),
   .mo-card,
   .mo-row,
   .mo-lift {
-    transition-property: color, background-color, border-color, opacity;
-    transition-duration: var(--mo-dur-2);
+    transition: none;
+  }
+
+  .mo-card::after {
+    opacity: 0;
+    transform: none;
+    transition: none;
   }
 }
 
@@ -329,7 +327,7 @@
     0
   );
   transition: transform var(--mo-dur-4) var(--mo-ease-out);
-  will-change: transform;
+  will-change: auto;
 }
 
 /* While the cursor is actually in the scene the layer must track it with
@@ -346,7 +344,7 @@
 .cx-depth {
   --zs: 1;
   transform: translate3d(0, calc((var(--sc-p) - 0.5) * var(--zs) * -70px), 0);
-  will-change: transform;
+  will-change: auto;
 }
 
 /* Counter-layer: moves against the cursor. Used sparingly — one element
@@ -357,7 +355,7 @@
   --z: 0.3;
   transform: translate3d(calc(var(--dx) * var(--z) * -14px), calc(var(--dy) * var(--z) * -10px), 0);
   transition: transform var(--mo-dur-4) var(--mo-ease-out);
-  will-change: transform;
+  will-change: auto;
 }
 
 /* Presence light. Follows the cursor across the scene and fades with
@@ -378,10 +376,11 @@
     pointer-events: none;
     opacity: calc(var(--din, 0) * (0.28 + var(--dv, 0) * 0.4));
     background: radial-gradient(
-      36% 46% at calc(50% + var(--dx, 0) * 50%) calc(50% + var(--dy, 0) * 50%),
+      36% 46% at 50% 50%,
       var(--accent) 0%,
       transparent 72%
     );
+    transform: translate3d(calc(var(--dx, 0) * 18%), calc(var(--dy, 0) * 18%), 0);
   }
 }
 
@@ -403,7 +402,7 @@
 .cx-scrub {
   opacity: clamp(0, calc((var(--sc-p, 0.5) - 0.12) * 4), 1);
   transform: translate3d(0, calc((1 - clamp(0, calc((var(--sc-p, 0.5) - 0.12) * 4), 1)) * 26px), 0);
-  will-change: transform, opacity;
+  will-change: auto;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -413,10 +412,12 @@
   .cx-scrub {
     transform: none;
     opacity: 1;
+    transition: none;
   }
 
   .cx-sheen::before {
     opacity: 0;
+    transform: none;
   }
 
   .cx-press:active {

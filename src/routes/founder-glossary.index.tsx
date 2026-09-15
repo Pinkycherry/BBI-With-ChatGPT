@@ -5,6 +5,7 @@ import { Search, BookOpen, Calculator, Sparkles, Tag, ArrowRight } from "lucide-
 import { SiteShell, Breadcrumbs } from "@/components/site-shell";
 import { JsonLd, breadcrumbSchema, collectionPageSchema } from "@/lib/schema";
 import { GLOSSARY_DATA, GLOSSARY_CATEGORIES, type GlossaryTerm } from "@/lib/glossary-data";
+import { useElementPointerGroup, useStaggerReveal, useTextReveal } from "@/motion";
 
 export const Route = createFileRoute("/founder-glossary/")({
   head: () => ({
@@ -27,6 +28,9 @@ export const Route = createFileRoute("/founder-glossary/")({
 });
 
 export function FounderGlossaryPage() {
+  const titleRef = useTextReveal<HTMLHeadingElement>();
+  const pointerRef = useElementPointerGroup<HTMLDivElement>(".mo-card");
+  const gridRef = useStaggerReveal<HTMLDivElement>({ stagger: 0.03, distance: 12 });
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedLetter, setSelectedLetter] = useState<string | null>(null);
@@ -81,13 +85,13 @@ export function FounderGlossaryPage() {
         ]}
       />
       <SiteShell>
-        <div className="mx-auto max-w-6xl px-3 py-10 sm:px-4 sm:py-14">
+        <div ref={pointerRef} className="mx-auto max-w-6xl px-3 py-10 sm:px-4 sm:py-14">
           <Breadcrumbs items={[{ label: "Home", to: "/" }, { label: "Founder Glossary" }]} />
 
           <div className="mt-6 flex flex-col justify-between gap-4 md:flex-row md:items-end">
             <div>
               <p className="t-eyebrow">Operator Lexicon</p>
-              <h1 className="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
+              <h1 ref={titleRef} className="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
                 Founder & Unit Economics{" "}
                 <span className="bg-gradient-to-r from-primary via-accent to-warm bg-clip-text text-transparent">
                   Glossary
@@ -198,12 +202,12 @@ export function FounderGlossaryPage() {
           </div>
 
           {/* Terms Cards Grid */}
-          <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+          <div ref={gridRef} className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
             {filteredTerms.map((t) => (
               <article
                 key={t.slug}
                 id={t.slug}
-                className="glass flex flex-col justify-between rounded-2xl p-5 transition-all hover:border-primary/50 sm:p-6"
+                className="glass mo-card flex min-w-0 flex-col justify-between rounded-3xl p-5 sm:p-6"
               >
                 <div>
                   <div className="flex items-start justify-between gap-2">

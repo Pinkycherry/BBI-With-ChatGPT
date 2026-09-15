@@ -20,7 +20,8 @@
  */
 import { useEffect, type ReactNode } from "react";
 
-import { hasFinePointer, prefersReducedMotion } from "./gsap";
+import { hasFinePointer } from "./gsap";
+import { observeMotionPreference } from "./preferences";
 
 /** Peak speeds used to normalize velocity into 0 -> 1. */
 const PTR_V_MAX = 1800; // px per second
@@ -52,10 +53,7 @@ export function startPointerChannel(options: PointerChannelOptions = {}): () => 
   const root = document.documentElement;
   setNeutral(root);
 
-  // Reduced motion opts out of everything — nothing is published, the neutral
-  // values above stand, and no listeners are attached.
-  if (prefersReducedMotion()) return () => {};
-
+  return observeMotionPreference(() => {
   // Touch devices have no cursor, so --ptr-x/y/v stay at their neutral values
   // and the pointermove listener is never attached. Scroll velocity is just as
   // meaningful on a phone as on a desktop, so --scroll-v keeps running.
@@ -87,13 +85,16 @@ export function startPointerChannel(options: PointerChannelOptions = {}): () => 
     lastClientY = e.clientY;
     rawPtrV = Math.hypot(dx, dy);
     moved = true;
+    kick();
   };
 
   const onScroll = () => {
     scrolled = true;
+    kick();
   };
 
   const frame = (now: number) => {
+    raf = 0;
     const dt = Math.max((now - lastT) / 1000, 1 / 240);
     lastT = now;
 
@@ -125,12 +126,19 @@ export function startPointerChannel(options: PointerChannelOptions = {}): () => 
     if (scrollV < 0.001) scrollV = 0;
     root.style.setProperty("--scroll-v", scrollV.toFixed(4));
 
+    // Idle pages do no frame work. A pointer or scroll event wakes the channel
+    // and it runs only until the two velocities have settled.
+    if (ptrV || scrollV) raf = requestAnimationFrame(frame);
+  };
+
+  const kick = () => {
+    if (raf) return;
+    lastT = performance.now();
     raf = requestAnimationFrame(frame);
   };
 
   if (pointerEnabled) window.addEventListener("pointermove", onPointerMove, { passive: true });
   window.addEventListener("scroll", onScroll, { passive: true });
-  raf = requestAnimationFrame(frame);
 
   return () => {
     cancelAnimationFrame(raf);
@@ -138,6 +146,7 @@ export function startPointerChannel(options: PointerChannelOptions = {}): () => 
     window.removeEventListener("scroll", onScroll);
     setNeutral(root);
   };
+  }, { watchPointer: true, settle: () => setNeutral(root) });
 }
 
 /**

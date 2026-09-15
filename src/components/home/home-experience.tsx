@@ -40,7 +40,7 @@ import type { IdeaCard } from "@/lib/ideas-shared";
 import { subscribeToNewsletter } from "@/lib/newsletter.functions";
 import { useAuth } from "@/hooks/use-auth";
 import { signOut } from "@/lib/auth-client";
-import { loadGsap } from "@/lib/motion";
+import { Odometer, useScrollProgress, useElementPointer, useElementPointerGroup, useStaggerReveal, useTextReveal, useTilt, useMagnet, usePageScrollProgress } from "@/motion";
 import sideHustle from "../../../Images/Side-Hustle-Ideas.webp";
 import homeWork from "../../../Images/Work-From-Home-Business-Ideas.webp";
 import zeroInvestment from "../../../Images/Zero-Investment-Business-Ideas.webp";
@@ -312,7 +312,7 @@ function Header({ categories }: { categories: CategoryNode[] }) {
 function BlueprintCard({ idea, index = 0 }: { idea: IdeaCard; index?: number }) {
   return (
     <Link
-      className="nh-blueprint"
+      className="nh-blueprint mo-card"
       to="/idea/$slug"
       params={{ slug: idea.slug }}
       style={{ "--card-i": index } as CSSProperties}
@@ -342,34 +342,17 @@ function BlueprintCard({ idea, index = 0 }: { idea: IdeaCard; index?: number }) 
 
 function ResearchJourney({ idea, paused }: { idea: IdeaCard | undefined; paused: boolean }) {
   const [active, setActive] = useState(0);
-  const root = useRef<HTMLElement>(null);
+  const root = useScrollProgress<HTMLElement>({
+    onProgress: (p) => {
+      if (!paused && window.matchMedia("(min-width: 900px)").matches) {
+        const step = Math.min(3, Math.max(0, Math.floor((p - 0.2) / 0.6 * 4)));
+        setActive((current) => current === step ? current : step);
+      }
+    },
+  });
+  const panelTilt = useTilt<HTMLDivElement>({ degrees: 3, perspective: 1600 });
   const chapter = CHAPTERS[active]!;
   const Icon = chapter.icon;
-  useEffect(() => {
-    const el = root.current;
-    if (!el || paused) return;
-    let disposed = false;
-    let cleanup: (() => void) | undefined;
-    void loadGsap(true).then((gsap) => {
-      if (disposed) return;
-      const media = gsap.matchMedia();
-      media.add("(min-width: 900px) and (prefers-reduced-motion: no-preference)", () => {
-        gsap.to(el, {
-          scrollTrigger: {
-            trigger: el,
-            start: "top 22%",
-            end: "bottom 85%",
-            onUpdate: (self) => setActive(Math.min(3, Math.floor(self.progress * 4))),
-          },
-        });
-      });
-      cleanup = () => media.revert();
-    });
-    return () => {
-      disposed = true;
-      cleanup?.();
-    };
-  }, [paused]);
   function keyTab(event: KeyboardEvent<HTMLButtonElement>, index: number) {
     let next = index;
     if (event.key === "ArrowRight") next = (index + 1) % 4;
@@ -410,7 +393,7 @@ function ResearchJourney({ idea, paused }: { idea: IdeaCard | undefined; paused:
             </button>
           ))}
         </div>
-        <div className="nh-research-frame">
+        <div ref={panelTilt} className="nh-research-frame mo-card">
           <div className="nh-window-bar">
             <span className="nh-window-dots" aria-hidden="true">
               <i />
@@ -488,9 +471,11 @@ function ResearchJourney({ idea, paused }: { idea: IdeaCard | undefined; paused:
 }
 
 function CategoryWorld({ categories }: { categories: CategoryNode[] }) {
+  const progress = useScrollProgress<HTMLElement>();
+  const pointer = useElementPointerGroup<HTMLDivElement>(".nh-world-card");
   const illustrated = categories.filter((c) => ART[c.categorySlug]).slice(0, 6);
   return (
-    <section className="nh-world" id="categories" aria-labelledby="nh-world-title">
+    <section ref={progress} className="nh-world" id="categories" aria-labelledby="nh-world-title">
       <div className="nh-section-heading" data-home-reveal>
         <p className="nh-eyebrow">There is more than one way to start</p>
         <h2 id="nh-world-title">
@@ -507,7 +492,7 @@ function CategoryWorld({ categories }: { categories: CategoryNode[] }) {
           Find your starting point <ArrowUpRight size={18} />
         </Link>
       </div>
-      <div className="nh-world-art">
+      <div ref={pointer} className="nh-world-art">
         <div className="nh-orbit-label">
           <Sprout size={25} />
           <span>
@@ -519,7 +504,7 @@ function CategoryWorld({ categories }: { categories: CategoryNode[] }) {
         {illustrated.map((c, i) => (
           <Link
             key={c.categorySlug}
-            className={`nh-world-card nh-world-card-${i}`}
+            className={`nh-world-card mo-card mo-drift nh-world-card-${i}`}
             to="/category/$categorySlug"
             params={{ categorySlug: c.categorySlug }}
           >
@@ -668,8 +653,10 @@ function Discovery({ categories }: { categories: CategoryNode[] }) {
 }
 
 function GoldenTree({ catalog }: { catalog: Catalog }) {
+  const progress = useScrollProgress<HTMLElement>();
+  const pointer = useElementPointer<HTMLDivElement>();
   return (
-    <section className="nh-tree-section" aria-labelledby="nh-tree-title">
+    <section ref={progress} className="nh-tree-section" aria-labelledby="nh-tree-title">
       <div className="nh-tree-topline" />
       <div className="nh-section-heading" data-home-reveal>
         <span className="nh-dark-badge">
@@ -686,7 +673,7 @@ function GoldenTree({ catalog }: { catalog: Catalog }) {
           The Golden Tree of Business Growth.
         </p>
       </div>
-      <div className="nh-tree-canopy">
+      <div ref={pointer} className="nh-tree-canopy">
         <img
           className="nh-tree-image"
           src="/home/golden-tree.jpg"
@@ -697,7 +684,7 @@ function GoldenTree({ catalog }: { catalog: Catalog }) {
         />
         {catalog.categories.slice(0, 6).map((c, i) => (
           <Link
-            className={`nh-tree-node nh-tree-node-${i}`}
+            className={`nh-tree-node mo-card mo-drift nh-tree-node-${i}`}
             key={c.categorySlug}
             to="/category/$categorySlug"
             params={{ categorySlug: c.categorySlug }}
@@ -762,9 +749,10 @@ function OperatorToolkitSection() {
         {/* Card 1: Calculators */}
         <Link
           to="/calculator"
+          className="mo-card"
           style={{
-            background: "#ffffff",
-            border: "1px solid #e9e2db",
+            background: "var(--nh-panel)",
+            border: "1px solid var(--nh-line)",
             borderRadius: "20px",
             padding: "30px 26px",
             display: "flex",
@@ -780,7 +768,7 @@ function OperatorToolkitSection() {
                 fontSize: "10px",
                 fontWeight: 700,
                 letterSpacing: "0.18em",
-                color: "#c94c27",
+                color: "var(--nh-accent)",
                 textTransform: "uppercase",
               }}
             >
@@ -789,7 +777,7 @@ function OperatorToolkitSection() {
             <h3 style={{ fontSize: "21px", fontWeight: 600, marginTop: "12px", marginBottom: "8px" }}>
               Useful Calculators
             </h3>
-            <p style={{ fontSize: "14px", color: "#686664", lineHeight: 1.6 }}>
+            <p style={{ fontSize: "14px", color: "var(--nh-muted)", lineHeight: 1.6 }}>
               Interactive TAM/SAM/SOM, runway, break-even units, CAC, and LTV models with real-time feedback.
             </p>
           </div>
@@ -801,7 +789,7 @@ function OperatorToolkitSection() {
               fontSize: "12px",
               fontWeight: 700,
               letterSpacing: "0.14em",
-              color: "#bd401c",
+              color: "var(--nh-accent)",
               textTransform: "uppercase",
               marginTop: "24px",
             }}
@@ -813,9 +801,10 @@ function OperatorToolkitSection() {
         {/* Card 2: Startup Guides */}
         <Link
           to="/startup-guides"
+          className="mo-card"
           style={{
-            background: "#ffffff",
-            border: "1px solid #e9e2db",
+            background: "var(--nh-panel)",
+            border: "1px solid var(--nh-line)",
             borderRadius: "20px",
             padding: "30px 26px",
             display: "flex",
@@ -831,7 +820,7 @@ function OperatorToolkitSection() {
                 fontSize: "10px",
                 fontWeight: 700,
                 letterSpacing: "0.18em",
-                color: "#c94c27",
+                color: "var(--nh-accent)",
                 textTransform: "uppercase",
               }}
             >
@@ -840,7 +829,7 @@ function OperatorToolkitSection() {
             <h3 style={{ fontSize: "21px", fontWeight: 600, marginTop: "12px", marginBottom: "8px" }}>
               Startup Guides
             </h3>
-            <p style={{ fontSize: "14px", color: "#686664", lineHeight: 1.6 }}>
+            <p style={{ fontSize: "14px", color: "var(--nh-muted)", lineHeight: 1.6 }}>
               Empirical customer discovery without pitching, bottom-up TAM calculation, and lean launch systems.
             </p>
           </div>
@@ -852,7 +841,7 @@ function OperatorToolkitSection() {
               fontSize: "12px",
               fontWeight: 700,
               letterSpacing: "0.14em",
-              color: "#bd401c",
+              color: "var(--nh-accent)",
               textTransform: "uppercase",
               marginTop: "24px",
             }}
@@ -864,9 +853,10 @@ function OperatorToolkitSection() {
         {/* Card 3: Founder Stories */}
         <Link
           to="/founder-stories"
+          className="mo-card"
           style={{
-            background: "#ffffff",
-            border: "1px solid #e9e2db",
+            background: "var(--nh-panel)",
+            border: "1px solid var(--nh-line)",
             borderRadius: "20px",
             padding: "30px 26px",
             display: "flex",
@@ -882,7 +872,7 @@ function OperatorToolkitSection() {
                 fontSize: "10px",
                 fontWeight: 700,
                 letterSpacing: "0.18em",
-                color: "#15803d",
+                color: "var(--nh-accent)",
                 textTransform: "uppercase",
               }}
             >
@@ -891,7 +881,7 @@ function OperatorToolkitSection() {
             <h3 style={{ fontSize: "21px", fontWeight: 600, marginTop: "12px", marginBottom: "8px" }}>
               Founder Stories
             </h3>
-            <p style={{ fontSize: "14px", color: "#686664", lineHeight: 1.6 }}>
+            <p style={{ fontSize: "14px", color: "var(--nh-muted)", lineHeight: 1.6 }}>
               Illustrative case studies of bootstrapped business models, execution timelines, and practical takeaways.
             </p>
           </div>
@@ -903,7 +893,7 @@ function OperatorToolkitSection() {
               fontSize: "12px",
               fontWeight: 700,
               letterSpacing: "0.14em",
-              color: "#bd401c",
+              color: "var(--nh-accent)",
               textTransform: "uppercase",
               marginTop: "24px",
             }}
@@ -915,9 +905,10 @@ function OperatorToolkitSection() {
         {/* Card 4: Glossary */}
         <Link
           to="/founder-glossary"
+          className="mo-card"
           style={{
-            background: "#ffffff",
-            border: "1px solid #e9e2db",
+            background: "var(--nh-panel)",
+            border: "1px solid var(--nh-line)",
             borderRadius: "20px",
             padding: "30px 26px",
             display: "flex",
@@ -933,7 +924,7 @@ function OperatorToolkitSection() {
                 fontSize: "10px",
                 fontWeight: 700,
                 letterSpacing: "0.18em",
-                color: "#4f46e5",
+                color: "var(--nh-accent)",
                 textTransform: "uppercase",
               }}
             >
@@ -942,7 +933,7 @@ function OperatorToolkitSection() {
             <h3 style={{ fontSize: "21px", fontWeight: 600, marginTop: "12px", marginBottom: "8px" }}>
               Founder Glossary
             </h3>
-            <p style={{ fontSize: "14px", color: "#686664", lineHeight: 1.6 }}>
+            <p style={{ fontSize: "14px", color: "var(--nh-muted)", lineHeight: 1.6 }}>
               Venture metrics, unit economics ratios, and financial terms with formulas and operator benchmarks.
             </p>
           </div>
@@ -954,7 +945,7 @@ function OperatorToolkitSection() {
               fontSize: "12px",
               fontWeight: 700,
               letterSpacing: "0.14em",
-              color: "#bd401c",
+              color: "var(--nh-accent)",
               textTransform: "uppercase",
               marginTop: "24px",
             }}
@@ -1036,93 +1027,33 @@ export function HomeExperience({
   const [faq, setFaq] = useState<number | null>(0);
   const navigate = useNavigate();
   const picks = (featured.length ? featured : trending).slice(0, 3);
-  useEffect(() => {
-    const el = root.current;
-    if (!el || paused) return;
-    let disposed = false;
-    let cleanup: (() => void) | undefined;
-    void loadGsap(true).then((gsap) => {
-      if (disposed) return;
-      const media = gsap.matchMedia();
-      media.add("(prefers-reduced-motion: no-preference)", () => {
-        const ctx = gsap.context(() => {
-          gsap.from(".nh-hero-reveal", {
-            y: 24,
-            autoAlpha: 0,
-            duration: 0.9,
-            stagger: 0.1,
-            ease: "power3.out",
-            clearProps: "all",
-          });
-          el.querySelectorAll<HTMLElement>("[data-home-reveal]").forEach((section) =>
-            gsap.from(section, {
-              y: 32,
-              opacity: 0,
-              duration: 0.8,
-              ease: "power3.out",
-              scrollTrigger: { trigger: section, start: "top 94%", once: true },
-              clearProps: "all",
-            }),
-          );
-          gsap.fromTo(
-            ".nh-world-card",
-            { y: 70, rotation: (i) => (i % 2 ? 7 : -7) },
-            {
-              y: -35,
-              rotation: (i) => (i % 2 ? -3 : 3),
-              ease: "none",
-              stagger: 0.015,
-              scrollTrigger: {
-                trigger: ".nh-world",
-                start: "top bottom",
-                end: "bottom top",
-                scrub: 1,
-              },
-            },
-          );
-          gsap.fromTo(
-            ".nh-tree-image",
-            { scale: 0.93 },
-            {
-              scale: 1.035,
-              ease: "none",
-              scrollTrigger: {
-                trigger: ".nh-tree-canopy",
-                start: "top bottom",
-                end: "bottom top",
-                scrub: 1,
-              },
-            },
-          );
-        }, el);
-        return () => ctx.revert();
-      });
-      cleanup = () => media.revert();
-    });
-    return () => {
-      disposed = true;
-      cleanup?.();
-    };
-  }, [paused]);
+  const heroProgress = useScrollProgress<HTMLElement>();
+  const heroPointer = useElementPointer<HTMLDivElement>();
+  const title = useTextReveal<HTMLHeadingElement>();
+  const searchMagnet = useMagnet<HTMLButtonElement>({ max: 4, radius: 30 });
+  const reveal = useStaggerReveal<HTMLDivElement>({ distance: 18, stagger: 0.03 });
+  const cards = useElementPointerGroup<HTMLDivElement>(".mo-card");
+  usePageScrollProgress();
   function submitSearch(e: FormEvent) {
     e.preventDefault();
     const q = search.trim();
     if (q) void navigate({ to: "/search", search: { q } });
   }
   return (
-    <div id="bbi-home" ref={root} className={paused ? "nh-motion-paused" : ""}>
+    <div id="bbi-home" ref={root} className={`nh-cinematic${paused ? " nh-motion-paused" : ""}`}>
       <a className="nh-skip" href="#main-content">
         Skip to content
       </a>
       <Header categories={catalog.categories} />
+      <div className="nh-page-progress mo-page-rail" aria-hidden="true" />
       <main id="main-content">
-        <section className="nh-hero" aria-labelledby="nh-hero-title">
+        <section ref={heroProgress} className="nh-hero" aria-labelledby="nh-hero-title">
           <div className="nh-hero-inner">
             <div className="nh-dark-badge nh-hero-reveal">
               <span className="nh-live-dot" />
-              {catalog.totalIdeas} researched ideas. Yours to explore.
+              <Odometer value={catalog.totalIdeas} /> researched ideas. Yours to explore.
             </div>
-            <h1 id="nh-hero-title" className="nh-hero-reveal">
+            <h1 ref={title} id="nh-hero-title" className="nh-hero-reveal">
               From what if,
               <br />
               <span>to what’s next.</span>
@@ -1147,7 +1078,7 @@ export function HomeExperience({
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
               />
-              <button type="submit" aria-label="Search ideas">
+              <button ref={searchMagnet} type="submit" aria-label="Search ideas">
                 <ArrowUpRight size={20} />
               </button>
             </form>
@@ -1160,6 +1091,13 @@ export function HomeExperience({
                 Or let us surprise you <Shuffle size={13} />
               </a>
             </div>
+          </div>
+          <div ref={heroPointer} className="nh-hero-visual">
+            <div className="nh-light-orbit mo-drift" aria-hidden="true" />
+            <div className="nh-hero-tree mo-media" aria-hidden="true">
+              <img src="/home/golden-tree.jpg" alt="" width="1280" height="720" fetchPriority="high" />
+            </div>
+            <div className="nh-hero-blueprint">{picks[0] && <BlueprintCard idea={picks[0]} />}</div>
           </div>
           <a href="#how-it-works" className="nh-scroll-cue">
             A little less guessing <ArrowDown size={15} />
@@ -1193,7 +1131,7 @@ export function HomeExperience({
               The whole library <ArrowUpRight size={18} />
             </Link>
           </div>
-          <div className="nh-blueprint-grid">
+          <div ref={(node) => { cards.current = node; reveal.current = node; }} className="nh-blueprint-grid">
             {picks.map((idea, i) => (
               <BlueprintCard idea={idea} index={i} key={idea.ideaId} />
             ))}

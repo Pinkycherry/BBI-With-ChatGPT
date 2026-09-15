@@ -13,7 +13,7 @@ import {
   type Reading,
 } from "@/lib/calculators";
 import { JsonLd, breadcrumbSchema, webPageSchema } from "@/lib/schema";
-import { useDepthScene, useStaggerReveal, useTextReveal } from "@/motion";
+import { useElementPointerGroup, useStaggerReveal, useTextReveal } from "@/motion";
 
 /**
  * One route for every calculator. It renders whatever `src/lib/calculators.ts`
@@ -89,10 +89,7 @@ function CalculatorPage({ calculator }: { calculator: Calculator }) {
   const issueFor = (key: string): FieldIssue | undefined => issues.find((i) => i.key === key);
 
   const titleRef = useTextReveal<HTMLHeadingElement>();
-  // Masthead depth scene: one shared observer + one shared frame callback
-  // for the whole header. Cursor depth on fine pointers, scroll depth on touch
-  // (see motion.css, coarse-pointer block).
-  const sceneRef = useDepthScene<HTMLDivElement>({ strength: 0.5 });
+  const pointerRef = useElementPointerGroup<HTMLDivElement>(".mo-card");
 
   const fieldsRef = useStaggerReveal<HTMLDivElement>({
     selector: "[data-field]",
@@ -117,7 +114,7 @@ function CalculatorPage({ calculator }: { calculator: Calculator }) {
         ]}
       />
       <SiteShell>
-        <div ref={sceneRef} className="cx-scene mx-auto max-w-6xl px-3 py-12 sm:px-4">
+        <div ref={pointerRef} className="mo-document mx-auto max-w-6xl px-3 py-12 sm:px-4">
           {/* EDITABLE SECTION START — safe to add, remove, or reorder sections below without breaking routing or data fetching. */}
           <Breadcrumbs
             items={[
@@ -129,7 +126,7 @@ function CalculatorPage({ calculator }: { calculator: Calculator }) {
           <p className="mt-6 t-eyebrow">Calculator</p>
           <h1
             ref={titleRef}
-            className="cx-layer cx-z3 mt-4 text-4xl font-extrabold tracking-tight sm:text-5xl"
+            className="mt-4 text-4xl font-extrabold tracking-tight sm:text-5xl"
           >
             {calculator.title}{" "}
             <span className="bg-gradient-to-r from-primary via-accent to-warm bg-clip-text text-transparent">
@@ -162,7 +159,7 @@ function CalculatorPage({ calculator }: { calculator: Calculator }) {
                 {fieldGroups(calculator).map(({ group, fields }) => (
                   <fieldset key={group} className="border-0 p-0">
                     <legend className="t-eyebrow">{group}</legend>
-                    <div className="mt-4 grid grid-cols-[repeat(auto-fit,minmax(15rem,1fr))] gap-5">
+                    <div className="mt-4 grid grid-cols-[repeat(auto-fit,minmax(min(100%,15rem),1fr))] gap-5">
                       {fields.map((field) => (
                         <FieldInput
                           key={field.key}
@@ -261,9 +258,9 @@ function CalculatorPage({ calculator }: { calculator: Calculator }) {
                   key={other.slug}
                   to="/calculator/$slug"
                   params={{ slug: other.slug }}
-                  className="group relative flex h-full flex-col justify-between overflow-hidden rounded-2xl border border-border/50 bg-card p-5 shadow-sm transition-all hover:-translate-y-1 hover:shadow-md hover:border-primary/30"
+                  className="glass mo-card group relative flex h-full min-w-0 flex-col justify-between overflow-hidden rounded-2xl p-5"
                 >
-                  <div className="absolute -right-8 -top-8 h-24 w-24 rounded-full bg-primary/5 blur-2xl transition-all group-hover:bg-primary/20" />
+                  <div aria-hidden="true" className="pointer-events-none absolute -right-8 -top-8 h-24 w-24 rounded-full bg-primary/5 blur-2xl" />
                   <div>
                     <h3 className="font-display text-lg font-bold tracking-tight text-foreground transition-colors group-hover:text-primary mb-2 line-clamp-2">
                       {other.title} <span className="text-accent">{other.highlight}</span>
@@ -318,7 +315,7 @@ function FieldInput({
         {field.label} <span className="font-normal text-muted-foreground">({field.unitLabel})</span>
       </label>
       
-      <div className="mt-1.5 flex items-center gap-2 rounded-xl border border-input/60 bg-gradient-to-b from-card to-card/50 px-3 py-1 shadow-sm transition-all focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20 hover:border-primary/50">
+      <div className="mt-1.5 flex items-center gap-2 rounded-xl border border-input/60 bg-gradient-to-b from-card to-card/50 px-3 py-1 shadow-sm focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/20">
         {field.prefix && (
           <span aria-hidden className="text-sm font-medium text-muted-foreground/80">
             {field.prefix}
@@ -333,10 +330,8 @@ function FieldInput({
           value={value}
           onChange={(event) => onChange(event.target.value)}
           aria-describedby={issue ? `${helpId} ${errorId}` : helpId}
-          className="w-full bg-transparent py-1.5 text-base font-semibold outline-none placeholder:text-muted-foreground"
-
           aria-invalid={issue ? true : undefined}
-          className="w-full min-w-0 bg-transparent py-2.5 text-sm tabular-nums outline-none"
+          className="w-full min-w-0 bg-transparent py-2.5 text-base font-semibold tabular-nums outline-none placeholder:text-muted-foreground"
         />
         {field.suffix && (
           <span aria-hidden className="whitespace-nowrap text-xs text-muted-foreground">
@@ -358,7 +353,7 @@ function FieldInput({
 
 function ResultRow({ reading }: { reading: Reading }) {
   return (
-    <li className="relative overflow-hidden rounded-xl border border-border/60 bg-gradient-to-br from-background to-muted/20 p-4 shadow-sm transition-all hover:shadow-md">
+    <li className="relative overflow-hidden rounded-xl border border-border/60 bg-gradient-to-br from-background to-muted/20 p-4 shadow-sm">
       {reading.primary && (
         <div className="absolute top-0 right-0 h-16 w-16 -translate-y-8 translate-x-8 rounded-full bg-primary/20 blur-2xl" />
       )}

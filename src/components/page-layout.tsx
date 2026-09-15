@@ -11,7 +11,7 @@ import { useRouterState } from "@tanstack/react-router";
 
 import { SiteShell, Breadcrumbs } from "@/components/site-shell";
 import { JsonLd, breadcrumbSchema, webPageSchema } from "@/lib/schema";
-import { useDepthScene, useStaggerReveal, useTextReveal } from "@/motion";
+import { useStaggerReveal, useTextReveal } from "@/motion";
 
 /**
  * Ten pages used to render through this component with nothing but the text
@@ -175,11 +175,6 @@ export function ContentPage({
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const t = PAGE_TONES[tone];
   const titleRef = useTextReveal<HTMLHeadingElement>();
-  const sectionsRef = useStaggerReveal<HTMLDivElement>({ distance: 14, stagger: 0.05 });
-  // One depth scene per content page — the masthead. Ten templates render
-  // through here, so this is the single place the grammar is applied to all
-  // of them. Cursor depth on fine pointers, scroll depth on touch.
-  const sceneRef = useDepthScene<HTMLDivElement>({ strength: 0.5 });
 
   return (
     <>
@@ -198,12 +193,12 @@ export function ContentPage({
       />
       <SiteShell>
         <div
-          ref={sceneRef}
-          className={`cx-scene mx-auto ${wide ? "max-w-6xl" : "max-w-3xl"} px-3 py-12 sm:px-4`}
+          data-tone={tone}
+          className={`mo-document mx-auto ${wide ? "max-w-6xl" : "max-w-3xl"} px-3 py-12 sm:px-4`}
         >
           <Breadcrumbs items={[{ label: "Home", to: "/" }, { label: eyebrow }]} />
           <Eyebrow tone={tone} label={eyebrow} />
-          <h1 ref={titleRef} className={`cx-layer cx-z3 ${t.title}`}>
+          <h1 ref={titleRef} className={t.title}>
             {title}
             {highlight && (
               <>
@@ -214,9 +209,9 @@ export function ContentPage({
               </>
             )}
           </h1>
-          <p className={`cx-layer cx-z1 ${t.intro}`}>{intro}</p>
+          <p className={t.intro}>{intro}</p>
           <ToneContext.Provider value={tone}>
-            <div ref={sectionsRef} className={t.stack}>
+            <div className={t.stack}>
               {t.numbered ? numberSections(children) : children}
             </div>
           </ToneContext.Provider>
@@ -237,9 +232,16 @@ export function Section({ heading, children, index }: SectionProps) {
   const tone = useContext(ToneContext);
   const t = SECTION_TONES[tone];
   const numbered = PAGE_TONES[tone].numbered && index !== undefined;
+  // The section heading enters where it is read. Long document bodies remain
+  // available throughout scrolling and never become a single hidden layer.
+  const headingRef = useStaggerReveal<HTMLElement>({
+    selector: ":scope > :first-child",
+    distance: 10,
+    stagger: 0,
+  });
 
   return (
-    <section className={t.shell}>
+    <section ref={headingRef} className={`mo-document-section ${t.shell}`}>
       {numbered ? (
         <div className="flex items-baseline gap-3">
           <span

@@ -1,6 +1,6 @@
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import { Fragment, useCallback, type CSSProperties } from "react";
+import { Fragment, useCallback } from "react";
 
 import { IdeaCard } from "@/components/idea-card";
 import { SiteShell, Breadcrumbs } from "@/components/site-shell";
@@ -9,7 +9,6 @@ import { getCategoryPage } from "@/lib/ideas.functions";
 import { JsonLd, breadcrumbSchema, collectionPageSchema } from "@/lib/schema";
 import {
   useElementPointerGroup,
-  useDepthScene,
   useScrollProgress,
   useStaggerReveal,
   useTextReveal,
@@ -74,14 +73,14 @@ function CategoryPage() {
   // deliberately matches `.mo-card` only: the ad slots interleaved into this
   // grid are not cards and must never be hidden or staggered.
   const pointerRef = useElementPointerGroup<HTMLDivElement>(".mo-card");
-  const revealRef = useStaggerReveal<HTMLDivElement>({ selector: ".mo-card", stagger: 0.03 });
+  const revealRef = useStaggerReveal<HTMLDivElement>({
+    selector: ".mo-card",
+    stagger: 0.03,
+    distance: 12,
+  });
   // Publishes --sc-p for the depth planes below. Breadcrumbs stay off the
   // planes: navigation should not drift while you are trying to click it.
   const depthRef = useScrollProgress<HTMLDivElement>();
-  // Masthead depth scene. Listing pages are scanning surfaces, so the cursor
-  // work is confined to the header — the grid below stays still under the eye
-  // (MOTION_SPEC section 3: no tilt, no magnet on listings).
-  const mastheadRef = useDepthScene<HTMLDivElement>({ strength: 0.45, scroll: false });
   const gridRef = useCallback(
     (node: HTMLDivElement | null) => {
       pointerRef.current = node;
@@ -116,7 +115,8 @@ function CategoryPage() {
         ]}
       />
       <SiteShell>
-        <div ref={depthRef} className="bbi-depth mx-auto max-w-6xl px-4 py-12">
+        <div ref={depthRef} className="catalog-page mx-auto max-w-6xl px-4 py-12">
+          <div className="catalog-ambient mo-drift" aria-hidden="true" />
           {/* EDITABLE SECTION START — safe to add, remove, or reorder sections below without breaking routing or data fetching. */}
           <Breadcrumbs
             items={[
@@ -125,27 +125,22 @@ function CategoryPage() {
               { label: data.categoryName ?? categorySlug },
             ]}
           />
-          <div ref={mastheadRef} className="bbi-depth-back cx-scene">
-            <h1
-              ref={headingRef}
-              style={{ "--z": 0.5 } as CSSProperties}
-              className="bbi-heading-glow cx-layer mt-4 text-3xl font-bold tracking-tight"
-            >
+          <div className="catalog-masthead">
+            <h1 ref={headingRef} className="text-3xl font-bold tracking-tight">
               {data.categoryName}
             </h1>
-            <p className="mt-2 text-sm text-muted-foreground">{data.ideas.length} ideas</p>
+            <p className="catalog-count mt-4 text-sm text-muted-foreground">
+              {data.ideas.length} ideas
+            </p>
           </div>
 
-          {/* Ad and grid share the FRONT plane so they travel together. Split
-              across planes they would converge on each other, and the ad-to-grid
-              gap is only 32px. */}
-          <div className="bbi-depth-front mt-8">
+          <div className="mt-8">
             <AdSlot position="category-above-grid" size="banner" />
           </div>
 
           <div
             ref={gridRef}
-            className="bbi-depth-front mt-8 grid grid-cols-[repeat(auto-fit,minmax(17rem,1fr))] gap-3"
+            className="catalog-grid mt-8 grid grid-cols-[repeat(auto-fit,minmax(min(100%,17rem),1fr))] gap-5"
           >
             {data.ideas.map((idea, i) => (
               <Fragment key={idea.ideaId}>

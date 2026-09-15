@@ -9,7 +9,6 @@ import { getListicle, type ListicleEntry, type ListiclePage } from "@/lib/lists.
 import { JsonLd, breadcrumbSchema } from "@/lib/schema";
 import { siteUrl } from "@/lib/site-config";
 import {
-  useDepthScene,
   useElementPointerGroup,
   useStaggerReveal,
   useTextReveal,
@@ -75,8 +74,14 @@ export const Route = createFileRoute("/list/$slug")({
 });
 
 function Entry({ entry, categorySlug }: { entry: ListicleEntry; categorySlug: string }) {
+  const entryRef = useStaggerReveal<HTMLElement>({
+    selector: ":scope > header",
+    distance: 12,
+    stagger: 0,
+  });
+
   return (
-    <article className="glass mo-card rounded-3xl p-6 sm:p-8">
+    <article ref={entryRef} className="glass mo-card rounded-3xl p-6 sm:p-8">
       <header className="flex items-start gap-4">
         <span
           aria-hidden
@@ -101,7 +106,7 @@ function Entry({ entry, categorySlug }: { entry: ListicleEntry; categorySlug: st
             <Link
               to="/idea/$slug"
               params={{ slug: entry.slug }}
-              className="transition-colors hover:text-accent"
+              className="mo-link hover:text-accent"
             >
               {entry.title}
             </Link>
@@ -130,7 +135,7 @@ function Entry({ entry, categorySlug }: { entry: ListicleEntry; categorySlug: st
       ))}
 
       {entry.facts.length > 0 && (
-        <dl className="mt-6 grid grid-cols-[repeat(auto-fit,minmax(16rem,1fr))] gap-4">
+        <dl className="mt-6 grid grid-cols-[repeat(auto-fit,minmax(min(100%,16rem),1fr))] gap-4">
           {entry.facts.map((fact) => (
             <div key={fact.label} className="rounded-2xl border border-border bg-card/60 p-4">
               <dt className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
@@ -143,7 +148,7 @@ function Entry({ entry, categorySlug }: { entry: ListicleEntry; categorySlug: st
       )}
 
       {(entry.pros.length > 0 || entry.cons.length > 0) && (
-        <div className="mt-6 grid grid-cols-[repeat(auto-fit,minmax(19rem,1fr))] gap-5">
+        <div className="mt-6 grid grid-cols-[repeat(auto-fit,minmax(min(100%,19rem),1fr))] gap-5">
           {entry.pros.length > 0 && (
             <div>
               <h3 className="text-[11px] font-semibold uppercase tracking-widest text-muted-foreground">
@@ -207,28 +212,10 @@ function ListiclePageRoute() {
   const listPath = `/list/${data.categorySlug}`;
 
   // MOTION_SPEC section 3, listing pages. One headline reveal, on the H1 only.
-  // Each of the two grids gets one delegated pointer listener and one short
-  // 0.03s stagger — never a listener per cell — and neither gets tilt or a
-  // magnet, because the cursor here is scanning rather than aiming.
+  // Long entries reveal their own header as it enters. Both collections use
+  // delegated pointer listeners; the compact remainder uses a short stagger.
   const headingRef = useTextReveal<HTMLHeadingElement>();
-  // Masthead depth scene: one shared observer + one shared frame callback
-  // for the whole header. Cursor depth on fine pointers, scroll depth on touch
-  // (see motion.css, coarse-pointer block).
-  const sceneRef = useDepthScene<HTMLDivElement>({ strength: 0.5 });
-
-
-  const entriesPointerRef = useElementPointerGroup<HTMLDivElement>(".mo-card");
-  const entriesRevealRef = useStaggerReveal<HTMLDivElement>({
-    selector: ".mo-card",
-    stagger: 0.03,
-  });
-  const entriesRef = useCallback(
-    (node: HTMLDivElement | null) => {
-      entriesPointerRef.current = node;
-      entriesRevealRef.current = node;
-    },
-    [entriesPointerRef, entriesRevealRef],
-  );
+  const entriesRef = useElementPointerGroup<HTMLDivElement>(".mo-card");
 
   const restPointerRef = useElementPointerGroup<HTMLDivElement>(".mo-card");
   const restRevealRef = useStaggerReveal<HTMLDivElement>({ selector: ".mo-card", stagger: 0.03 });
@@ -282,7 +269,7 @@ function ListiclePageRoute() {
         ]}
       />
       <SiteShell>
-        <div ref={sceneRef} className="cx-scene mx-auto max-w-6xl px-4 py-12">
+        <div className="mx-auto max-w-6xl px-4 py-12">
           {/* EDITABLE SECTION START — safe to add, remove, or reorder sections below without breaking routing or data fetching. */}
           <Breadcrumbs
             items={[
@@ -293,7 +280,7 @@ function ListiclePageRoute() {
           />
           <h1
             ref={headingRef}
-            className="cx-layer cx-z3 bbi-heading-glow mt-4 text-3xl font-bold tracking-tight sm:text-4xl"
+            className="bbi-heading-glow mt-4 text-3xl font-bold tracking-tight sm:text-4xl"
           >
             {data.title}
           </h1>
@@ -343,7 +330,7 @@ function ListiclePageRoute() {
               </h2>
               <div
                 ref={restRef}
-                className="mt-6 grid grid-cols-[repeat(auto-fit,minmax(17rem,1fr))] gap-4"
+                className="mt-6 grid grid-cols-[repeat(auto-fit,minmax(min(100%,17rem),1fr))] gap-4"
               >
                 {data.rest.map((idea) => (
                   <IdeaCard key={idea.ideaId} idea={idea} />

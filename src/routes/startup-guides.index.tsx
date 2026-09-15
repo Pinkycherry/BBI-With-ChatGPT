@@ -5,6 +5,7 @@ import { BookOpen, Clock, ArrowRight, CheckCircle2, Sparkles, Compass } from "lu
 import { SiteShell, Breadcrumbs } from "@/components/site-shell";
 import { JsonLd, breadcrumbSchema, collectionPageSchema } from "@/lib/schema";
 import { STARTUP_GUIDES, type StartupGuideMeta } from "@/lib/guides-data";
+import { useElementPointerGroup, useStaggerReveal, useTextReveal } from "@/motion";
 
 export const Route = createFileRoute("/startup-guides/")({
   head: () => ({
@@ -28,6 +29,9 @@ export const Route = createFileRoute("/startup-guides/")({
 
 function StartupGuidesIndexPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
+  const titleRef = useTextReveal<HTMLHeadingElement>();
+  const pointerRef = useElementPointerGroup<HTMLDivElement>(".mo-card");
+  const gridRef = useStaggerReveal<HTMLDivElement>({ stagger: 0.03, distance: 16 });
 
   const categories = [
     "All",
@@ -60,13 +64,13 @@ function StartupGuidesIndexPage() {
         ]}
       />
       <SiteShell>
-        <div className="mx-auto max-w-6xl px-3 py-10 sm:px-4 sm:py-14">
+        <div ref={pointerRef} className="mx-auto max-w-6xl px-3 py-10 sm:px-4 sm:py-14">
           <Breadcrumbs items={[{ label: "Home", to: "/" }, { label: "Startup Guides" }]} />
 
           <div className="mt-6 flex flex-col justify-between gap-4 md:flex-row md:items-end">
             <div>
               <p className="t-eyebrow">Operator Playbooks</p>
-              <h1 className="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
+              <h1 ref={titleRef} className="mt-2 text-3xl font-extrabold tracking-tight sm:text-4xl lg:text-5xl">
                 Startup & Validation{" "}
                 <span className="bg-gradient-to-r from-primary via-accent to-warm bg-clip-text text-transparent">
                   Guides
@@ -96,7 +100,8 @@ function StartupGuidesIndexPage() {
                 key={cat}
                 type="button"
                 onClick={() => setSelectedCategory(cat)}
-                className={`rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] transition-colors ${
+                aria-pressed={selectedCategory === cat}
+                className={`mo-lift rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] ${
                   selectedCategory === cat
                     ? "bg-primary text-primary-foreground"
                     : "glass text-muted-foreground hover:bg-secondary hover:text-foreground"
@@ -108,11 +113,11 @@ function StartupGuidesIndexPage() {
           </div>
 
           {/* Guides Catalog Grid */}
-          <div className="mt-10 grid gap-6 md:grid-cols-2">
+          <div ref={gridRef} className="mt-10 grid gap-6 md:grid-cols-2">
             {filteredGuides.map((guide) => (
               <article
                 key={guide.slug}
-                className="glass group flex flex-col justify-between rounded-2xl p-6 transition-all hover:border-primary/50 hover:shadow-lg sm:p-7"
+                className="glass mo-card group flex flex-col justify-between rounded-3xl p-6 sm:p-7"
               >
                 <div>
                   <div className="flex flex-wrap items-center justify-between gap-2">
@@ -130,7 +135,7 @@ function StartupGuidesIndexPage() {
                   </div>
 
                   <h2 className="mt-4 font-display text-xl font-bold tracking-tight text-foreground transition-colors group-hover:text-primary sm:text-2xl">
-                    <Link to="/startup-guides/$slug" params={{ slug: guide.slug }}>
+                    <Link className="mo-link" to="/startup-guides/$slug" params={{ slug: guide.slug }}>
                       {guide.title}
                     </Link>
                   </h2>
@@ -157,7 +162,7 @@ function StartupGuidesIndexPage() {
                   <Link
                     to="/startup-guides/$slug"
                     params={{ slug: guide.slug }}
-                    className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.16em] text-primary transition-colors hover:underline"
+                    className="mo-link flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.16em] text-primary"
                   >
                     <span>Read Guide</span>
                     <ArrowRight className="h-3.5 w-3.5" />

@@ -10,7 +10,7 @@
  */
 import { useEffect, useRef, type RefObject } from "react";
 
-import { pointerMotionEnabled } from "./gsap";
+import { observeMotionPreference, preserveStyles } from "./preferences";
 
 export type MagnetOptions = {
   /** Fraction of the offset followed. 0.2 - 0.35 is the usable band. */
@@ -29,7 +29,10 @@ export function useMagnet<T extends HTMLElement = HTMLElement>(
 
   useEffect(() => {
     const el = ref.current;
-    if (!el || !pointerMotionEnabled()) return;
+    if (!el) return;
+
+    return observeMotionPreference(() => {
+    const restore = preserveStyles([el], ["transform"]);
 
     let raf = 0;
     let tx = 0;
@@ -83,9 +86,11 @@ export function useMagnet<T extends HTMLElement = HTMLElement>(
     return () => {
       cancelAnimationFrame(raf);
       window.removeEventListener("pointermove", onMove);
-      el.style.removeProperty("transform");
+      restore();
     };
+    }, { pointer: true });
   }, [strength, max, radius]);
 
   return ref;
 }
+

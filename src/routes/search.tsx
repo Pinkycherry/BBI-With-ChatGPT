@@ -9,7 +9,7 @@ import { AdSlot } from "@/components/AdSlot";
 import { searchIdeas } from "@/lib/ideas.functions";
 import type { IdeaCard as IdeaCardData } from "@/lib/ideas-shared";
 import {
-  useDepthScene,
+  useScrollProgress,
   useElementPointerGroup,
   useStaggerReveal,
   useTextReveal,
@@ -50,7 +50,11 @@ function SearchResults({ ideas, term }: { ideas: IdeaCardData[]; term: string })
   // plus the short 0.03s stagger. `.mo-card` as the selector keeps the ad slots
   // interleaved into this grid out of the reveal.
   const pointerRef = useElementPointerGroup<HTMLDivElement>(".mo-card");
-  const revealRef = useStaggerReveal<HTMLDivElement>({ selector: ".mo-card", stagger: 0.03 });
+  const revealRef = useStaggerReveal<HTMLDivElement>({
+    selector: ".mo-card",
+    stagger: 0.03,
+    distance: 12,
+  });
   const gridRef = useCallback(
     (node: HTMLDivElement | null) => {
       pointerRef.current = node;
@@ -61,10 +65,13 @@ function SearchResults({ ideas, term }: { ideas: IdeaCardData[]; term: string })
 
   return (
     <>
-      <p className="text-sm text-muted-foreground">
+      <p className="catalog-count text-sm text-muted-foreground">
         {ideas.length} result{ideas.length === 1 ? "" : "s"} for “{term}”
       </p>
-      <div ref={gridRef} className="mt-4 grid grid-cols-[repeat(auto-fit,minmax(17rem,1fr))] gap-4">
+      <div
+        ref={gridRef}
+        className="catalog-grid mt-5 grid grid-cols-[repeat(auto-fit,minmax(min(100%,17rem),1fr))] gap-5"
+      >
         {ideas.map((idea, i) => (
           <Fragment key={idea.ideaId}>
             <IdeaCard idea={idea} />
@@ -85,11 +92,7 @@ function SearchPage() {
   const navigate = useNavigate({ from: "/search" });
   const [term, setTerm] = useState(q ?? "");
   const headingRef = useTextReveal<HTMLHeadingElement>();
-  // Masthead depth scene: one shared observer + one shared frame callback
-  // for the whole header. Cursor depth on fine pointers, scroll depth on touch
-  // (see motion.css, coarse-pointer block).
-  const sceneRef = useDepthScene<HTMLDivElement>({ strength: 0.5 });
-
+  const depthRef = useScrollProgress<HTMLDivElement>();
 
   const query = useQuery({
     queryKey: ["search", q ?? ""],
@@ -99,33 +102,36 @@ function SearchPage() {
 
   return (
     <SiteShell>
-      <div ref={sceneRef} className="cx-scene mx-auto max-w-6xl px-4 py-12">
+      <div ref={depthRef} className="catalog-page mx-auto max-w-6xl px-4 py-12">
+        <div className="catalog-ambient mo-drift" aria-hidden="true" />
         {/* EDITABLE SECTION START — safe to add, remove, or reorder sections below without breaking routing or data fetching. */}
         <Breadcrumbs items={[{ label: "Home", to: "/" }, { label: "Search" }]} />
-        <h1 ref={headingRef} className="cx-layer cx-z3 mt-4 text-3xl font-bold tracking-tight">
-          Search the vault
-        </h1>
-        <form
-          className="mt-6 flex gap-2"
-          onSubmit={(e) => {
-            e.preventDefault();
-            navigate({ search: { q: term } });
-          }}
-        >
-          <input
-            value={term}
-            onChange={(e) => setTerm(e.target.value)}
-            placeholder="e.g. data enrichment, newsletters, automation"
-            aria-label="Search business ideas"
-            className="w-full rounded-md border border-input bg-card px-4 py-2.5 text-sm outline-none focus:border-primary"
-          />
-          <button
-            type="submit"
-            className="rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+        <div className="catalog-masthead">
+          <h1 ref={headingRef} className="text-3xl font-bold tracking-tight">
+            Search the vault
+          </h1>
+          <form
+            className="catalog-search-form mt-6 flex gap-2"
+            onSubmit={(e) => {
+              e.preventDefault();
+              navigate({ search: { q: term } });
+            }}
           >
-            Search
-          </button>
-        </form>
+            <input
+              value={term}
+              onChange={(e) => setTerm(e.target.value)}
+              placeholder="e.g. data enrichment, newsletters, automation"
+              aria-label="Search business ideas"
+              className="w-full min-w-0 rounded-md bg-transparent px-3 py-3 text-sm outline-none"
+            />
+            <button
+              type="submit"
+              className="shrink-0 rounded-md bg-primary px-5 py-3 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+            >
+              Search
+            </button>
+          </form>
+        </div>
 
         <div className="mt-8">
           {!q?.trim() && (

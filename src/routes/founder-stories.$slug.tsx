@@ -16,6 +16,7 @@ import {
 import { SiteShell, Breadcrumbs } from "@/components/site-shell";
 import { JsonLd, articleSchema, breadcrumbSchema } from "@/lib/schema";
 import { getCaseStudyBySlug, CASE_STUDIES } from "@/lib/case-studies-data";
+import { useElementPointerGroup, useStaggerReveal, useTextReveal } from "@/motion";
 
 export const Route = createFileRoute("/founder-stories/$slug")({
   head: ({ params }) => {
@@ -48,6 +49,10 @@ function formatUsd(val: number): string {
 function FounderStoryDetailPage() {
   const { slug } = Route.useParams();
   const study = getCaseStudyBySlug(slug);
+  const titleRef = useTextReveal<HTMLHeadingElement>();
+  const pointerRef = useElementPointerGroup<HTMLDivElement>(".mo-card");
+  const scorecardRef = useStaggerReveal<HTMLDivElement>({ distance: 12, stagger: 0.03 });
+  const timelineRef = useStaggerReveal<HTMLDivElement>({ distance: 12, stagger: 0.03 });
 
   if (!study) {
     return (
@@ -90,7 +95,7 @@ function FounderStoryDetailPage() {
         ]}
       />
       <SiteShell>
-        <div className="mx-auto max-w-4xl px-3 py-10 sm:px-6 sm:py-14">
+        <div ref={pointerRef} className="mo-document mx-auto max-w-4xl px-3 py-10 sm:px-6 sm:py-14">
           <Breadcrumbs
             items={[
               { label: "Home", to: "/" },
@@ -111,7 +116,7 @@ function FounderStoryDetailPage() {
               </span>
             </div>
 
-            <h1 className="mt-4 font-display text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
+            <h1 ref={titleRef} className="mt-4 font-display text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
               {study.title}
             </h1>
 
@@ -133,7 +138,7 @@ function FounderStoryDetailPage() {
               Financial & Velocity Scorecard
             </p>
 
-            <div className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6">
+            <div ref={scorecardRef} className="mt-6 grid grid-cols-2 gap-4 sm:grid-cols-3">
               <div className="rounded-xl border border-border/70 bg-background/50 p-3.5 text-center">
                 <p className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
                   Monthly Run Rate
@@ -228,7 +233,7 @@ function FounderStoryDetailPage() {
               From $0 to "Premium Pricing"/mo
             </h2>
 
-            <div className="mt-6 space-y-6">
+            <div ref={timelineRef} className="mt-6 space-y-6">
               {study.execution_milestones.map((milestone, idx) => (
                 <div key={idx} className="relative flex gap-4">
                   <div className="flex flex-col items-center">
@@ -344,7 +349,7 @@ function FounderStoryDetailPage() {
               <Link
                 to="/founder-stories/$slug"
                 params={{ slug: prevStudy.slug }}
-                className="glass flex flex-col rounded-xl p-4 transition-colors hover:border-primary/50"
+                className="glass mo-card flex flex-col rounded-2xl p-5"
               >
                 <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
                   ← Previous Story
@@ -361,7 +366,7 @@ function FounderStoryDetailPage() {
               <Link
                 to="/founder-stories/$slug"
                 params={{ slug: nextStudy.slug }}
-                className="glass flex flex-col items-end rounded-xl p-4 text-right transition-colors hover:border-primary/50"
+                className="glass mo-card flex flex-col items-end rounded-2xl p-5 text-right"
               >
                 <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
                   Next Story →

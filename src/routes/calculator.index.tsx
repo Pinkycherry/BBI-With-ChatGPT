@@ -4,7 +4,7 @@ import { createFileRoute, Link } from "@tanstack/react-router";
 import { SiteShell, Breadcrumbs } from "@/components/site-shell";
 import { CALCULATORS } from "@/lib/calculators";
 import { JsonLd, breadcrumbSchema, collectionPageSchema } from "@/lib/schema";
-import { useDepthScene, useElementPointerGroup, useStaggerReveal, useTextReveal } from "@/motion";
+import { useElementPointerGroup, useStaggerReveal, useTextReveal } from "@/motion";
 
 const TITLE = "Business Calculators for Indian Founders | BBI";
 const DESCRIPTION =
@@ -28,12 +28,7 @@ function CalculatorIndex() {
   const [search, setSearch] = useState("");
   // One headline reveal per page, on the H1. One stagger, on the grid.
   const titleRef = useTextReveal<HTMLHeadingElement>();
-  // Masthead depth scene: one shared observer + one shared frame callback
-  // for the whole header. Cursor depth on fine pointers, scroll depth on touch
-  // (see motion.css, coarse-pointer block).
-  const sceneRef = useDepthScene<HTMLDivElement>({ strength: 0.5 });
-
-  const gridRef = useStaggerReveal<HTMLDivElement>({ direction: "up", stagger: 0.05 });
+  const gridRef = useStaggerReveal<HTMLDivElement>({ direction: "up", stagger: 0.03, distance: 12 });
   // One pointer listener for the whole grid rather than one per card.
   const pointerRef = useElementPointerGroup<HTMLDivElement>(".mo-card");
 
@@ -54,13 +49,13 @@ function CalculatorIndex() {
         ]}
       />
       <SiteShell>
-        <div ref={sceneRef} className="cx-scene mx-auto max-w-6xl px-3 py-12 sm:px-4">
+        <div className="catalog-page mx-auto max-w-6xl px-3 py-12 sm:px-4">
           {/* EDITABLE SECTION START — safe to add, remove, or reorder sections below without breaking routing or data fetching. */}
           <Breadcrumbs items={[{ label: "Home", to: "/" }, { label: "Calculators" }]} />
           <p className="mt-6 t-eyebrow">Calculators</p>
           <h1
             ref={titleRef}
-            className="cx-layer cx-z3 mt-4 text-4xl font-extrabold tracking-tight sm:text-5xl"
+            className="mt-4 text-4xl font-extrabold tracking-tight sm:text-5xl"
           >
             Small tools that answer{" "}
             <span className="bg-gradient-to-r from-primary via-accent to-warm bg-clip-text text-transparent">
@@ -82,6 +77,7 @@ function CalculatorIndex() {
             </div>
             <input
               type="search"
+              aria-label="Search calculators"
               placeholder="Search 60+ calculators..."
               className="w-full rounded-2xl border border-border/50 bg-background/50 py-3.5 pl-11 pr-4 text-sm outline-none transition-colors focus:border-primary focus:ring-1 focus:ring-primary"
               value={search}
@@ -105,9 +101,9 @@ function CalculatorIndex() {
                 key={calculator.slug}
                 to="/calculator/$slug"
                 params={{ slug: calculator.slug }}
-                className="group relative flex h-full flex-col gap-3 overflow-hidden rounded-2xl border border-border/50 bg-gradient-to-br from-card/80 to-muted/30 p-6 shadow-sm transition-all hover:-translate-y-1 hover:shadow-[0_12px_40px_rgba(0,0,0,0.12)] hover:border-primary/30"
+                className="glass mo-card group relative flex h-full min-w-0 flex-col gap-3 overflow-hidden rounded-3xl p-6"
               >
-                <div className="absolute -right-12 -top-12 h-32 w-32 rounded-full bg-primary/10 blur-3xl transition-all group-hover:bg-primary/20" />
+                <div aria-hidden="true" className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-primary/10 blur-3xl" />
                 <h2 className="font-display text-xl font-bold tracking-tight text-foreground transition-colors group-hover:text-primary">
                   {calculator.title} <span className="text-accent">{calculator.highlight}</span>
                 </h2>
