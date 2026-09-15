@@ -14,12 +14,12 @@
   background:
     radial-gradient(
       ellipse at 82% 10%,
-      color-mix(in oklab, var(--hl-teal) 9%, transparent),
+      rgba(249, 115, 22, 0.10),
       transparent 60%
     ),
     radial-gradient(
       ellipse at 16% 26%,
-      color-mix(in oklab, var(--primary) 7%, transparent),
+      rgba(234, 88, 12, 0.07),
       transparent 62%
     );
 }
