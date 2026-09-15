@@ -124,7 +124,6 @@ export const Route = createFileRoute("/idea/$slug")({
         { property: "og:type", content: "article" },
         { name: "twitter:card", content: "summary_large_image" },
       ],
-      links: idea ? [{ rel: "canonical", href: `https://businessidea.io/idea/${idea.slug}` }] : [],
     };
   },
   component: IdeaPage,

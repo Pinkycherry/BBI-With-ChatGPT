@@ -19,6 +19,7 @@ import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as ProcessIdeasRouteImport } from './routes/process-ideas'
 import { Route as RefundPolicyRouteImport } from './routes/refund-policy'
+import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as SearchRouteImport } from './routes/search'
 import { Route as ServicesRouteImport } from './routes/services'
 import { Route as SignInRouteImport } from './routes/sign-in'
@@ -96,6 +97,11 @@ const ProcessIdeasRoute = ProcessIdeasRouteImport.update({
 const RefundPolicyRoute = RefundPolicyRouteImport.update({
   id: '/refund-policy',
   path: '/refund-policy',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
+  id: '/robots.txt',
+  path: '/robots.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SearchRoute = SearchRouteImport.update({
@@ -252,6 +258,7 @@ export interface FileRoutesByFullPath {
   '/privacy': typeof PrivacyRoute
   '/process-ideas': typeof ProcessIdeasRoute
   '/refund-policy': typeof RefundPolicyRoute
+  '/robots.txt': typeof RobotsDottxtRoute
   '/search': typeof SearchRoute
   '/services': typeof ServicesRoute
   '/sign-in': typeof SignInRoute
@@ -292,6 +299,7 @@ export interface FileRoutesByTo {
   '/privacy': typeof PrivacyRoute
   '/process-ideas': typeof ProcessIdeasRoute
   '/refund-policy': typeof RefundPolicyRoute
+  '/robots.txt': typeof RobotsDottxtRoute
   '/search': typeof SearchRoute
   '/services': typeof ServicesRoute
   '/sign-in': typeof SignInRoute
@@ -332,6 +340,7 @@ export interface FileRoutesById {
   '/privacy': typeof PrivacyRoute
   '/process-ideas': typeof ProcessIdeasRoute
   '/refund-policy': typeof RefundPolicyRoute
+  '/robots.txt': typeof RobotsDottxtRoute
   '/search': typeof SearchRoute
   '/services': typeof ServicesRoute
   '/sign-in': typeof SignInRoute
@@ -374,6 +383,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/process-ideas'
     | '/refund-policy'
+    | '/robots.txt'
     | '/search'
     | '/services'
     | '/sign-in'
@@ -414,6 +424,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/process-ideas'
     | '/refund-policy'
+    | '/robots.txt'
     | '/search'
     | '/services'
     | '/sign-in'
@@ -453,6 +464,7 @@ export interface FileRouteTypes {
     | '/privacy'
     | '/process-ideas'
     | '/refund-policy'
+    | '/robots.txt'
     | '/search'
     | '/services'
     | '/sign-in'
@@ -494,6 +506,7 @@ export interface RootRouteChildren {
   PrivacyRoute: typeof PrivacyRoute
   ProcessIdeasRoute: typeof ProcessIdeasRoute
   RefundPolicyRoute: typeof RefundPolicyRoute
+  RobotsDottxtRoute: typeof RobotsDottxtRoute
   SearchRoute: typeof SearchRoute
   ServicesRoute: typeof ServicesRoute
   SignInRoute: typeof SignInRoute
@@ -592,6 +605,13 @@ declare module '@tanstack/react-router' {
       path: '/refund-policy'
       fullPath: '/refund-policy'
       preLoaderRoute: typeof RefundPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/robots.txt': {
+      id: '/robots.txt'
+      path: '/robots.txt'
+      fullPath: '/robots.txt'
+      preLoaderRoute: typeof RobotsDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/search': {
@@ -818,6 +838,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyRoute: PrivacyRoute,
   ProcessIdeasRoute: ProcessIdeasRoute,
   RefundPolicyRoute: RefundPolicyRoute,
+  RobotsDottxtRoute: RobotsDottxtRoute,
   SearchRoute: SearchRoute,
   ServicesRoute: ServicesRoute,
   SignInRoute: SignInRoute,
