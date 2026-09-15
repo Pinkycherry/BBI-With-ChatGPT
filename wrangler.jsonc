@@ -1,0 +1,33 @@
+{
+  // Root Wrangler config, so `npx wrangler deploy` works with no arguments.
+  //
+  // WHY THIS FILE EXISTS: without a config at the repo root, wrangler treats the
+  // repo as unconfigured and runs its framework-setup flow -- installing
+  // @cloudflare/vite-plugin, rewriting package.json scripts and editing
+  // vite.config.ts. That last step fails here, because the Vite config comes
+  // from @lovable.dev/vite-tanstack-config and exposes no `plugins` array for it
+  // to edit. The build then dies with "Cannot modify Vite config".
+  //
+  // This file makes the repo already-configured, so wrangler deploys what the
+  // build produced instead of trying to reconfigure the project.
+  //
+  // It mirrors the config nitro writes into .output/server/ at build time, with
+  // paths rewritten relative to the repo root.
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "bbi-with-chatgpt",
+  "main": ".output/server/index.mjs",
+  "compatibility_date": "2026-09-15",
+  "compatibility_flags": ["nodejs_compat"],
+
+  // nitro has already bundled the server. Re-bundling it here breaks the
+  // output, so wrangler uploads the files as they are.
+  "no_bundle": true,
+  "rules": [{ "type": "ESModule", "globs": ["**/*.mjs", "**/*.js"] }],
+
+  "assets": {
+    "binding": "ASSETS",
+    "directory": ".output/public"
+  },
+
+  "observability": { "enabled": true }
+}
