@@ -33,7 +33,7 @@ export default function MovingBorder({
     >
       <Comp
         className={cn(
-          "relative z-10 inline-flex items-center justify-center gap-2 rounded-[calc(var(--radius)-1px)] border border-border bg-card px-5 py-2.5 text-sm font-semibold tracking-tight text-foreground transition-colors duration-300 hover:text-primary focus-visible:outline-none",
+          "glass-btn-light relative z-10 inline-flex items-center justify-center gap-2 rounded-[calc(var(--radius)-1px)] px-5 py-2.5 text-sm font-semibold tracking-tight hover:text-primary focus-visible:outline-none",
           className,
         )}
         {...rest}

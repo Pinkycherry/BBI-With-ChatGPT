@@ -42,7 +42,7 @@ const Card = memo(function Card({
       onFocus={() => setFocused(index)}
       onBlur={() => setFocused(null)}
       className={cn(
-        "group relative block h-56 w-full overflow-hidden rounded-md border border-border bg-card transition-all duration-300 ease-out sm:h-64",
+        "glass group relative block h-56 w-full overflow-hidden rounded-md transition-all duration-300 ease-out sm:h-64",
         dimmed && "scale-[0.985] opacity-60 blur-[1px]",
       )}
     >

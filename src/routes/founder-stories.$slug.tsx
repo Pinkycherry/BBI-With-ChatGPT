@@ -57,7 +57,7 @@ function FounderStoryDetailPage() {
           <p className="mt-2 text-muted-foreground">The story you requested does not exist.</p>
           <Link
             to="/founder-stories"
-            className="mt-6 inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-xs font-semibold uppercase tracking-wider text-primary-foreground"
+            className="glass-btn-light mt-6 inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-semibold uppercase tracking-wider"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to Stories

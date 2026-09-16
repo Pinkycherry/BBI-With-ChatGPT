@@ -18,7 +18,7 @@ export function LockedResearchBlock({ idea }: { idea: IdeaDetail }) {
   return (
     <section className="relative pt-6" data-anchor="research" data-anchor-label="Research">
       <div className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-3 bg-background/20 backdrop-blur-[2px] text-center p-6 rounded-2xl">
-        <div className="bg-card/90 border border-border px-6 py-4 rounded-2xl shadow-xl flex flex-col items-center">
+        <div className="glass px-6 py-4 rounded-2xl flex flex-col items-center">
           <Lock className="h-8 w-8 text-accent mb-2" aria-hidden />
           <h3 className="text-lg font-bold text-foreground">Research locked</h3>
           <p className="mt-1 text-sm text-muted-foreground max-w-sm">

@@ -45,7 +45,7 @@ function StartupGuideDetailPage() {
           <p className="mt-2 text-muted-foreground">The playbook you requested does not exist.</p>
           <Link
             to="/startup-guides"
-            className="mt-6 inline-flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-xs font-semibold uppercase tracking-wider text-primary-foreground"
+            className="glass-btn-light mt-6 inline-flex items-center gap-2 rounded-xl px-4 py-2 text-xs font-semibold uppercase tracking-wider"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to Guides
@@ -163,7 +163,7 @@ function StartupGuideDetailPage() {
             </div>
             <Link
               to="/calculator"
-              className="flex shrink-0 items-center gap-2 rounded-xl bg-primary px-4 py-2.5 text-xs font-bold uppercase tracking-wider text-primary-foreground hover:opacity-90"
+              className="glass-btn-light flex shrink-0 items-center gap-2 rounded-xl px-4 py-2.5 text-xs font-bold uppercase tracking-wider"
             >
               <Calculator className="h-4 w-4" />
               Open Calculators

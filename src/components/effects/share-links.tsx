@@ -47,7 +47,7 @@ export default function ShareLinks({ url, title }: { url: string; title: string 
         type="button"
         onClick={() => setOpen((v) => !v)}
         aria-expanded={open}
-        className="inline-flex items-center gap-2 rounded-md border border-border bg-card px-4 py-2 text-sm font-semibold text-foreground transition-colors hover:border-primary/50"
+        className="glass-btn-light inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-semibold"
       >
         <Link2 aria-hidden className="h-4 w-4" />
         Share
@@ -66,7 +66,7 @@ export default function ShareLinks({ url, title }: { url: string; title: string 
             target="_blank"
             rel="noopener noreferrer"
             aria-label={t.label}
-            className="grid h-9 w-9 shrink-0 place-items-center rounded-md border border-border bg-card text-foreground transition-colors hover:border-primary/50 hover:text-primary"
+            className="glass-btn-light grid h-9 w-9 shrink-0 place-items-center rounded-md"
           >
             <t.icon aria-hidden className="h-4 w-4" />
           </a>
@@ -76,10 +76,10 @@ export default function ShareLinks({ url, title }: { url: string; title: string 
           onClick={copy}
           aria-label={copied ? "Link copied" : "Copy link"}
           className={cn(
-            "grid h-9 w-9 shrink-0 place-items-center rounded-md border border-border bg-card transition-colors",
+            "glass-btn-light grid h-9 w-9 shrink-0 place-items-center rounded-md",
             copied
-              ? "border-hl-green/50 text-hl-green"
-              : "text-foreground hover:border-primary/50 hover:text-primary",
+              ? "text-hl-green"
+              : "hover:text-primary",
           )}
         >
           {copied ? (

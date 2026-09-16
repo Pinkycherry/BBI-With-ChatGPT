@@ -98,7 +98,7 @@ function StartupGuidesIndexPage() {
                 onClick={() => setSelectedCategory(cat)}
                 className={`rounded-full px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] transition-colors ${
                   selectedCategory === cat
-                    ? "bg-primary text-primary-foreground"
+                    ? "glass-btn-glow glass-btn"
                     : "glass text-muted-foreground hover:bg-secondary hover:text-foreground"
                 }`}
               >
@@ -184,7 +184,7 @@ function StartupGuidesIndexPage() {
               </div>
               <Link
                 to="/calculator"
-                className="shrink-0 rounded-xl bg-primary px-5 py-2.5 text-xs font-bold uppercase tracking-[0.16em] text-primary-foreground transition-opacity hover:opacity-90"
+                className="glass-btn-light shrink-0 rounded-xl px-5 py-2.5 text-xs font-bold uppercase tracking-[0.16em]"
               >
                 Open Calculators →
               </Link>

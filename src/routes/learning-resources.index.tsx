@@ -298,7 +298,7 @@ function LearningResourcesIndexPage() {
             <div className="mt-6 flex flex-wrap items-center justify-center gap-4">
               <Link
                 to="/browse"
-                className="rounded-xl bg-primary px-6 py-3 text-xs font-bold uppercase tracking-[0.18em] text-primary-foreground transition-opacity hover:opacity-90"
+                className="glass-btn-light rounded-xl px-6 py-3 text-xs font-bold uppercase tracking-[0.18em]"
               >
                 Browse Idea Library
               </Link>

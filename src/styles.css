@@ -275,11 +275,11 @@
      glass than it needed over `#0C0C25`, and the drop shadow has to carry
      brand ink instead of black or it reads as a smudge, not elevation. */
   background:
-    linear-gradient(140deg, rgba(255, 255, 255, 0.52) 0%, rgba(255, 255, 255, 0.26) 48%, rgba(255, 255, 255, 0.14) 100%) !important;
-  backdrop-filter: blur(24px) saturate(170%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.75) !important;
-  border-top-color: rgba(255, 255, 255, 0.95);
-  border-left-color: rgba(255, 255, 255, 0.88);
+    linear-gradient(140deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.12) 48%, rgba(255, 255, 255, 0.05) 100%) !important;
+  backdrop-filter: blur(26px) saturate(180%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  border-top-color: rgba(255, 255, 255, 0.9);
+  border-left-color: rgba(255, 255, 255, 0.75);
   position: relative;
   /* Neutral, soft shadow — the previous pass leaned the shadow itself
      violet, which read as a tinted smudge instead of elevation (see the
@@ -382,12 +382,13 @@
 @utility glass-nav {
   position: relative;
   z-index: 50;
-  background: rgba(12, 12, 37, 0.92) !important;
-  backdrop-filter: blur(24px) saturate(180%) !important;
-  border-bottom: 1px solid rgba(182, 181, 227, 0.2) !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.22) 100%) !important;
+  backdrop-filter: blur(26px) saturate(180%) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.55) !important;
   box-shadow:
-    0 0 34px -14px rgba(182, 181, 227, 0.18),
-    0 12px 40px -10px rgba(0, 0, 0, 0.9) !important;
+    0 1px 0 0 rgba(255, 255, 255, 0.7) inset,
+    0 12px 30px -18px rgba(30, 28, 46, 0.16) !important;
 }
 /* ================================================================
    GLOW PILL BUTTONS — neon cyan glass (Image 2 style)
@@ -973,8 +974,8 @@ a.mo-link {
   border-radius: 0.375rem;
   color: #FCFBFE;
   background:
-    linear-gradient(180deg, rgba(136, 134, 219, 0.30) 0%, rgba(43, 40, 113, 0.38) 52%, rgba(70, 67, 186, 0.30) 100%);
-  backdrop-filter: blur(18px) saturate(140%);
+    linear-gradient(180deg, rgba(136, 134, 219, 0.16) 0%, rgba(43, 40, 113, 0.22) 52%, rgba(70, 67, 186, 0.16) 100%);
+  backdrop-filter: blur(22px) saturate(170%);
   border: 1px solid rgba(255, 255, 255, 0.34);
   box-shadow:
     0 1px 0 0 rgba(255, 255, 255, 0.55) inset,
@@ -998,8 +999,8 @@ button[class*="from-primary"],
   color: #FCFBFE !important;
   border-radius: 0.375rem;
   background:
-    linear-gradient(180deg, rgba(136, 134, 219, 0.30) 0%, rgba(43, 40, 113, 0.38) 52%, rgba(70, 67, 186, 0.30) 100%) !important;
-  backdrop-filter: blur(18px) saturate(140%) !important;
+    linear-gradient(180deg, rgba(136, 134, 219, 0.16) 0%, rgba(43, 40, 113, 0.22) 52%, rgba(70, 67, 186, 0.16) 100%) !important;
+  backdrop-filter: blur(22px) saturate(170%) !important;
   border: 1px solid rgba(255, 255, 255, 0.34) !important;
   box-shadow:
     0 1px 0 0 rgba(255, 255, 255, 0.55) inset,
@@ -1060,7 +1061,7 @@ button[class*="from-primary"]:hover,
      src/hooks/use-pill-interaction.ts) so hover/press motion has one
      source of truth instead of fighting a CSS transition. */
   background:
-    linear-gradient(180deg, rgba(136, 134, 219, 0.46) 0%, rgba(70, 67, 186, 0.46) 52%, rgba(58, 54, 151, 0.42) 100%) !important;
+    linear-gradient(180deg, rgba(136, 134, 219, 0.28) 0%, rgba(70, 67, 186, 0.28) 52%, rgba(58, 54, 151, 0.24) 100%) !important;
   border-color: rgba(255, 255, 255, 0.6) !important;
   box-shadow:
     0 1px 0 0 rgba(255, 255, 255, 0.7) inset,
@@ -1116,8 +1117,8 @@ button[class*="from-primary"]:hover,
   /* Real transparency — this should look like you could see through it, not
      like a solid white pill. Most of what reads as "glass" below comes from
      the blur + the rim/specular layers, not from an opaque fill. */
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.06) 100%);
-  backdrop-filter: blur(22px) saturate(180%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.04) 100%);
+  backdrop-filter: blur(24px) saturate(190%);
   border: 1px solid transparent;
   box-shadow:
     0 0 18px -8px rgba(255, 255, 255, 0.7) inset,
@@ -1302,35 +1303,34 @@ html.light body::before {
   animation: none !important;
   background-image: none !important;
 }
-/* `body::after` gets SOME atmosphere back, deliberately soft and pastel
-   rather than the old dark nebula: backdrop-blur on `.glass`/`.glass-btn`
-   has nothing to actually blur against a flat page, which is the reason the
-   liquid-glass pass still read as "frosted plastic" rather than glass —
-   real transparency needs colour behind it to distort. Large, low-opacity,
-   fixed (doesn't move on scroll, doesn't cost paint), positioned so it sits
-   under the hero and CTA-heavy sections where glass is heaviest. */
+/* `body::after` is the real background image (`--bbi-bg-image`, set inline
+   on <body> in __root.tsx from Images/BBI-Background-1.jpg) instead of the
+   flat page or the gradient-blob placeholder that came before it.
+   backdrop-blur on `.glass`/`.glass-btn` has nothing to actually blur
+   against a flat page — that is the reason the liquid-glass pass still read
+   as "frosted plastic" rather than glass. A soft white scrim sits over the
+   image (the linear-gradient layer, painted first so the image shows
+   through it) so the plain body text that is NOT inside a glass surface
+   anywhere on the site — headings, paragraphs, list items — keeps its WCAG
+   AA contrast against ink; glass surfaces themselves get the image's full
+   colour and detail through their own blur. Fixed (doesn't move on scroll,
+   doesn't repaint), covers the viewport, centred. */
 html.light body::after {
   opacity: 1 !important;
   animation: none !important;
   background-image:
-    radial-gradient(48rem 36rem at 12% -6%, rgba(136, 134, 219, 0.26), transparent 68%),
-    radial-gradient(42rem 32rem at 96% 4%, rgba(255, 184, 41, 0.16), transparent 70%),
-    radial-gradient(52rem 40rem at 45% 105%, rgba(70, 67, 186, 0.18), transparent 72%) !important;
+    linear-gradient(rgba(247, 246, 251, 0.62), rgba(247, 246, 251, 0.62)),
+    var(--bbi-bg-image) !important;
+  background-size: cover !important;
+  background-position: center top !important;
+  background-repeat: no-repeat !important;
 }
-/* The NAV shell only, reprinted as a plate: flat paper, one drawn rule, no
-   blur, no coloured shadow. `.glass`, `.glass-btn` and `.glass-pill` used to
-   be flattened here too — that is the single value that stopped every card
-   and button on the site from reading as glass despite the frosted CSS
-   above being fully built. The liquid-glass pass un-flattens them; the nav
-   shell stays a flat plate on purpose (out of scope for this pass, and a
-   flat header reads better against a page full of glass beneath it). */
+/* The nav shell is glass now too — "all means all" — instead of the flat
+   plate it was reprinted as here. `@utility glass-nav` above carries the
+   real (light, transparent) treatment; this override used to cancel it out
+   the same way the old `.glass`/`.glass-btn` overrides did. */
 html.light .glass-nav {
-  background: #FFFFFF !important;
-  border-color: rgba(70, 67, 186, 0.22) !important;
   color: #12122E;
-  -webkit-backdrop-filter: none !important;
-  backdrop-filter: none !important;
-  box-shadow: none !important;
 }
 /* The Aceternity hover signature, given to every legacy plate on the site in
    one rule rather than at twenty-odd call sites: the border takes brand ink
@@ -1461,25 +1461,26 @@ html.light .iv-skeleton {
    light-mode overrides must sit in the same layer to apply.
    ============================================================ */
 @layer utilities {
+  /* Dropdown / mega-menu / mobile-menu panel — glass now too, matching
+     `.glass-nav` it drops out of. Was a near-opaque plate (0.98 white); this
+     is the one panel on the site that most needs SOME body behind its text
+     since it sits directly over whatever page is beneath it, so it stays a
+     little less transparent than `.glass-nav` itself rather than matching
+     the buttons/cards exactly. */
   .iv-nav-panel {
-    background: rgba(10, 10, 32, 0.97) !important;
-    border: 1px solid rgba(182, 181, 227, 0.22) !important;
-    box-shadow: 0 26px 60px -24px rgba(0, 0, 0, 0.85) !important;
+    background:
+      linear-gradient(180deg, rgba(255, 255, 255, 0.62) 0%, rgba(255, 255, 255, 0.42) 100%) !important;
+    backdrop-filter: blur(28px) saturate(180%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.7) !important;
+    color: #12122E !important;
+    box-shadow:
+      0 1px 0 0 rgba(255, 255, 255, 0.85) inset,
+      0 24px 60px -30px rgba(30, 28, 46, 0.28) !important;
   }
-  html.light .iv-nav-panel,
-  html.light .glass-nav {
-    background: rgba(255, 255, 255, 0.98) !important;
-    border-color: rgba(43, 40, 113, 0.14) !important;
-    color: #0C0C25 !important;
-    box-shadow: 0 24px 60px -30px rgba(12, 12, 37, 0.45) !important;
-  }
-  html.light .iv-nav-panel a,
-  html.light .iv-nav-panel button,
   html.light .glass-nav a,
   html.light .glass-nav button {
-    color: #0C0C25 !important;
+    color: #12122E !important;
   }
-  html.light .iv-nav-panel a:hover,
   html.light .glass-nav a:hover {
     color: #2B2871 !important;
   }
@@ -1986,9 +1987,13 @@ html.light .idea-shell::before { opacity: 0.42; }
    ================================================================== */
 
 .bbi-footer {
-  background: var(--card);
-  border: 1px solid var(--border);
-  box-shadow: 0 24px 60px -40px color-mix(in oklab, var(--foreground) 40%, transparent);
+  background:
+    linear-gradient(140deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.18) 100%);
+  backdrop-filter: blur(26px) saturate(170%);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  box-shadow:
+    0 1px 0 0 rgba(255, 255, 255, 0.8) inset,
+    0 24px 60px -40px rgba(30, 28, 46, 0.3);
 }
 
 .bbi-footer-heading {
@@ -2024,11 +2029,13 @@ html.light .idea-shell::before { opacity: 0.42; }
 .bbi-footer-input {
   width: 100%;
   border-radius: 0.75rem;
-  border: 1px solid var(--input);
-  background: var(--popover);
   padding: 0.7rem 0.9rem;
   font-size: 0.875rem;
   color: var(--foreground);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.12) 100%);
+  backdrop-filter: blur(18px) saturate(170%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
   transition:
     border-color var(--mo-dur-2, 240ms) ease,
     box-shadow var(--mo-dur-2, 240ms) ease;
@@ -2048,8 +2055,15 @@ html.light .idea-shell::before { opacity: 0.42; }
   padding: 0.7rem 1rem;
   font-size: 0.875rem;
   font-weight: 600;
-  color: var(--primary-foreground);
-  background: linear-gradient(90deg, var(--primary), var(--ember));
+  color: #FCFBFE;
+  background:
+    linear-gradient(180deg, rgba(136, 134, 219, 0.2) 0%, rgba(43, 40, 113, 0.26) 52%, rgba(70, 67, 186, 0.2) 100%);
+  backdrop-filter: blur(20px) saturate(170%);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  box-shadow:
+    0 1px 0 0 rgba(255, 255, 255, 0.5) inset,
+    0 0 0 1px color-mix(in oklab, var(--primary) 45%, transparent),
+    0 0 20px -8px color-mix(in oklab, var(--primary) 60%, transparent);
   transition:
     transform var(--mo-dur-2, 240ms) cubic-bezier(0.16, 1, 0.3, 1),
     filter var(--mo-dur-2, 240ms) ease;
@@ -2785,21 +2799,40 @@ html.bbi-motion [data-wave].revealed:not(:has(.rv)) {
    would be too loud: sign-in, the paywall's confirm, the locked-content
    prompt. Same plate radius and brand ink as every other control — no
    gradient between two nearly identical colours, no glow, no scale-up. */
+/* The site's highest-intent CTA (pricing checkout, sign-in, paywall
+   upgrade) — dark glass + the coloured edge-glow, same tone the very first
+   glass spec asked for on "featured" buttons. This is the one that earns
+   it: it's the one thing on each of its five pages you actually want the
+   eye to land on. */
 .ac-cta {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
-  border-radius: var(--radius);
-  background: var(--primary);
-  color: var(--primary-foreground);
   font-weight: 600;
-  border: 1px solid var(--primary);
+  color: #FCFBFE;
+  background:
+    linear-gradient(180deg, rgba(136, 134, 219, 0.16) 0%, rgba(43, 40, 113, 0.22) 52%, rgba(70, 67, 186, 0.16) 100%);
+  backdrop-filter: blur(22px) saturate(170%);
+  border-radius: 0.375rem;
+  border: 1px solid rgba(255, 255, 255, 0.34);
+  box-shadow:
+    0 1px 0 0 rgba(255, 255, 255, 0.55) inset,
+    0 -1px 0 0 rgba(255, 255, 255, 0.22) inset,
+    0 10px 24px -10px rgba(12, 12, 37, 0.5),
+    0 0 0 1px color-mix(in oklab, var(--primary) 55%, transparent),
+    0 0 28px -6px color-mix(in oklab, var(--primary) 65%, transparent);
   transition:
     background-color 240ms cubic-bezier(0.22, 1, 0.36, 1),
-    color 240ms cubic-bezier(0.22, 1, 0.36, 1);
+    box-shadow 240ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 .ac-cta:hover:not(:disabled) {
-  background: color-mix(in oklab, var(--primary) 86%, #000000);
+  background:
+    linear-gradient(180deg, rgba(136, 134, 219, 0.26) 0%, rgba(70, 67, 186, 0.26) 52%, rgba(58, 54, 151, 0.22) 100%);
+  box-shadow:
+    0 1px 0 0 rgba(255, 255, 255, 0.7) inset,
+    0 16px 34px -12px rgba(12, 12, 37, 0.6),
+    0 0 0 1px color-mix(in oklab, var(--primary) 70%, transparent),
+    0 0 36px -6px color-mix(in oklab, var(--primary) 80%, transparent);
 }
 .ac-cta:disabled { opacity: 0.6; }

@@ -111,11 +111,11 @@ function SearchPage() {
             onChange={(e) => setTerm(e.target.value)}
             placeholder="e.g. data enrichment, newsletters, automation"
             aria-label="Search business ideas"
-            className="w-full rounded-md border border-input bg-card px-4 py-2.5 text-sm outline-none focus:border-primary"
+            className="glass w-full rounded-md px-4 py-2.5 text-sm outline-none focus:border-primary"
           />
           <button
             type="submit"
-            className="rounded-md bg-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground transition-opacity hover:opacity-90"
+            className="glass-btn-light rounded-md px-5 py-2.5 text-sm font-semibold"
           >
             Search
           </button>

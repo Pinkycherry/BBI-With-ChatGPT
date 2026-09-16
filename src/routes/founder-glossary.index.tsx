@@ -156,7 +156,7 @@ export function FounderGlossaryPage() {
               onClick={() => setSelectedLetter(null)}
               className={`rounded px-2.5 py-1 text-xs font-bold uppercase transition-colors ${
                 selectedLetter === null
-                  ? "bg-primary text-primary-foreground"
+                  ? "glass-btn-glow glass-btn"
                   : "text-muted-foreground hover:bg-secondary hover:text-foreground"
               }`}
             >
@@ -169,7 +169,7 @@ export function FounderGlossaryPage() {
                 onClick={() => setSelectedLetter(selectedLetter === ltr ? null : ltr)}
                 className={`rounded px-2.5 py-1 text-xs font-semibold uppercase transition-colors ${
                   selectedLetter === ltr
-                    ? "bg-primary text-primary-foreground"
+                    ? "glass-btn-glow glass-btn"
                     : "text-muted-foreground hover:bg-secondary hover:text-foreground"
                 }`}
               >
@@ -311,7 +311,7 @@ export function FounderGlossaryPage() {
                   setSelectedCategory("All");
                   setSelectedLetter(null);
                 }}
-                className="mt-5 rounded-xl bg-primary px-4 py-2 text-xs font-semibold uppercase tracking-wider text-primary-foreground"
+                className="glass-btn-light mt-5 rounded-xl px-4 py-2 text-xs font-semibold uppercase tracking-wider"
               >
                 Reset Search
               </button>

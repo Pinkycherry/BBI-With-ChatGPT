@@ -67,7 +67,7 @@ export default function StickyScroll({
         ))}
       </div>
       <div className="hidden lg:block">
-        <div className="sticky top-28 flex h-56 items-center justify-center overflow-hidden rounded-md border border-border bg-card p-8">
+        <div className="glass sticky top-28 flex h-56 items-center justify-center overflow-hidden rounded-md p-8">
           {/* This plate used to also print "01 of 03". That was a string I
               wrote, and no word on this site is mine to add — the position is
               already carried by the rule below, which needs no caption. */}

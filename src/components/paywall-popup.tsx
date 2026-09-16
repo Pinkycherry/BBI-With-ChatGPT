@@ -39,7 +39,7 @@ export function PaywallPopup({
           <Link
             to="/pricing"
             onClick={() => onOpenChange(false)}
-            className="flex-1 rounded-md border border-border bg-card px-5 py-3 text-center text-sm font-semibold transition-colors duration-300 hover:border-primary hover:text-primary"
+            className="glass-btn-light flex-1 px-5 py-3 text-center text-sm font-semibold hover:text-primary"
           >
             Get 3 Months — ₹199
           </Link>
