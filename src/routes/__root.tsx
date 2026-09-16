@@ -17,7 +17,6 @@ import { SiteTextMotion } from "@/components/site-text-motion";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { catalogQuery } from "../lib/ideas.functions";
 import { canonicalUrl } from "../lib/site-config";
-import bbiBackground from "../../Images/BBI-Background-1.jpg";
 
 function NotFoundComponent() {
   return (
@@ -142,7 +141,7 @@ function RootShell({ children }: { children: ReactNode }) {
         <HeadContent />
         <CanonicalLink />
       </head>
-      <body style={{ ["--bbi-bg-image" as string]: `url(${bbiBackground})` }}>
+      <body>
         {children}
         <Scripts />
       </body>

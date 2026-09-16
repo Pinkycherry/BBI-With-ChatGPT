@@ -1318,15 +1318,12 @@ html.light body::before {
    AA contrast against ink; glass surfaces themselves get the image's full
    colour and detail through their own blur. Fixed (doesn't move on scroll,
    doesn't repaint), covers the viewport, centred. */
+/* Background image removed on request — flat ground again, glass surfaces
+   stand on their own contrast/blur/shadow, no photo behind them. */
 html.light body::after {
-  opacity: 1 !important;
+  opacity: 0 !important;
   animation: none !important;
-  background-image:
-    linear-gradient(rgba(247, 246, 251, 0.62), rgba(247, 246, 251, 0.62)),
-    var(--bbi-bg-image) !important;
-  background-size: cover !important;
-  background-position: center top !important;
-  background-repeat: no-repeat !important;
+  background-image: none !important;
 }
 /* The nav shell is glass now too — "all means all" — instead of the flat
    plate it was reprinted as here. `@utility glass-nav` above carries the

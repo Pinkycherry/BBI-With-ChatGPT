@@ -1074,14 +1074,8 @@
 }
 #bbi-home .nh-tree-section {
   position: relative;
-  /* The site's second background image — a dark abstract wash — for this
-     one deliberately dark, immersive chapter, instead of a flat #10171d.
-     A dark scrim keeps the white type readable over it. */
-  background:
-    linear-gradient(rgba(8, 11, 14, 0.72), rgba(8, 11, 14, 0.72)),
-    url("../../../Images/BBI-Background-2.jpg");
-  background-size: cover;
-  background-position: center;
+  /* Background image removed on request — flat dark chapter again. */
+  background: #10171d;
   color: #f9f5ee;
   text-align: center;
   padding: 115px 5% 100px;
