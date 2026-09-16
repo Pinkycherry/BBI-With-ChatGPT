@@ -1,7 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { queryOptions } from "@tanstack/react-query";
 import { HomeExperience } from "@/components/home/home-experience";
-import { SiteShell } from "@/components/site-shell";
 import { catalogQuery, getFeaturedIdeas, getTrendingIdeas } from "@/lib/ideas.functions";
 import { FEATURED_IDEA_IDS } from "@/config/featured";
 import homeStyles from "@/components/home/home.css?url";
@@ -58,9 +57,5 @@ export const Route = createFileRoute("/")({
 function HomePage() {
   // Serialize the exact server results; do not refetch random values during hydration.
   const data = Route.useLoaderData();
-  return (
-    <SiteShell>
-      <HomeExperience {...data} />
-    </SiteShell>
-  );
+  return <HomeExperience {...data} />;
 }
