@@ -29,18 +29,18 @@ import { prefersReducedMotion } from "@/lib/motion";
 
 import { useAuth } from "@/hooks/use-auth";
 import { signOut } from "@/lib/auth-client";
-import HoverBorderGradient from "@/components/aceternity/hover-border-gradient";
 import MovingBorder from "@/components/aceternity/moving-border";
 
-/** Footer's primary CTA — spotlight glow behind a pill with GSAP hover/press motion. */
+/** Footer's primary CTA. */
 function FooterCta() {
   return (
-    <HoverBorderGradient asChild containerClassName="mt-5">
-      <Link to="/browse" className="text-xs font-extrabold uppercase tracking-[0.18em]">
-        <span aria-hidden>&#8981;</span>
-        <span>Browse the library free</span>
-      </Link>
-    </HoverBorderGradient>
+    <Link
+      to="/browse"
+      className="ac-cta mt-5 inline-flex text-xs font-extrabold uppercase tracking-[0.18em]"
+    >
+      <span aria-hidden>&#8981;</span>
+      <span>Browse the library free</span>
+    </Link>
   );
 }
 
@@ -215,15 +215,13 @@ function AuthButtons({ onNavigate, full }: { onNavigate?: () => void; full?: boo
       >
         Sign In
       </Link>
-      <HoverBorderGradient asChild containerClassName={full ? "w-full" : "shrink-0"}>
-        <Link
-          to="/browse"
-          onClick={onNavigate}
-          className={`whitespace-nowrap px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] ${full ? "w-full justify-center" : ""}`}
-        >
-          Browse free
-        </Link>
-      </HoverBorderGradient>
+      <Link
+        to="/browse"
+        onClick={onNavigate}
+        className={`ac-cta whitespace-nowrap px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] ${full ? "w-full justify-center" : ""}`}
+      >
+        Browse free
+      </Link>
     </>
   );
 }
