@@ -225,7 +225,7 @@ function AuthButtons({ onNavigate, full }: { onNavigate?: () => void; full?: boo
       <Link
         to="/sign-in"
         onClick={onNavigate}
-        className={`whitespace-nowrap rounded-md border border-border bg-card px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-foreground transition-colors duration-300 hover:border-primary hover:text-primary ${full ? "block text-center" : ""}`}
+        className={`glass-btn-light whitespace-nowrap rounded-md px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] ${full ? "block text-center" : ""}`}
       >
         Sign In
       </Link>

@@ -974,7 +974,7 @@ a.mo-link {
   border-radius: 0.375rem;
   color: #FCFBFE;
   background:
-    linear-gradient(180deg, rgba(136, 134, 219, 0.16) 0%, rgba(43, 40, 113, 0.22) 52%, rgba(70, 67, 186, 0.16) 100%);
+    linear-gradient(180deg, rgba(30, 30, 30, 0.4) 0%, rgba(10, 10, 10, 0.5) 52%, rgba(30, 30, 30, 0.4) 100%);
   backdrop-filter: blur(22px) saturate(170%);
   border: 1px solid rgba(255, 255, 255, 0.34);
   box-shadow:
@@ -999,7 +999,7 @@ button[class*="from-primary"],
   color: #FCFBFE !important;
   border-radius: 0.375rem;
   background:
-    linear-gradient(180deg, rgba(136, 134, 219, 0.16) 0%, rgba(43, 40, 113, 0.22) 52%, rgba(70, 67, 186, 0.16) 100%) !important;
+    linear-gradient(180deg, rgba(30, 30, 30, 0.4) 0%, rgba(10, 10, 10, 0.5) 52%, rgba(30, 30, 30, 0.4) 100%) !important;
   backdrop-filter: blur(22px) saturate(170%) !important;
   border: 1px solid rgba(255, 255, 255, 0.34) !important;
   box-shadow:
@@ -1061,7 +1061,7 @@ button[class*="from-primary"]:hover,
      src/hooks/use-pill-interaction.ts) so hover/press motion has one
      source of truth instead of fighting a CSS transition. */
   background:
-    linear-gradient(180deg, rgba(136, 134, 219, 0.28) 0%, rgba(70, 67, 186, 0.28) 52%, rgba(58, 54, 151, 0.24) 100%) !important;
+    linear-gradient(180deg, rgba(40, 40, 40, 0.55) 0%, rgba(15, 15, 15, 0.6) 52%, rgba(35, 35, 35, 0.5) 100%) !important;
   border-color: rgba(255, 255, 255, 0.6) !important;
   box-shadow:
     0 1px 0 0 rgba(255, 255, 255, 0.7) inset,
@@ -1216,27 +1216,30 @@ html.light {
   /* Opaque. A plate is printed, not frosted — this single value is
      what stops every card in the site reading as glass. */
   --card: #FFFFFF;
-  --card-foreground: #12122E;
+  --card-foreground: #000000;
   --popover: #FFFFFF;
-  --popover-foreground: #12122E;
-  --primary: #4643BA;
+  --popover-foreground: #000000;
+  /* TEMPORARY — no brand colour anywhere, black/white/gray only, per
+     explicit instruction ("I will tell you which colours to use later").
+     Every token below still exists and is still read everywhere it always
+     was; only the VALUES are neutralized, so restoring the palette later
+     is a token edit here, not a re-touch of every component. */
+  --primary: #111111;
   --primary-foreground: #FFFFFF;
-  --secondary: #EFEDF7;
-  --secondary-foreground: #12122E;
-  --muted: rgba(70, 67, 186, 0.05);
-  --muted-foreground: #5B5892;
-  --accent: #4643BA;
+  --secondary: #EFEFEF;
+  --secondary-foreground: #000000;
+  --muted: rgba(0, 0, 0, 0.05);
+  --muted-foreground: #555555;
+  --accent: #111111;
   --accent-foreground: #FFFFFF;
-  /* The plate rule. Structure is a drawn line at a readable weight,
-     not a soft edge. */
-  --border: rgba(70, 67, 186, 0.22);
-  --input: rgba(70, 67, 186, 0.28);
-  --ring: #4643BA;
-  --ember: #8886DB;
-  --warm: #5B5892;
-  --glass-border: rgba(70, 67, 186, 0.22);
-  --violet: #4643BA;
-  --violet-soft: #8886DB;
+  --border: rgba(0, 0, 0, 0.16);
+  --input: rgba(0, 0, 0, 0.2);
+  --ring: #111111;
+  --ember: #111111;
+  --warm: #555555;
+  --glass-border: rgba(0, 0, 0, 0.16);
+  --violet: #111111;
+  --violet-soft: #555555;
 
   /* ============================================================
      HIGHLIGHT PALETTE
@@ -1278,14 +1281,14 @@ html.light {
        coral  a cost or a risk: what hurts, what to watch
        teal   data: trend scores, counts, measured figures
      ============================================================ */
-  --hl-gold: #8A5D00;
-  --hl-green: #0F6E44;
-  --hl-coral: #B0442C;
-  --hl-teal: #10627A;
+  --hl-gold: #111111;
+  --hl-green: #111111;
+  --hl-coral: #111111;
+  --hl-teal: #111111;
 }
 html.light body {
   background-color: #F7F6FB !important;
-  color: #12122E;
+  color: #000000;
 }
 /* The base body background is `!important` inside @layer base; important
    declarations in a layer beat unlayered ones, so the light override must
@@ -1467,15 +1470,20 @@ html.light .iv-skeleton {
      since it sits directly over whatever page is beneath it, so it stays a
      little less transparent than `.glass-nav` itself rather than matching
      the buttons/cards exactly. */
+  /* This one carries dense, readable content (category grids, links) sitting
+     directly over whatever the page behind it is — a hero headline, a card
+     grid. Too transparent and the two layers of text visually collide and
+     neither reads. Opaque enough to be legible on its own; still glass
+     (blur + a glossy top highlight + shadow), never a flat white plate. */
   .iv-nav-panel {
     background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.62) 0%, rgba(255, 255, 255, 0.42) 100%) !important;
-    backdrop-filter: blur(28px) saturate(180%) !important;
-    border: 1px solid rgba(255, 255, 255, 0.7) !important;
-    color: #12122E !important;
+      linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0%, rgba(240, 240, 240, 0.85) 100%) !important;
+    backdrop-filter: blur(40px) saturate(180%) !important;
+    border: 1px solid rgba(255, 255, 255, 0.85) !important;
+    color: #000000 !important;
     box-shadow:
-      0 1px 0 0 rgba(255, 255, 255, 0.85) inset,
-      0 24px 60px -30px rgba(30, 28, 46, 0.28) !important;
+      0 1px 0 0 rgba(255, 255, 255, 0.9) inset,
+      0 28px 64px -24px rgba(0, 0, 0, 0.35) !important;
   }
   html.light .glass-nav a,
   html.light .glass-nav button {
@@ -1573,19 +1581,22 @@ html.light .iv-skeleton {
 /* Footer column is narrow — keep the gap tighter there. */
 footer .iv-tag-cloud { gap: 0.5rem; }
 
-/* Light mode: footer/cloud pills get a soft light-grey/blue fill + dark text. */
+/* Glass, not a flat plate. */
 html.light .iv-tag-cloud .iv-tag {
-  background: var(--card) !important;
-  border-color: var(--border) !important;
-  color: #0C0C25 !important;
+  background:
+    linear-gradient(140deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0.18) 100%) !important;
+  backdrop-filter: blur(16px) saturate(170%) !important;
+  border-color: rgba(255, 255, 255, 0.65) !important;
+  color: #000000 !important;
   box-shadow:
-    0 1px 0 0 rgba(255, 255, 255, 0.95) inset,
-    0 10px 22px -18px rgba(12, 12, 37, 0.55) !important;
+    0 1px 0 0 rgba(255, 255, 255, 0.8) inset,
+    0 10px 22px -18px rgba(0, 0, 0, 0.3) !important;
 }
 html.light .iv-tag-cloud .iv-tag:hover {
-  background: linear-gradient(180deg, rgba(238, 236, 248, 1) 0%, rgba(218, 217, 242, 0.98) 100%) !important;
-  border-color: rgba(70, 67, 186, 0.42) !important;
-  color: #2B2871 !important;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.32) 100%) !important;
+  border-color: rgba(255, 255, 255, 0.85) !important;
+  color: #000000 !important;
 }
 
 /* ============================================================
@@ -2057,7 +2068,7 @@ html.light .idea-shell::before { opacity: 0.42; }
   font-weight: 600;
   color: #FCFBFE;
   background:
-    linear-gradient(180deg, rgba(136, 134, 219, 0.2) 0%, rgba(43, 40, 113, 0.26) 52%, rgba(70, 67, 186, 0.2) 100%);
+    linear-gradient(180deg, rgba(30, 30, 30, 0.45) 0%, rgba(10, 10, 10, 0.55) 52%, rgba(30, 30, 30, 0.45) 100%);
   backdrop-filter: blur(20px) saturate(170%);
   border: 1px solid rgba(255, 255, 255, 0.3);
   box-shadow:
@@ -2812,7 +2823,7 @@ html.bbi-motion [data-wave].revealed:not(:has(.rv)) {
   font-weight: 600;
   color: #FCFBFE;
   background:
-    linear-gradient(180deg, rgba(136, 134, 219, 0.16) 0%, rgba(43, 40, 113, 0.22) 52%, rgba(70, 67, 186, 0.16) 100%);
+    linear-gradient(180deg, rgba(30, 30, 30, 0.4) 0%, rgba(10, 10, 10, 0.5) 52%, rgba(30, 30, 30, 0.4) 100%);
   backdrop-filter: blur(22px) saturate(170%);
   border-radius: 0.375rem;
   border: 1px solid rgba(255, 255, 255, 0.34);
@@ -2828,7 +2839,7 @@ html.bbi-motion [data-wave].revealed:not(:has(.rv)) {
 }
 .ac-cta:hover:not(:disabled) {
   background:
-    linear-gradient(180deg, rgba(136, 134, 219, 0.26) 0%, rgba(70, 67, 186, 0.26) 52%, rgba(58, 54, 151, 0.22) 100%);
+    linear-gradient(180deg, rgba(40, 40, 40, 0.5) 0%, rgba(15, 15, 15, 0.58) 52%, rgba(35, 35, 35, 0.46) 100%);
   box-shadow:
     0 1px 0 0 rgba(255, 255, 255, 0.7) inset,
     0 16px 34px -12px rgba(12, 12, 37, 0.6),
