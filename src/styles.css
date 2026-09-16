@@ -275,18 +275,23 @@
      glass than it needed over `#0C0C25`, and the drop shadow has to carry
      brand ink instead of black or it reads as a smudge, not elevation. */
   background:
-    linear-gradient(140deg, rgba(255, 255, 255, 0.72) 0%, rgba(255, 255, 255, 0.42) 48%, rgba(255, 255, 255, 0.26) 100%) !important;
-  backdrop-filter: blur(20px) saturate(160%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.8) !important;
+    linear-gradient(140deg, rgba(255, 255, 255, 0.52) 0%, rgba(255, 255, 255, 0.26) 48%, rgba(255, 255, 255, 0.14) 100%) !important;
+  backdrop-filter: blur(24px) saturate(170%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.75) !important;
   border-top-color: rgba(255, 255, 255, 0.95);
-  border-left-color: rgba(255, 255, 255, 0.9);
+  border-left-color: rgba(255, 255, 255, 0.88);
   position: relative;
+  /* Neutral, soft shadow — the previous pass leaned the shadow itself
+     violet, which read as a tinted smudge instead of elevation (see the
+     reference "Weather / Steps / Balance" cards: the shadow there is a
+     near-neutral soft gray, brand colour lives in the content, not the
+     card's own cast shadow). */
   box-shadow:
-    0 0 0 1px rgba(70, 67, 186, 0.06),
-    0 1px 1px 0 rgba(255, 255, 255, 0.8) inset,
-    0 -1px 1px 0 rgba(70, 67, 186, 0.08) inset,
-    0 24px 48px -20px rgba(70, 67, 186, 0.22),
-    0 6px 16px -6px rgba(12, 12, 37, 0.1) !important;
+    0 0 0 1px rgba(70, 67, 186, 0.05),
+    0 1px 1px 0 rgba(255, 255, 255, 0.85) inset,
+    0 -1px 1px 0 rgba(70, 67, 186, 0.06) inset,
+    0 20px 40px -18px rgba(30, 28, 46, 0.16),
+    0 6px 14px -6px rgba(30, 28, 46, 0.08) !important;
   color: var(--foreground);
   /* Rim-light sweeping the top-left edge — brighter along the top than the
      bottom, per the Liquid Glass reference. Same mask-composite technique as
@@ -320,8 +325,9 @@
   .glass-card:hover {
     transform: translateY(-4px);
     box-shadow:
-      0 32px 60px -24px rgba(70, 67, 186, 0.3),
-      0 10px 24px -10px rgba(12, 12, 37, 0.14);
+      0 32px 60px -24px rgba(30, 28, 46, 0.22),
+      0 10px 24px -10px rgba(30, 28, 46, 0.12),
+      0 0 24px -10px rgba(70, 67, 186, 0.16);
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -1107,44 +1113,59 @@ button[class*="from-primary"]:hover,
   overflow: hidden;
   border-radius: 0.375rem;
   color: #12122E;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0.4) 52%, rgba(255, 255, 255, 0.28) 100%);
-  backdrop-filter: blur(16px) saturate(160%);
-  border: 1px solid rgba(255, 255, 255, 0.85);
-  border-bottom-color: rgba(70, 67, 186, 0.16);
+  /* Real transparency — this should look like you could see through it, not
+     like a solid white pill. Most of what reads as "glass" below comes from
+     the blur + the rim/specular layers, not from an opaque fill. */
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.06) 100%);
+  backdrop-filter: blur(22px) saturate(180%);
+  border: 1px solid transparent;
   box-shadow:
-    0 1px 0 0 rgba(255, 255, 255, 0.95) inset,
-    0 -1px 0 0 rgba(70, 67, 186, 0.12) inset,
-    0 0 18px -6px rgba(255, 255, 255, 0.6) inset,
-    0 10px 24px -10px rgba(70, 67, 186, 0.22),
-    0 2px 6px -2px rgba(12, 12, 37, 0.08);
+    0 0 18px -8px rgba(255, 255, 255, 0.7) inset,
+    0 14px 28px -14px rgba(12, 12, 37, 0.22),
+    0 2px 8px -3px rgba(12, 12, 37, 0.1);
 }
+/* The rim: a 1px gradient border, bright at the top, fading out by the
+   bottom edge — masked so only the ring shows, same technique as `.glass`. */
+.glass-btn-light::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(255, 255, 255, 0.35) 45%, rgba(255, 255, 255, 0.05) 100%);
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+/* Two crisp catch-lights (top-left, bottom-right) instead of one soft blob —
+   the pair is what reads as "glossy and reflective" rather than "backlit". */
 .glass-btn-light::after {
   content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
   pointer-events: none;
-  background: radial-gradient(120px 90px at 22% 18%, rgba(255, 255, 255, 0.95), transparent 70%);
+  background:
+    radial-gradient(60px 44px at 16% 20%, rgba(255, 255, 255, 0.95), transparent 72%),
+    radial-gradient(50px 36px at 86% 84%, rgba(255, 255, 255, 0.4), transparent 74%);
   mix-blend-mode: screen;
-  opacity: 0.5;
+  opacity: 0.7;
   transition:
     opacity var(--mo-dur-3) var(--mo-ease),
     transform var(--mo-dur-3) var(--mo-ease);
 }
 .glass-btn-light:hover {
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.88) 0%, rgba(255, 255, 255, 0.55) 52%, rgba(255, 255, 255, 0.4) 100%);
-  border-color: rgba(255, 255, 255, 1);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.32) 0%, rgba(255, 255, 255, 0.1) 100%);
   box-shadow:
-    0 1px 0 0 rgba(255, 255, 255, 1) inset,
-    0 0 22px -6px rgba(255, 255, 255, 0.75) inset,
-    0 16px 34px -12px rgba(70, 67, 186, 0.3),
-    0 0 20px -6px rgba(70, 67, 186, 0.18);
+    0 0 24px -8px rgba(255, 255, 255, 0.85) inset,
+    0 20px 38px -16px rgba(12, 12, 37, 0.28),
+    0 0 22px -8px rgba(70, 67, 186, 0.2);
 }
 .glass-btn-light:hover::after {
-  opacity: 0.85;
-  transform: translate3d(6px, -4px, 0);
+  opacity: 0.95;
+  transform: translate3d(4px, -3px, 0);
 }
 .glass-btn-light:disabled {
   cursor: not-allowed;
@@ -1274,16 +1295,27 @@ html.light body {
     color: #12122E;
   }
 }
-/* Paper has no atmosphere. `body::before` is a starfield on a 7s twinkle and
-   `body::after` a violet nebula wash — the deep-space backdrop this design is
-   leaving behind. The animation has to go with the opacity: a running
-   animation sets opacity every frame and would otherwise beat the static
-   value here, which is why the field survived an earlier `opacity: 0`. */
-html.light body::before,
-html.light body::after {
+/* `body::before` is the old starfield — stays off, a business content site
+   doesn't need twinkling dots. */
+html.light body::before {
   opacity: 0 !important;
   animation: none !important;
   background-image: none !important;
+}
+/* `body::after` gets SOME atmosphere back, deliberately soft and pastel
+   rather than the old dark nebula: backdrop-blur on `.glass`/`.glass-btn`
+   has nothing to actually blur against a flat page, which is the reason the
+   liquid-glass pass still read as "frosted plastic" rather than glass —
+   real transparency needs colour behind it to distort. Large, low-opacity,
+   fixed (doesn't move on scroll, doesn't cost paint), positioned so it sits
+   under the hero and CTA-heavy sections where glass is heaviest. */
+html.light body::after {
+  opacity: 1 !important;
+  animation: none !important;
+  background-image:
+    radial-gradient(48rem 36rem at 12% -6%, rgba(136, 134, 219, 0.26), transparent 68%),
+    radial-gradient(42rem 32rem at 96% 4%, rgba(255, 184, 41, 0.16), transparent 70%),
+    radial-gradient(52rem 40rem at 45% 105%, rgba(70, 67, 186, 0.18), transparent 72%) !important;
 }
 /* The NAV shell only, reprinted as a plate: flat paper, one drawn rule, no
    blur, no coloured shadow. `.glass`, `.glass-btn` and `.glass-pill` used to
