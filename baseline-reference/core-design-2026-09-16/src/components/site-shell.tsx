@@ -1,0 +1,950 @@
+import { Link, useLoaderData } from "@tanstack/react-router";
+import { Fragment, useEffect, useRef, useState, type ReactNode } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { User } from "lucide-react";
+import type { IconType } from "react-icons";
+import {
+  SiReact,
+  SiTypescript,
+  SiVite,
+  SiTailwindcss,
+  SiShadcnui,
+  SiGsap,
+  SiFramer,
+  SiTanstack,
+  SiNodedotjs,
+  SiSupabase,
+  SiVercel,
+  SiGithub,
+  SiClaude,
+  SiClaudecode,
+  SiN8N,
+  SiGooglegemini,
+} from "react-icons/si";
+// ChatGPT (OpenAI) and Grok (xAI) marks live in the Remix Icon set, not
+// Simple Icons — so all 18 entries below render a real brand logo, none a
+// text placeholder.
+import { RiOpenaiFill, RiGrokAiFill } from "react-icons/ri";
+
+import { LiveSearch } from "@/components/live-search";
+import { FloatingDock } from "@/components/floating-dock";
+import { CategoryBadge } from "@/components/category-badge";
+import { catalogQuery } from "@/lib/ideas.functions";
+import { usePageScrollProgress } from "@/motion";
+import { topCategories, typeGroups } from "@/lib/catalog-display";
+import { subscribeToNewsletter } from "@/lib/newsletter.functions";
+import { prefersReducedMotion } from "@/lib/motion";
+
+import { useAuth } from "@/hooks/use-auth";
+import { signOut } from "@/lib/auth-client";
+import HoverBorderGradient from "@/components/aceternity/hover-border-gradient";
+import MovingBorder from "@/components/aceternity/moving-border";
+
+/** Footer's primary CTA — spotlight glow behind a pill with GSAP hover/press motion. */
+function FooterCta() {
+  return (
+    <HoverBorderGradient asChild containerClassName="mt-5">
+      <Link to="/browse" className="text-xs font-extrabold uppercase tracking-[0.18em]">
+        <span aria-hidden>&#8981;</span>
+        <span>Browse the library free</span>
+      </Link>
+    </HoverBorderGradient>
+  );
+}
+
+type BuiltWithItem = { name: string; href: string; Icon: IconType; color: string };
+
+/**
+ * Trust/stack showcase, placed directly before the footer on every page.
+ * Each entry links out to that technology's real official site and shows
+ * its real brand mark, rendered in that brand's own color so it reads as
+ * the actual recognizable logo (not a faint one-tone glyph). All 18 have a
+ * real logo — the ChatGPT (OpenAI) and Grok (xAI) marks come from the
+ * Remix Icon set since Simple Icons doesn't carry them. Marks that are
+ * black in their brand guidelines (shadcn, Vercel, GitHub, ChatGPT, Grok)
+ * use the site's near-black foreground so they stay crisp on the light
+ * glass surface.
+ */
+const INK = "#0C0C25";
+const BUILT_WITH: BuiltWithItem[] = [
+  { name: "React", href: "https://react.dev", Icon: SiReact, color: "#61DAFB" },
+  {
+    name: "TypeScript",
+    href: "https://www.typescriptlang.org",
+    Icon: SiTypescript,
+    color: "#3178C6",
+  },
+  { name: "Vite", href: "https://vite.dev", Icon: SiVite, color: "#646CFF" },
+  { name: "Tailwind CSS", href: "https://tailwindcss.com", Icon: SiTailwindcss, color: "#06B6D4" },
+  { name: "shadcn/ui", href: "https://ui.shadcn.com", Icon: SiShadcnui, color: INK },
+  { name: "GSAP", href: "https://gsap.com", Icon: SiGsap, color: "#0AE448" },
+  { name: "Framer Motion", href: "https://motion.dev", Icon: SiFramer, color: "#0055FF" },
+  { name: "TanStack", href: "https://tanstack.com", Icon: SiTanstack, color: "#FF4154" },
+  { name: "Node.js", href: "https://nodejs.org", Icon: SiNodedotjs, color: "#5FA04E" },
+  { name: "Supabase", href: "https://supabase.com", Icon: SiSupabase, color: "#3FCF8E" },
+  { name: "Vercel", href: "https://vercel.com", Icon: SiVercel, color: INK },
+  { name: "GitHub", href: "https://github.com", Icon: SiGithub, color: INK },
+  { name: "Claude", href: "https://claude.com", Icon: SiClaude, color: "#D97757" },
+  { name: "Claude Code", href: "https://claude.com", Icon: SiClaudecode, color: "#D97757" },
+  { name: "n8n", href: "https://n8n.io", Icon: SiN8N, color: "#EA4B71" },
+  { name: "ChatGPT", href: "https://chatgpt.com", Icon: RiOpenaiFill, color: INK },
+  { name: "Grok", href: "https://x.ai", Icon: RiGrokAiFill, color: INK },
+  { name: "Gemini", href: "https://gemini.google.com", Icon: SiGooglegemini, color: "#8E75B2" },
+];
+
+function BuiltWithItemLink({ item }: { item: BuiltWithItem }) {
+  const { name, href, Icon, color } = item;
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="glass glass-hover flex shrink-0 items-center gap-2.5 rounded-full px-4 py-2.5 text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+    >
+      <Icon aria-hidden className="h-6 w-6 shrink-0" style={{ color }} />
+      <span className="whitespace-nowrap">{name}</span>
+    </a>
+  );
+}
+
+function BuiltWithSection() {
+  const [looping, setLooping] = useState(true);
+
+  useEffect(() => {
+    setLooping(!prefersReducedMotion());
+    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const onChange = () => setLooping(!mq.matches);
+    mq.addEventListener("change", onChange);
+    return () => mq.removeEventListener("change", onChange);
+  }, []);
+
+  const items = looping ? [...BUILT_WITH, ...BUILT_WITH] : BUILT_WITH;
+
+  return (
+    <section className="px-3 pb-12 pt-6 sm:px-4" aria-labelledby="built-with-heading">
+      <div className="mx-auto max-w-7xl">
+        <p id="built-with-heading" className="text-center t-eyebrow">
+          Built with
+        </p>
+        <div className="bbi-built-ticker mt-6">
+          <div
+            className={`bbi-built-ticker-track ${looping ? "" : "bbi-built-ticker-static"}`}
+            style={looping ? { animationDuration: "38s" } : undefined}
+          >
+            {items.map((item, i) => (
+              <BuiltWithItemLink key={`${item.name}-${i}`} item={item} />
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/**
+ * Header/nav grouping (PROJECT_BRIEF.md Section 12.5 — 3-4 dropdowns).
+ * Exact structure is provisional pending the founder's reference images;
+ * see PENDING.md.
+ */
+const navLinks = [{ to: "/pricing", label: "Pricing" }];
+
+const EXPLORE_ITEMS = [
+  { to: "/browse", label: "Browse all ideas" },
+  { to: "/search", label: "Search" },
+  { to: "/blog", label: "Blog" },
+  { to: "/services", label: "Services" },
+];
+
+const COMPANY_ITEMS = [
+  { to: "/about", label: "About" },
+  { to: "/contact", label: "Contact" },
+];
+
+/** Curated static groupings — link through to /browse (no dedicated filtered route yet). */
+const isDesktop = () =>
+  typeof window !== "undefined" && window.matchMedia("(min-width: 768px)").matches;
+
+/**
+ * The catalog, read from the ROOT ROUTE'S LOADER rather than from the query
+ * cache.
+ *
+ * This used to be `useQuery(catalogQuery)`. The root loader does call
+ * `ensureQueryData(catalogQuery)`, so the server had the data — but
+ * `src/router.tsx` builds a fresh, empty `QueryClient` on both the server and
+ * the client with no dehydration between them, so the client's first render
+ * found an empty cache. Server markup rendered six category pills; client
+ * markup rendered "Loading…". React saw the mismatch and threw away the whole
+ * tree on nearly every page of the site.
+ *
+ * Router loader data, unlike the query cache, IS dehydrated and rehydrated by
+ * TanStack Router automatically, so reading it here makes both renders
+ * identical. It also means the header dropdown and the footer no longer issue
+ * a client-side fetch per page visit.
+ */
+function useCatalog() {
+  const data = useLoaderData({ from: "__root__" });
+  return { data };
+}
+
+function AuthButtons({ onNavigate, full }: { onNavigate?: () => void; full?: boolean }) {
+  const auth = useAuth();
+
+  if (auth.status === "authenticated") {
+    const metadata = auth.session.user.user_metadata as Record<string, unknown> | undefined;
+    const fullName = metadata?.["full_name"] as string | undefined;
+    const name = fullName?.split(" ")[0] ?? auth.session.user.email?.split("@")[0] ?? "Account";
+    return (
+      <div className={`flex items-center gap-2 ${full ? "flex-col" : ""}`}>
+        <span
+          className={`glass flex items-center gap-1.5 rounded-full px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-foreground ${full ? "w-full justify-center" : ""}`}
+        >
+          <User className="h-3.5 w-3.5 shrink-0" aria-hidden />
+          <span className="truncate">{name}</span>
+        </span>
+        <button
+          type="button"
+          onClick={() => {
+            void signOut();
+            onNavigate?.();
+          }}
+          className={`rounded-full border border-border px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground transition-colors duration-300 hover:border-primary hover:text-foreground ${full ? "w-full" : ""}`}
+        >
+          Sign out
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      <Link
+        to="/sign-in"
+        onClick={onNavigate}
+        className={`whitespace-nowrap rounded-md border border-border bg-card px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-foreground transition-colors duration-300 hover:border-primary hover:text-primary ${full ? "block text-center" : ""}`}
+      >
+        Sign In
+      </Link>
+      <HoverBorderGradient asChild containerClassName={full ? "w-full" : "shrink-0"}>
+        <Link
+          to="/browse"
+          onClick={onNavigate}
+          className={`whitespace-nowrap px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] ${full ? "w-full justify-center" : ""}`}
+        >
+          Browse free
+        </Link>
+      </HoverBorderGradient>
+    </>
+  );
+}
+
+/** Desktop mega-menu. Categories are never hardcoded — live from the `ideas` table. */
+/**
+ * Shared dropdown shell (hover-open with a close-delay gap fix, outside-click
+ * close, keyboard focus support). Every header dropdown is built on this one
+ * implementation instead of four copies of the same open/close logic.
+ */
+function NavDropdown({
+  label,
+  panelClassName = "glass-nav absolute left-0 top-full z-50 mt-3 w-64 rounded-2xl p-3",
+  children,
+}: {
+  label: string;
+  panelClassName?: string;
+  children: (close: () => void) => ReactNode;
+}) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const closeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  const cancelClose = () => {
+    if (closeTimer.current) {
+      clearTimeout(closeTimer.current);
+      closeTimer.current = null;
+    }
+  };
+  const openNow = () => {
+    cancelClose();
+    setOpen(true);
+  };
+  const closeSoon = () => {
+    cancelClose();
+    closeTimer.current = setTimeout(() => setOpen(false), 150);
+  };
+  useEffect(() => cancelClose, []);
+
+  useEffect(() => {
+    if (!open) return;
+    const onClick = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener("mousedown", onClick);
+    return () => document.removeEventListener("mousedown", onClick);
+  }, [open]);
+
+  return (
+    <div
+      ref={ref}
+      className="relative"
+      onMouseEnter={() => isDesktop() && openNow()}
+      onMouseLeave={closeSoon}
+    >
+      <button
+        type="button"
+        aria-expanded={open}
+        aria-haspopup="menu"
+        onFocus={() => isDesktop() && openNow()}
+        onClick={() => setOpen((v) => !v)}
+        className="relative flex items-center gap-1 rounded-[calc(var(--radius)-2px)] px-1.5 py-1 uppercase tracking-[0.18em] transition-colors duration-300 hover:text-foreground"
+      >
+        {/* One marker element shared across every dropdown trigger, so moving
+            along the bar slides a single plate rather than fading N of them. */}
+        {open ? (
+          <motion.span
+            layoutId="ac-nav-marker"
+            transition={{ type: "spring", stiffness: 340, damping: 30 }}
+            className="absolute inset-0 rounded-[calc(var(--radius)-2px)] bg-primary/10"
+          />
+        ) : null}
+        <span className="relative z-10">{label}</span>
+        <span
+          aria-hidden
+          className={`transition-transform duration-300 ${open ? "rotate-180" : ""}`}
+        >
+          ▾
+        </span>
+      </button>
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            role="menu"
+            initial={{ opacity: 0, y: -8, scale: 0.9, filter: "blur(8px)" }}
+            animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }}
+            exit={{ opacity: 0, y: -8, scale: 0.9, filter: "blur(8px)" }}
+            transition={{ type: "spring", stiffness: 260, damping: 26 }}
+            onMouseEnter={openNow}
+            onMouseLeave={closeSoon}
+            className={`iv-nav-panel ${panelClassName}`}
+          >
+            {children(() => setOpen(false))}
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+/**
+ * Desktop mega-menu. Categories are never hardcoded — live from the `ideas`
+ * table, every one of them, with its real blueprint count.
+ *
+ * This used to render the categories as a cloud of capsules with no counts and
+ * a hard cap of 20. Rows carry more information in less space, and the count
+ * is the single most useful thing a reader can know before clicking.
+ */
+function CategoryMega() {
+  const { data } = useCatalog();
+  // Capped, and with a scroll container as a second line of defence. A stress
+  // run at 1,200 categories measured this panel at 14,978px tall against a
+  // 1,000px viewport — a menu fifteen screens deep with no way to scroll it.
+  const all = data?.categories ?? [];
+  const { shown: categories, hasMore } = topCategories(all, 12);
+
+  return (
+    <NavDropdown
+      label="Categories"
+      panelClassName="glass-nav absolute left-0 top-full z-50 mt-3 max-h-[70vh] w-[min(52rem,94vw)] overflow-y-auto rounded-3xl p-6"
+    >
+      {(close) => (
+        <div>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-accent">
+            Browse by category
+          </p>
+
+          <ul className="mt-4 grid gap-x-6 gap-y-0.5 sm:grid-cols-2 lg:grid-cols-3">
+            {categories.map((c) => (
+              <li key={c.categorySlug}>
+                <Link
+                  to="/category/$categorySlug"
+                  params={{ categorySlug: c.categorySlug }}
+                  onClick={close}
+                  className="mo-row flex items-baseline justify-between gap-3 rounded-lg px-2 py-2 text-sm normal-case tracking-normal text-muted-foreground"
+                >
+                  <span className="min-w-0 leading-snug">{c.categoryName}</span>
+                  <span className="shrink-0 text-[11px] tabular-nums opacity-70">
+                    {c.ideaCount}
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+
+          <div className="mt-4 flex flex-wrap gap-x-6 gap-y-1 border-t border-border pt-3">
+            <Link to="/browse" onClick={close} className="mo-link t-eyebrow">
+              {hasMore ? `All ${all.length} categories` : "The full library"}
+            </Link>
+            <Link to="/search" search={{ q: "" }} onClick={close} className="mo-link t-eyebrow">
+              Search every field
+            </Link>
+          </div>
+        </div>
+      )}
+    </NavDropdown>
+  );
+}
+
+/**
+ * "Browse by type" — the same real categories, grouped by the question a reader
+ * is actually asking.
+ *
+ * Groups are DERIVED from live data (see `typeGroups`). The previous version
+ * matched against fourteen hand-typed slugs, two of which were wrong, so two
+ * columns silently rendered short on every page of the site. Deriving them
+ * means a new category joins a group on its own and a wrong slug is not
+ * possible to type.
+ */
+function BrowseByTypeDropdown() {
+  const { data } = useCatalog();
+  const groups = typeGroups(data?.categories ?? []);
+
+  if (groups.length === 0) return null;
+
+  return (
+    <NavDropdown
+      label="Browse by type"
+      panelClassName="glass-nav absolute left-0 top-full z-50 mt-3 max-h-[70vh] w-[min(46rem,92vw)] overflow-y-auto rounded-3xl p-6"
+    >
+      {(close) => (
+        <div className="grid gap-6 sm:grid-cols-3">
+          {groups.map((group) => (
+            <div key={group.title}>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.28em] text-accent">
+                {group.title}
+              </p>
+              <ul className="mt-3 grid gap-0.5">
+                {group.categories.map((c) => (
+                  <li key={c.categorySlug}>
+                    <Link
+                      to="/category/$categorySlug"
+                      params={{ categorySlug: c.categorySlug }}
+                      onClick={close}
+                      className="mo-row flex items-baseline justify-between gap-3 rounded-lg px-2 py-2 text-sm normal-case tracking-normal text-muted-foreground"
+                    >
+                      <span className="min-w-0 leading-snug">{c.categoryName}</span>
+                      <span className="shrink-0 text-[11px] tabular-nums opacity-70">
+                        {c.ideaCount}
+                      </span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      )}
+    </NavDropdown>
+  );
+}
+
+function LinkListDropdown({
+  label,
+  items,
+}: {
+  label: string;
+  items: { to: string; label: string }[];
+}) {
+  return (
+    <NavDropdown label={label}>
+      {(close) => (
+        <ul className="grid min-w-[13rem] gap-0.5">
+          {items.map((item) => (
+            <li key={item.to}>
+              <Link
+                to={item.to}
+                onClick={close}
+                className="mo-row block rounded-lg px-2 py-2 text-sm normal-case tracking-normal text-muted-foreground"
+              >
+                {item.label}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      )}
+    </NavDropdown>
+  );
+}
+
+function MobileMenu({ onClose }: { onClose: () => void }) {
+  const [catOpen, setCatOpen] = useState(false);
+  const { data } = useCatalog();
+  const categories = data?.categories ?? [];
+
+  return (
+    <div className="fixed inset-0 z-50 lg:hidden">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.2 }}
+        className="absolute inset-0 bg-black/60"
+        onClick={onClose}
+        aria-hidden
+      />
+      <motion.div
+        initial={{ x: "100%" }}
+        animate={{ x: 0 }}
+        exit={{ x: "100%" }}
+        transition={{ duration: 0.34, ease: [0.16, 1, 0.3, 1] }}
+        className="glass-nav absolute right-0 top-0 flex h-full w-[min(22rem,92vw)] flex-col overflow-y-auto px-4 py-4"
+      >
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-semibold uppercase tracking-[0.25em] text-accent">
+            Menu
+          </span>
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close navigation menu"
+              className="rounded-full border border-border px-3 py-1 text-xs text-muted-foreground"
+            >
+              ✕
+            </button>
+          </div>
+        </div>
+
+        <LiveSearch className="mt-4" onNavigate={onClose} />
+
+        <nav className="mt-5 grid gap-1 text-sm font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+          {navLinks.map((link) => (
+            <Link
+              key={link.to}
+              to={link.to}
+              onClick={onClose}
+              className="rounded-xl px-3 py-2.5 transition-colors hover:bg-secondary hover:text-foreground"
+            >
+              {link.label}
+            </Link>
+          ))}
+
+          <button
+            type="button"
+            aria-expanded={catOpen}
+            onClick={() => setCatOpen((v) => !v)}
+            className="flex items-center justify-between rounded-xl px-3 py-2.5 text-left uppercase tracking-[0.18em] transition-colors hover:bg-secondary hover:text-foreground"
+          >
+            Categories
+            <span
+              aria-hidden
+              className={`transition-transform duration-300 ${catOpen ? "rotate-180" : ""}`}
+            >
+              ▾
+            </span>
+          </button>
+          {catOpen && (
+            <div className="grid gap-0.5 border-l border-border pl-3">
+              {categories.length === 0 ? (
+                <p className="px-3 py-2 text-xs normal-case tracking-normal text-muted-foreground">
+                  Loading categories…
+                </p>
+              ) : (
+                categories.map((c) => (
+                  <Link
+                    key={c.categorySlug}
+                    to="/category/$categorySlug"
+                    params={{ categorySlug: c.categorySlug }}
+                    onClick={onClose}
+                    className="rounded-lg px-3 py-2 text-xs font-semibold normal-case tracking-normal text-muted-foreground hover:bg-secondary hover:text-foreground"
+                  >
+                    {c.categoryName}
+                  </Link>
+                ))
+              )}
+              <Link
+                to="/browse"
+                onClick={onClose}
+                className="rounded-lg px-3 py-2.5 text-[11px] font-semibold uppercase tracking-[0.2em] text-primary hover:bg-white/10"
+              >
+                View all categories →
+              </Link>
+            </div>
+          )}
+
+          <p className="mt-4 px-3 text-[10px] normal-case tracking-normal text-accent">
+            Browse by type
+          </p>
+          {typeGroups(categories).map((group) => (
+            <Fragment key={group.title}>
+              <p className="mt-2 px-3 text-[10px] normal-case tracking-normal text-muted-foreground/70">
+                {group.title}
+              </p>
+              {group.categories.map((c) => (
+                <Link
+                  key={c.categorySlug}
+                  to="/category/$categorySlug"
+                  params={{ categorySlug: c.categorySlug }}
+                  onClick={onClose}
+                  className="mo-row flex items-baseline justify-between gap-3 rounded-xl px-3 py-2.5 text-xs normal-case tracking-normal text-muted-foreground"
+                >
+                  <span className="min-w-0 leading-snug">{c.categoryName}</span>
+                  <span className="shrink-0 tabular-nums opacity-70">{c.ideaCount}</span>
+                </Link>
+              ))}
+            </Fragment>
+          ))}
+
+          <p className="mt-4 px-3 text-[10px] normal-case tracking-normal text-accent">Explore</p>
+          {EXPLORE_ITEMS.map((item) => (
+            <Link
+              key={item.to}
+              to={item.to}
+              onClick={onClose}
+              className="mo-row rounded-xl px-3 py-2.5 text-xs normal-case tracking-normal text-muted-foreground"
+            >
+              {item.label}
+            </Link>
+          ))}
+
+          <p className="mt-4 px-3 text-[10px] normal-case tracking-normal text-accent">Company</p>
+          {COMPANY_ITEMS.map((item) => (
+            <Link
+              key={item.to}
+              to={item.to}
+              onClick={onClose}
+              className="mo-row rounded-xl px-3 py-2.5 text-xs normal-case tracking-normal text-muted-foreground"
+            >
+              {item.label}
+            </Link>
+          ))}
+        </nav>
+
+        <div className="mt-auto grid gap-2 pt-8">
+          <AuthButtons onNavigate={onClose} full />
+        </div>
+      </motion.div>
+    </div>
+  );
+}
+
+const footerColumns: { title: string; links: { to: string; label: string }[] }[] = [
+  {
+    title: "Platform",
+    links: [
+      { to: "/browse", label: "Browse ideas" },
+      { to: "/search", label: "Search" },
+      { to: "/pricing", label: "Pricing" },
+      { to: "/services", label: "Services" },
+      { to: "/blog", label: "Blog" },
+    ],
+  },
+  {
+    title: "Company",
+    links: [
+      { to: "/about", label: "About" },
+      { to: "/contact", label: "Contact" },
+    ],
+  },
+  {
+    title: "Legal",
+    links: [
+      { to: "/terms", label: "Terms of service" },
+      { to: "/privacy", label: "Privacy policy" },
+      { to: "/disclaimer", label: "Disclaimer" },
+      { to: "/gdpr", label: "GDPR" },
+      { to: "/refund-policy", label: "Refund policy" },
+    ],
+  },
+];
+
+/**
+ * The newsletter column from the reference footer.
+ *
+ * It writes a real row into `newsletter_signups` rather than being a shape
+ * that looks like a form. A Subscribe button that does nothing is worse than
+ * no Subscribe button, and this site has already had to remove four things
+ * that were pretending.
+ */
+function NewsletterSignup() {
+  const [email, setEmail] = useState("");
+  const [state, setState] = useState<"idle" | "sending" | "done" | "error">("idle");
+  const [message, setMessage] = useState("");
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (state === "sending") return;
+    setState("sending");
+    try {
+      await subscribeToNewsletter({ data: { email, source: "footer" } });
+      setState("done");
+      setEmail("");
+    } catch (err) {
+      setState("error");
+      setMessage(err instanceof Error ? err.message : "Something went wrong.");
+    }
+  };
+
+  return (
+    <div>
+      <h3 className="bbi-footer-heading">Newsletter</h3>
+      <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
+        New blueprints, and the occasional honest note about what is and is not working. No spam,
+        and one click to leave.
+      </p>
+
+      {state === "done" ? (
+        <p className="mt-5 text-sm font-medium text-accent" role="status">
+          You are on the list.
+        </p>
+      ) : (
+        <form onSubmit={onSubmit} className="mt-5 grid gap-2.5">
+          <label htmlFor="bbi-newsletter-email" className="sr-only">
+            Email address
+          </label>
+          <input
+            id="bbi-newsletter-email"
+            type="email"
+            required
+            autoComplete="email"
+            inputMode="email"
+            value={email}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              if (state === "error") setState("idle");
+            }}
+            placeholder="Enter your email address"
+            className="bbi-footer-input"
+          />
+          <MovingBorder
+            type="submit"
+            disabled={state === "sending"}
+            className="w-full justify-center"
+            containerClassName="w-full"
+          >
+            {state === "sending" ? "Signing you up…" : "Subscribe"}
+          </MovingBorder>
+          {state === "error" && (
+            <p className="text-xs text-destructive" role="alert">
+              {message}
+            </p>
+          )}
+        </form>
+      )}
+    </div>
+  );
+}
+
+export function SiteShell({ children }: { children: ReactNode }) {
+  const [mobileOpen, setMobileOpen] = useState(false);
+  // Publishes --page-p on :root; the rail under the header is the only thing
+  // that reads it here, and it does so with a composited scaleX.
+  usePageScrollProgress();
+  const { data: catalog } = useCatalog();
+  const allCategories = catalog?.categories ?? [];
+  // Capped by design. See src/lib/catalog-display.ts for the measurements —
+  // uncapped, this block was 3,300px of footer per page at 200 categories.
+  const footerCategories = topCategories(allCategories, 5);
+  return (
+    <div className="relative flex min-h-screen flex-col text-foreground">
+      <header className="sticky top-0 z-40 px-3 pt-2 sm:px-4 sm:pt-5">
+        {/* Reading position for the whole document. One composited transform
+            per frame, driven from --page-p — no layout, no repaint. */}
+        <div aria-hidden className="mx-auto h-px max-w-6xl overflow-hidden rounded-full bg-border">
+          <div className="mo-page-rail h-full w-full bg-accent" />
+        </div>
+        <div className="glass-nav mx-auto mt-2 flex max-w-6xl items-center justify-between gap-3 rounded-md border border-border px-4 py-2.5 sm:gap-5 sm:px-6 sm:py-3">
+          <Link
+            to="/"
+            onClick={() => setMobileOpen(false)}
+            className="flex shrink-0 items-baseline gap-2"
+          >
+            <span className="shrink-0 rounded-[3px] bg-primary px-2.5 py-1 text-sm font-black uppercase tracking-[0.18em] text-primary-foreground sm:text-base">
+              BBI
+            </span>
+          </Link>
+
+          <nav className="hidden shrink-0 items-center gap-2.5 text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground lg:flex xl:gap-4">
+            <CategoryMega />
+            <BrowseByTypeDropdown />
+            <LinkListDropdown label="Explore" items={EXPLORE_ITEMS} />
+            <LinkListDropdown label="Company" items={COMPANY_ITEMS} />
+            {navLinks.map((link) => (
+              <Link
+                key={link.to}
+                to={link.to}
+                className="relative transition-colors duration-300 hover:text-foreground after:absolute after:-bottom-1.5 after:left-0 after:h-px after:w-0 after:bg-primary after:transition-all after:duration-500 hover:after:w-full"
+              >
+                {link.label}
+              </Link>
+            ))}
+          </nav>
+
+          {/* Nav labels cannot reflow and the two actions must stay on one
+              line, so the search field is what gives way: it appears from xl
+              up, where there is room for all three. Below lg the whole group
+              is replaced by the sheet menu, which carries the search itself. */}
+          <div className="hidden shrink-0 items-center gap-2 lg:flex">
+            <LiveSearch className="hidden xl:block xl:w-52" />
+            <AuthButtons />
+          </div>
+
+          <button
+            type="button"
+            aria-expanded={mobileOpen}
+            aria-label="Open navigation menu"
+            onClick={() => setMobileOpen(true)}
+            className="flex shrink-0 flex-col gap-1.5 rounded-full border border-border px-3 py-2.5 lg:hidden"
+          >
+            <span aria-hidden className="block h-0.5 w-5 bg-foreground" />
+            <span aria-hidden className="block h-0.5 w-5 bg-foreground" />
+            <span aria-hidden className="block h-0.5 w-5 bg-foreground" />
+          </button>
+        </div>
+      </header>
+      <AnimatePresence>
+        {mobileOpen && <MobileMenu onClose={() => setMobileOpen(false)} />}
+      </AnimatePresence>
+      <main className="flex-1">{children}</main>
+      <FloatingDock />
+      <BuiltWithSection />
+      {/* Footer, built to the reference the founder supplied: a light card,
+          four columns of plain link lists with a newsletter block, then a
+          hairline and a thin bottom bar.
+
+          What this replaced was a dark full-bleed band with display type and
+          a statistics row. That was my idea, not the brief's, and it was
+          wrong. This is the reference. */}
+      {/* pb-24 on mobile: the floating back-to-top / compass dock is fixed to
+          the bottom-right and was sitting on top of the legal links. */}
+      <footer className="px-3 pb-24 pt-20 sm:px-4 sm:pb-10 sm:pt-24">
+        <div className="bbi-footer mx-auto max-w-7xl rounded-3xl px-5 py-9 sm:px-12 sm:py-14">
+          {/* Two columns on a phone, not one. Below sm: this was a single
+              column with a 2.5rem gap, which stacked the four blocks into a
+              1,249px ribbon on an 844px screen. These are short lists of
+              short labels; two columns halve the height and give it a shape.
+              Everything from sm: up is the approved desktop layout, untouched. */}
+          <div className="grid grid-cols-2 gap-x-6 gap-y-7 sm:grid-cols-2 sm:gap-10 lg:grid-cols-[1.1fr_1fr_1fr_1.4fr]">
+            {/* Categories, capped. The cap is what keeps this footer one
+                height whether the catalogue holds 14 categories or 1,400. */}
+            <div className="col-span-2 sm:col-span-1">
+              <h3 className="bbi-footer-heading">Browse</h3>
+              <ul className="mt-3 grid grid-cols-2 gap-x-6 gap-y-2 sm:mt-4 sm:grid-cols-1 sm:gap-2.5">
+                {footerCategories.shown.map((c) => (
+                  <li key={c.categorySlug}>
+                    <Link
+                      to="/category/$categorySlug"
+                      params={{ categorySlug: c.categorySlug }}
+                      className="bbi-footer-link"
+                    >
+                      {c.categoryName}
+                    </Link>
+                  </li>
+                ))}
+                {footerCategories.hasMore && (
+                  <li>
+                    <Link to="/browse" className="bbi-footer-link bbi-footer-more">
+                      and {footerCategories.hiddenCount} more
+                    </Link>
+                  </li>
+                )}
+              </ul>
+            </div>
+
+            {footerColumns
+              .filter((col) => col.title !== "Legal")
+              .map((col) => (
+                <div key={col.title}>
+                  <h3 className="bbi-footer-heading">{col.title}</h3>
+                  <ul className="mt-3 grid gap-2 sm:mt-4 sm:gap-2.5">
+                    {col.links.map((link) => (
+                      <li key={`${col.title}-${link.to}-${link.label}`}>
+                        <Link to={link.to} className="bbi-footer-link">
+                          {link.label}
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+
+            {/* Full width on a phone — the input and Subscribe need it. */}
+            <div className="col-span-2 sm:col-span-1">
+              <NewsletterSignup />
+            </div>
+          </div>
+
+          <div className="mt-9 flex flex-col gap-4 border-t border-border pt-6 text-xs sm:mt-12 sm:flex-row sm:items-center sm:justify-between sm:gap-3">
+            {/* Legal lives here rather than as a fifth column — that is where
+                the reference puts it, and four columns plus a fifth is what
+                pushed the newsletter onto its own row. */}
+            {/* A two-column list on a phone. As an inline dotted row these
+                five wrapped into a ragged paragraph at 390px. */}
+            <ul className="grid grid-cols-2 gap-x-6 gap-y-2 sm:flex sm:flex-wrap sm:items-center sm:gap-x-2 sm:gap-y-1">
+              {(footerColumns.find((c) => c.title === "Legal")?.links ?? []).map((link, i) => (
+                <li key={link.to} className="flex items-center gap-2">
+                  {i > 0 && (
+                    <span aria-hidden className="hidden text-border sm:inline">
+                      ·
+                    </span>
+                  )}
+                  <Link to={link.to} className="bbi-footer-link">
+                    {link.label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+            {/* pr-24 on mobile keeps this clear of the fixed back-to-top /
+                compass dock, which was printing over the end of the line.
+
+                This used to read "N blueprints across N categories". A sign-off
+                is the last line anyone reads on the page; it should say who we
+                are and who this is for, not how many rows are in the table. The
+                count is on /browse, where someone is actually looking for it. */}
+            <div className="pr-24 sm:pr-0 sm:text-right">
+              <p className="text-muted-foreground">
+                © {new Date().getFullYear()} Bro Business Ideas · businessidea.io
+              </p>
+              <p className="mt-1 text-muted-foreground/80">
+                Made in India, for everyone starting from zero. We were there too.
+              </p>
+            </div>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}
+
+export function Breadcrumbs({
+  items,
+}: {
+  items: { label: string; to?: string; params?: Record<string, string> }[];
+}) {
+  return (
+    <nav
+      aria-label="Breadcrumb"
+      className="flex max-w-full flex-wrap items-center gap-1.5 text-[11px] font-medium text-muted-foreground"
+    >
+      {items.map((item, i) => (
+        <span key={`${item.label}-${i}`} className="flex min-w-0 items-center gap-1.5">
+          {i > 0 && (
+            <span aria-hidden className="text-border">
+              ›
+            </span>
+          )}
+          {item.to ? (
+            <Link
+              to={item.to}
+              params={item.params as never}
+              className="rounded-full border border-border/70 bg-secondary/55 px-2.5 py-1 transition-colors hover:border-primary/60 hover:text-foreground"
+            >
+              {item.label}
+            </Link>
+          ) : (
+            <span className="max-w-[min(18rem,70vw)] truncate rounded-full border border-border bg-card/70 px-2.5 py-1 text-foreground">
+              {item.label}
+            </span>
+          )}
+        </span>
+      ))}
+    </nav>
+  );
+}
