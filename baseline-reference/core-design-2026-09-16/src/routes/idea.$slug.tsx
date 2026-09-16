@@ -17,6 +17,7 @@ import {
   type RelatedCategory,
 } from "@/lib/ideas.functions";
 import { type IdeaCard as IdeaCardType, type IdeaDetail } from "@/lib/ideas-shared";
+import { getRandomCategoryFaqs } from "@/lib/faqs.functions";
 import { JsonLd, articleSchema, breadcrumbSchema } from "@/lib/schema";
 import { useAuth } from "@/hooks/use-auth";
 import { useDepthScene, useElementPointerGroup, useScrollProgress, useTextReveal } from "@/motion";
@@ -102,7 +103,16 @@ export const Route = createFileRoute("/idea/$slug")({
   loader: async ({ context, params }) => {
     const data = await context.queryClient.ensureQueryData(ideaDetailQuery(params.slug));
     if (!data) throw notFound();
-    return data;
+    // PROJECT_BRIEF.md Section 6.5 — ideas.faq_json is filled on only a handful
+    // of rows, so the FAQ block rendered empty on nearly every idea. Draw the
+    // category pool alongside it and fall back to that below. The draw is
+    // random per request, which is also the Section 9 "alive on refresh"
+    // behaviour. A failure here must not take the page down: the idea itself
+    // is the content, the FAQ block is an addition.
+    const poolFaqs = await getRandomCategoryFaqs({
+      data: { categorySlug: data.idea.categorySlug, count: 10 },
+    }).catch(() => []);
+    return { ...data, poolFaqs };
   },
   head: ({ loaderData }) => {
     const idea = loaderData?.idea;
@@ -127,12 +137,12 @@ export const Route = createFileRoute("/idea/$slug")({
   },
   component: IdeaPage,
   errorComponent: () => (
-    <SiteShell>
+    <SiteShell tone="instrument">
       <p className="mx-auto max-w-6xl px-4 py-24">This idea could not be loaded.</p>
     </SiteShell>
   ),
   notFoundComponent: () => (
-    <SiteShell>
+    <SiteShell tone="instrument">
       <div className="mx-auto max-w-6xl px-4 py-24">
         <p>That idea does not exist in the library.</p>
         <Link to="/browse" className="mt-4 inline-block text-primary underline">
@@ -219,7 +229,17 @@ function DemandBlock({ score }: { score: number | null }) {
  * settled value instead, so the verdict is simply there.
  */
 function ComputedVerdictPanel({ idea }: { idea: IdeaDetail }) {
-  const stageRef = useScrollProgress<HTMLElement>({ mode: "pinned", spanVh: 1.6 });
+  // The pin is what the verdict crossfade needs, and ONLY the verdict crossfade
+  // needs it. `pinSpacing` makes ScrollTrigger insert a spacer the length of
+  // the pin — at spanVh 1.6 that is 1,440px of reserved scroll on a 900px
+  // screen — and it was reserved unconditionally, including on every idea
+  // whose `verdict` field is empty. The result was a screen and a half of
+  // blank under this panel on those pages, holding space for a reveal that
+  // had nothing to reveal. No verdict, no pin.
+  const hasVerdict = Boolean(idea.verdict?.trim());
+  const stageRef = useScrollProgress<HTMLElement>(
+    hasVerdict ? { mode: "pinned", spanVh: 1.2 } : { mode: "unpinned" },
+  );
 
   return (
     <section
@@ -261,7 +281,7 @@ function ComputedVerdictPanel({ idea }: { idea: IdeaDetail }) {
         </div>
       </div>
 
-      {idea.verdict && (
+      {hasVerdict && (
         <div
           className="mt-6 border-t border-primary/30 pt-5"
           style={{
@@ -306,7 +326,9 @@ function IdeaPage() {
   // loader's single server-computed result to the client once.
   // Non-null by construction: the loader throws notFound() when the query
   // returns null, so this component never renders without data.
-  const data = Route.useLoaderData() as NonNullable<IdeaDetailData>;
+  const data = Route.useLoaderData() as NonNullable<IdeaDetailData> & {
+    poolFaqs: { question: string; answer: string }[];
+  };
   const auth = useAuth();
   // MOTION_SPEC §2.3 — the page's single headline reveal, on the idea title.
   const titleRef = useTextReveal<HTMLHeadingElement>();
@@ -318,7 +340,7 @@ function IdeaPage() {
   // than reading as one flat column of panels.
   const mastheadRef = useDepthScene<HTMLDivElement>({ strength: 0.5, weight: 0.14 });
   if (!data) return null;
-  const { idea, related, relatedCategories, trending, variant, gradient } = data;
+  const { idea, related, relatedCategories, trending, variant, gradient, poolFaqs } = data;
   // PROJECT_BRIEF.md Section 3.2 — full blueprint content is blurred behind
   // a sign-in gate; the title/description teaser above stays visible.
   const contentLocked = auth.status !== "authenticated";
@@ -330,8 +352,15 @@ function IdeaPage() {
   const [subcategoryLink, categoryLink, matchedIdeaLink] = contextualLinks;
 
   // Section 6.1 item 5 — 5 FAQs above the additional content, 5 below.
-  const faqAbove = idea.faq.slice(0, 5);
-  const faqBelow = idea.faq.slice(5, 10);
+  // The idea's own researched FAQs win when they exist; otherwise the
+  // category pool fills the block so every idea page has real questions
+  // rather than nothing.
+  const faqSource =
+    idea.faq.length > 0
+      ? idea.faq
+      : poolFaqs.map((f) => ({ q: f.question, a: f.answer }));
+  const faqAbove = faqSource.slice(0, 5);
+  const faqBelow = faqSource.slice(5, 10);
 
   const ideaPath = `/idea/${idea.slug}`;
   const breadcrumbItems = [
@@ -357,9 +386,26 @@ function IdeaPage() {
             categoryName: idea.categoryName,
           }),
           breadcrumbSchema(breadcrumbItems),
+          // FAQPage for the questions actually rendered on this page. Emitted
+          // only when there are some, so a page with an empty block never
+          // declares structured data it does not show -- markup that describes
+          // absent content is a liability, not a signal.
+          ...(faqSource.length > 0
+            ? [
+                {
+                  "@context": "https://schema.org",
+                  "@type": "FAQPage",
+                  mainEntity: faqSource.map((item) => ({
+                    "@type": "Question",
+                    name: item.q,
+                    acceptedAnswer: { "@type": "Answer", text: item.a },
+                  })),
+                },
+              ]
+            : []),
         ]}
       />
-      <SiteShell>
+      <SiteShell tone="instrument">
         <div
           ref={mastheadRef}
           className="cx-scene mx-auto grid max-w-6xl gap-10 px-4 py-12 lg:grid-cols-[minmax(0,1fr)_20rem]"

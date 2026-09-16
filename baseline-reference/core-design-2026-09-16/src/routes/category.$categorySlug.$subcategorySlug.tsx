@@ -33,6 +33,11 @@ export const Route = createFileRoute("/category/$categorySlug/$subcategorySlug")
     return {
       meta: [
         { title: `${name} Ideas | BBI` },
+        // One idea per subcategory today, so this page duplicates the idea page
+        // it links to. Kept reachable (existing links must not 404, and a crawler
+        // has to reach the page to see this tag) but out of the index. `follow`
+        // so link equity still flows through to the idea pages.
+        { name: "robots", content: "noindex,follow" },
         {
           name: "description",
           content: `Business idea blueprints in ${name}: what the business is, who it serves, pros, cons and a founder-fit verdict.`,
@@ -49,14 +54,14 @@ export const Route = createFileRoute("/category/$categorySlug/$subcategorySlug")
   },
   component: SubcategoryPage,
   errorComponent: () => (
-    <SiteShell>
+    <SiteShell tone="instrument">
       <p className="mx-auto max-w-6xl px-4 py-24">
         Couldn't load this subcategory — try refreshing.
       </p>
     </SiteShell>
   ),
   notFoundComponent: () => (
-    <SiteShell>
+    <SiteShell tone="instrument">
       <p className="mx-auto max-w-6xl px-4 py-24">We don't have that subcategory.</p>
     </SiteShell>
   ),
@@ -111,7 +116,7 @@ function SubcategoryPage() {
           ]),
         ]}
       />
-      <SiteShell>
+      <SiteShell tone="instrument">
         <div ref={depthRef} className="bbi-depth mx-auto max-w-6xl px-4 py-12">
           <Breadcrumbs
             items={[

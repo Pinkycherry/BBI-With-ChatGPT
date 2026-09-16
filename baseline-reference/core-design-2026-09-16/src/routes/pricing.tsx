@@ -53,9 +53,7 @@ function PricingPage() {
                 : ""
             }`}
           >
-            <p className="t-eyebrow">
-              {plan.name}
-            </p>
+            <p className="t-eyebrow">{plan.name}</p>
             <p className="mt-4 flex items-baseline gap-2">
               <span className="text-5xl font-extrabold tracking-tight">{plan.price}</span>
               <span className="text-xs uppercase tracking-widest text-muted-foreground">
@@ -72,7 +70,7 @@ function PricingPage() {
             <button
               type="button"
               disabled
-              className="ac-cta mt-7 w-full cursor-not-allowed px-6 py-3 text-sm opacity-60"
+              className="ac-cta mt-7 w-full cursor-not-allowed px-6 py-3 text-sm"
             >
               Checkout not live yet
             </button>

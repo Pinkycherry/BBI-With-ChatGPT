@@ -8,16 +8,11 @@ import { SiteShell, Breadcrumbs } from "@/components/site-shell";
 import { getListicle, type ListicleEntry, type ListiclePage } from "@/lib/lists.functions";
 import { JsonLd, breadcrumbSchema } from "@/lib/schema";
 import { siteUrl } from "@/lib/site-config";
-import {
-  useDepthScene,
-  useElementPointerGroup,
-  useStaggerReveal,
-  useTextReveal,
-} from "@/motion";
+import { useDepthScene, useElementPointerGroup, useStaggerReveal, useTextReveal } from "@/motion";
 
 /**
  * PROJECT_BRIEF.md Section 6.3 — the listicle template. One page per category,
- * keyed on the real category slug: /list/side-hustle-ideas, and so on.
+ * keyed on the real category slug: /shortlist/side-hustle-ideas, and so on.
  *
  * The top ten are written out on the page and the remainder are cards linking
  * to their own /idea/[slug] blueprint, which is the point of the template —
@@ -31,7 +26,7 @@ const listicleQuery = (categorySlug: string) =>
     queryFn: () => getListicle({ data: { categorySlug } }),
   });
 
-export const Route = createFileRoute("/list/$slug")({
+export const Route = createFileRoute("/shortlist/$slug")({
   // Read through Route.useLoaderData() in the component rather than
   // useSuspenseQuery: this app's QueryClient is not dehydrated to the client,
   // so a client-side suspense read would re-run the query against a cold cache
@@ -58,15 +53,15 @@ export const Route = createFileRoute("/list/$slug")({
   },
   component: ListiclePageRoute,
   errorComponent: () => (
-    <SiteShell>
+    <SiteShell tone="instrument">
       <p className="mx-auto max-w-6xl px-4 py-24">Couldn't load this list — try refreshing.</p>
     </SiteShell>
   ),
   notFoundComponent: () => (
-    <SiteShell>
+    <SiteShell tone="instrument">
       <div className="mx-auto max-w-6xl px-4 py-24">
         <p>We don't have a list for that category.</p>
-        <Link to="/list" className="mt-4 inline-block text-primary underline">
+        <Link to="/shortlist" className="mt-4 inline-block text-primary underline">
           See every list
         </Link>
       </div>
@@ -204,7 +199,7 @@ function Entry({ entry, categorySlug }: { entry: ListicleEntry; categorySlug: st
 
 function ListiclePageRoute() {
   const data = Route.useLoaderData();
-  const listPath = `/list/${data.categorySlug}`;
+  const listPath = `/shortlist/${data.categorySlug}`;
 
   // MOTION_SPEC section 3, listing pages. One headline reveal, on the H1 only.
   // Each of the two grids gets one delegated pointer listener and one short
@@ -215,7 +210,6 @@ function ListiclePageRoute() {
   // for the whole header. Cursor depth on fine pointers, scroll depth on touch
   // (see motion.css, coarse-pointer block).
   const sceneRef = useDepthScene<HTMLDivElement>({ strength: 0.5 });
-
 
   const entriesPointerRef = useElementPointerGroup<HTMLDivElement>(".mo-card");
   const entriesRevealRef = useStaggerReveal<HTMLDivElement>({
@@ -276,18 +270,18 @@ function ListiclePageRoute() {
           },
           breadcrumbSchema([
             { name: "Home", path: "/" },
-            { name: "Lists", path: "/list" },
+            { name: "Shortlists", path: "/shortlist" },
             { name: data.title, path: listPath },
           ]),
         ]}
       />
-      <SiteShell>
+      <SiteShell tone="instrument">
         <div ref={sceneRef} className="cx-scene mx-auto max-w-6xl px-4 py-12">
           {/* EDITABLE SECTION START — safe to add, remove, or reorder sections below without breaking routing or data fetching. */}
           <Breadcrumbs
             items={[
               { label: "Home", to: "/" },
-              { label: "Lists", to: "/list" },
+              { label: "Shortlists", to: "/shortlist" },
               { label: data.title },
             ]}
           />
@@ -361,7 +355,7 @@ function ListiclePageRoute() {
                 {data.otherLists.map((list) => (
                   <li key={list.categorySlug}>
                     <Link
-                      to="/list/$slug"
+                      to="/shortlist/$slug"
                       params={{ slug: list.categorySlug }}
                       className="mo-row flex items-center justify-between gap-4 px-2 py-3 text-sm"
                     >
@@ -374,7 +368,7 @@ function ListiclePageRoute() {
                 ))}
               </ul>
               <Link
-                to="/list"
+                to="/shortlist"
                 className="mo-link mt-4 inline-block text-sm font-semibold text-primary"
               >
                 See every list

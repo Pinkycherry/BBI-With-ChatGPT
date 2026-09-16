@@ -6,12 +6,7 @@ import { SiteShell, Breadcrumbs } from "@/components/site-shell";
 import { getListicleIndex, type ListicleSummary } from "@/lib/lists.functions";
 import { JsonLd, breadcrumbSchema, collectionPageSchema } from "@/lib/schema";
 import { siteUrl } from "@/lib/site-config";
-import {
-  useDepthScene,
-  useElementPointerGroup,
-  useStaggerReveal,
-  useTextReveal,
-} from "@/motion";
+import { useDepthScene, useElementPointerGroup, useStaggerReveal, useTextReveal } from "@/motion";
 
 /**
  * PROJECT_BRIEF.md Section 6.3 — the index of every listicle. One listicle per
@@ -24,7 +19,7 @@ const listsQuery = queryOptions<ListicleSummary[]>({
   queryFn: () => getListicleIndex(),
 });
 
-export const Route = createFileRoute("/list/")({
+export const Route = createFileRoute("/shortlist/")({
   // Read in the component through Route.useLoaderData(), not useSuspenseQuery:
   // this app's QueryClient is not dehydrated to the client, so a client-side
   // suspense read of this key would re-run the query and mismatch the SSR'd
@@ -49,12 +44,12 @@ export const Route = createFileRoute("/list/")({
   },
   component: ListIndexPage,
   errorComponent: () => (
-    <SiteShell>
+    <SiteShell tone="instrument">
       <p className="mx-auto max-w-6xl px-4 py-24">Couldn't load the lists — try refreshing.</p>
     </SiteShell>
   ),
   notFoundComponent: () => (
-    <SiteShell>
+    <SiteShell tone="instrument">
       <p className="mx-auto max-w-6xl px-4 py-24">That page doesn't exist.</p>
     </SiteShell>
   ),
@@ -89,7 +84,7 @@ function ListIndexPage() {
       <JsonLd
         schema={[
           collectionPageSchema({
-            path: "/list",
+            path: "/shortlist",
             name: "Business Idea Lists",
             description: "Ranked business idea lists, one per category, ordered by trend score.",
             itemCount: lists.length,
@@ -103,19 +98,19 @@ function ListIndexPage() {
               "@type": "ListItem",
               position: i + 1,
               name: list.title,
-              url: `${siteUrl()}/list/${list.categorySlug}`,
+              url: `${siteUrl()}/shortlist/${list.categorySlug}`,
             })),
           },
           breadcrumbSchema([
             { name: "Home", path: "/" },
-            { name: "Lists", path: "/list" },
+            { name: "Shortlists", path: "/shortlist" },
           ]),
         ]}
       />
-      <SiteShell>
+      <SiteShell tone="instrument">
         <div ref={sceneRef} className="cx-scene mx-auto max-w-6xl px-4 py-12">
           {/* EDITABLE SECTION START — safe to add, remove, or reorder sections below without breaking routing or data fetching. */}
-          <Breadcrumbs items={[{ label: "Home", to: "/" }, { label: "Lists" }]} />
+          <Breadcrumbs items={[{ label: "Home", to: "/" }, { label: "Shortlists" }]} />
           <h1
             ref={headingRef}
             className="cx-layer cx-z3 bbi-heading-glow mt-4 text-3xl font-bold tracking-tight"
@@ -139,7 +134,7 @@ function ListIndexPage() {
               {lists.map((list) => (
                 <Link
                   key={list.categorySlug}
-                  to="/list/$slug"
+                  to="/shortlist/$slug"
                   params={{ slug: list.categorySlug }}
                   className="glass glass-hover mo-card group flex h-full min-w-0 flex-col gap-3 rounded-3xl p-6"
                 >

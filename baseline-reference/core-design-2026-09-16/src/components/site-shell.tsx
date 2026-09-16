@@ -38,7 +38,6 @@ import { prefersReducedMotion } from "@/lib/motion";
 import { useAuth } from "@/hooks/use-auth";
 import { signOut } from "@/lib/auth-client";
 import HoverBorderGradient from "@/components/aceternity/hover-border-gradient";
-import MovingBorder from "@/components/aceternity/moving-border";
 
 /** Footer's primary CTA — spotlight glow behind a pill with GSAP hover/press motion. */
 function FooterCta() {
@@ -186,6 +185,43 @@ function useCatalog() {
   return { data };
 }
 
+/** Same reasoning as HoverBorderGradient: the rest/hover pair is React state
+ * and an inline style, because four attempts at stating it in CSS measured as
+ * the rule matching and the colour not changing. */
+function SignInAction({ onNavigate, full }: { onNavigate?: () => void; full: boolean }) {
+  const [hovered, setHovered] = useState(false);
+  const ref = useRef<HTMLAnchorElement | null>(null);
+  // Set as important — see the note in hover-border-gradient.tsx. A plain
+  // inline colour was still being beaten by an author !important rule.
+  useEffect(() => {
+    ref.current?.style.setProperty(
+      "color",
+      hovered ? "var(--ins-void, var(--primary-foreground))" : "var(--ins-read, var(--foreground))",
+      "important",
+    );
+  }, [hovered]);
+  return (
+    <Link
+      ref={ref}
+      to="/sign-in"
+      onClick={onNavigate}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      onFocus={() => setHovered(true)}
+      onBlur={() => setHovered(false)}
+      className={`ins-action whitespace-nowrap rounded-md border px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] transition-colors duration-300 ${full ? "block text-center" : ""}`}
+      style={{
+        backgroundColor: hovered
+          ? "var(--ins-signal, var(--primary))"
+          : "var(--ins-face, var(--card))",
+        borderColor: hovered ? "var(--ins-signal, var(--primary))" : "var(--ins-rule, var(--border))",
+      }}
+    >
+      Sign In
+    </Link>
+  );
+}
+
 function AuthButtons({ onNavigate, full }: { onNavigate?: () => void; full?: boolean }) {
   const auth = useAuth();
 
@@ -194,9 +230,12 @@ function AuthButtons({ onNavigate, full }: { onNavigate?: () => void; full?: boo
     const fullName = metadata?.["full_name"] as string | undefined;
     const name = fullName?.split(" ")[0] ?? auth.session.user.email?.split("@")[0] ?? "Account";
     return (
-      <div className={`flex items-center gap-2 ${full ? "flex-col" : ""}`}>
+      /* `min-w-0` and a capped name: signed in, this cluster is a chip plus a
+         button, and with everything marked shrink-0 the pair pushed straight
+         through the right edge of the nav plate instead of fitting inside. */
+      <div className={`flex min-w-0 items-center gap-2 ${full ? "flex-col" : ""}`}>
         <span
-          className={`glass flex items-center gap-1.5 rounded-full px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-foreground ${full ? "w-full justify-center" : ""}`}
+          className={`glass flex min-w-0 items-center gap-1.5 rounded-full px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-foreground ${full ? "w-full justify-center" : "max-w-[9rem]"}`}
         >
           <User className="h-3.5 w-3.5 shrink-0" aria-hidden />
           <span className="truncate">{name}</span>
@@ -207,7 +246,7 @@ function AuthButtons({ onNavigate, full }: { onNavigate?: () => void; full?: boo
             void signOut();
             onNavigate?.();
           }}
-          className={`rounded-full border border-border px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground transition-colors duration-300 hover:border-primary hover:text-foreground ${full ? "w-full" : ""}`}
+          className={`glass-pill shrink-0 whitespace-nowrap rounded-full border border-border px-3 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-muted-foreground transition-colors duration-300 ${full ? "w-full" : ""}`}
         >
           Sign out
         </button>
@@ -217,13 +256,7 @@ function AuthButtons({ onNavigate, full }: { onNavigate?: () => void; full?: boo
 
   return (
     <>
-      <Link
-        to="/sign-in"
-        onClick={onNavigate}
-        className={`whitespace-nowrap rounded-md border border-border bg-card px-4 py-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-foreground transition-colors duration-300 hover:border-primary hover:text-primary ${full ? "block text-center" : ""}`}
-      >
-        Sign In
-      </Link>
+      <SignInAction {...(onNavigate ? { onNavigate } : {})} full={full ?? false} />
       <HoverBorderGradient asChild containerClassName={full ? "w-full" : "shrink-0"}>
         <Link
           to="/browse"
@@ -479,7 +512,7 @@ function MobileMenu({ onClose }: { onClose: () => void }) {
   const categories = data?.categories ?? [];
 
   return (
-    <div className="fixed inset-0 z-50 lg:hidden">
+    <div className="bbi-overlay fixed inset-0 z-50 lg:hidden">
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -713,14 +746,16 @@ function NewsletterSignup() {
             placeholder="Enter your email address"
             className="bbi-footer-input"
           />
-          <MovingBorder
+          {/* Was a fourth button treatment on a site that now has one. It is
+              the footer tier of the shared action: the same travelling band,
+              at the quietest weight of the three. */}
+          <button
             type="submit"
             disabled={state === "sending"}
-            className="w-full justify-center"
-            containerClassName="w-full"
+            className="ac-action w-full justify-center px-4 py-2.5 text-sm font-semibold disabled:cursor-wait disabled:opacity-70"
           >
             {state === "sending" ? "Signing you up…" : "Subscribe"}
-          </MovingBorder>
+          </button>
           {state === "error" && (
             <p className="text-xs text-destructive" role="alert">
               {message}
@@ -732,8 +767,28 @@ function NewsletterSignup() {
   );
 }
 
-export function SiteShell({ children }: { children: ReactNode }) {
+export function SiteShell({
+  children,
+  tone,
+}: {
+  children: ReactNode;
+  /** "instrument" swaps the shell into the dark panel world. Scoped rather
+   * than global so a template that has not been redesigned yet keeps the
+   * light treatment instead of half-inheriting this one. */
+  tone?: "instrument";
+}) {
   const [mobileOpen, setMobileOpen] = useState(false);
+  // Radix renders selects, dialogs and tooltips through a PORTAL on
+  // document.body, outside this subtree — which is why a `.bbi-instrument …`
+  // selector never reached the open dropdown and it kept its light panel and
+  // indigo tick. A flag on <html> is the only thing portal content inherits.
+  useEffect(() => {
+    if (tone !== "instrument") return;
+    document.documentElement.dataset["tone"] = "instrument";
+    return () => {
+      delete document.documentElement.dataset["tone"];
+    };
+  }, [tone]);
   // Publishes --page-p on :root; the rail under the header is the only thing
   // that reads it here, and it does so with a composited scaleX.
   usePageScrollProgress();
@@ -743,7 +798,11 @@ export function SiteShell({ children }: { children: ReactNode }) {
   // uncapped, this block was 3,300px of footer per page at 200 categories.
   const footerCategories = topCategories(allCategories, 5);
   return (
-    <div className="relative flex min-h-screen flex-col text-foreground">
+    <div
+      className={`relative flex min-h-screen flex-col text-foreground${
+        tone === "instrument" ? " bbi-instrument" : ""
+      }`}
+    >
       <header className="sticky top-0 z-40 px-3 pt-2 sm:px-4 sm:pt-5">
         {/* Reading position for the whole document. One composited transform
             per frame, driven from --page-p — no layout, no repaint. */}
@@ -781,7 +840,7 @@ export function SiteShell({ children }: { children: ReactNode }) {
               line, so the search field is what gives way: it appears from xl
               up, where there is room for all three. Below lg the whole group
               is replaced by the sheet menu, which carries the search itself. */}
-          <div className="hidden shrink-0 items-center gap-2 lg:flex">
+          <div className="hidden min-w-0 items-center gap-2 lg:flex">
             <LiveSearch className="hidden xl:block xl:w-52" />
             <AuthButtons />
           </div>
@@ -930,18 +989,20 @@ export function Breadcrumbs({
               ›
             </span>
           )}
+          {/* A breadcrumb is a path, not a row of controls. As pills it read
+              as two buttons, and the first one — light chip, lighter label —
+              could not be read at all. Plain marks now, with the current page
+              the brighter of the two. */}
           {item.to ? (
             <Link
               to={item.to}
               params={item.params as never}
-              className="rounded-full border border-border/70 bg-secondary/55 px-2.5 py-1 transition-colors hover:border-primary/60 hover:text-foreground"
+              className="underline-offset-4 transition-colors hover:text-foreground hover:underline"
             >
               {item.label}
             </Link>
           ) : (
-            <span className="max-w-[min(18rem,70vw)] truncate rounded-full border border-border bg-card/70 px-2.5 py-1 text-foreground">
-              {item.label}
-            </span>
+            <span className="max-w-[min(18rem,70vw)] truncate text-foreground">{item.label}</span>
           )}
         </span>
       ))}

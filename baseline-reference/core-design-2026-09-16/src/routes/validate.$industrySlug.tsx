@@ -69,12 +69,12 @@ export const Route = createFileRoute("/validate/$industrySlug")({
   },
   component: ValidateIndustryPage,
   errorComponent: () => (
-    <SiteShell>
+    <SiteShell tone="instrument">
       <p className="mx-auto max-w-6xl px-4 py-24">Couldn&apos;t load this page — try refreshing.</p>
     </SiteShell>
   ),
   notFoundComponent: () => (
-    <SiteShell>
+    <SiteShell tone="instrument">
       <div className="mx-auto max-w-6xl px-4 py-24">
         <h1>We don&apos;t cover that industry yet.</h1>
         <p className="t-lead mt-4">
@@ -151,7 +151,7 @@ function ValidateIndustryPage() {
   const top = data.ideas.slice(0, 12);
 
   return (
-    <SiteShell>
+    <SiteShell tone="instrument">
       <JsonLd
         schema={breadcrumbSchema([
           { name: "Home", path: "/" },
@@ -206,7 +206,10 @@ function ValidateIndustryPage() {
         <section className="mt-14">
           <p className="t-eyebrow">The four checks</p>
           <h2 className="mt-3">What validating one of these actually involves.</h2>
-          <div ref={stepsRef} className="mt-7 grid grid-cols-[repeat(auto-fit,minmax(19rem,1fr))] gap-4">
+          <div
+            ref={stepsRef}
+            className="mt-7 grid grid-cols-[repeat(auto-fit,minmax(19rem,1fr))] gap-4"
+          >
             {STEPS.map((s) => (
               <div key={s.n} className="mo-card glass flex gap-4 rounded-2xl p-5 sm:p-6">
                 <span className="t-meta shrink-0 text-hl-gold">{s.n}</span>

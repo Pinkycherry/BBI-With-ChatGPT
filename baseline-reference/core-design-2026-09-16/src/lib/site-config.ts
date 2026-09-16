@@ -9,20 +9,25 @@ export function siteUrl(): string {
 }
 
 /**
- * SINGLE SOURCE OF TRUTH for the WordPress blog.
+ * SINGLE SOURCE OF TRUTH for the publishing entity behind this site.
  *
- * To point the blog at a different WordPress instance, change this ONE line
- * (or set the WORDPRESS_SITE_URL environment variable, which wins over it).
- * Nothing else in the codebase hardcodes a WordPress URL.
+ * Every page asserts what it is about; none of them asserted who stands behind
+ * it. `Organization` as `publisher` is the signal search engines and AI
+ * crawlers use to attach authorship and accountability to content, and it was
+ * absent from the whole codebase.
+ *
+ * `sameAs` is deliberately empty. It is meant to list profiles the same
+ * organisation genuinely controls, and inventing URLs there is worse than
+ * omitting it -- a broken or wrong profile is a trust signal pointing the
+ * wrong way. Fill it in when the real accounts exist.
  */
-export const DEFAULT_WORDPRESS_SITE_URL = "https://nutrizoe.in";
+export const ORGANISATION_NAME = "BBI";
+export const ORGANISATION_LEGAL_NAME = "Bro Business Ideas";
 
-/** Resolved at request time so an env override can swap sites with no rebuild. */
-export function wordpressSiteUrl(): string {
-  const fromEnv = typeof process !== "undefined" ? process.env?.["WORDPRESS_SITE_URL"] : undefined;
-  return (fromEnv?.trim() || DEFAULT_WORDPRESS_SITE_URL).replace(/\/+$/, "");
-}
-
-export function wordpressApiBase(): string {
-  return `${wordpressSiteUrl()}/wp-json/wp/v2`;
+export function organisationSameAs(): string[] {
+  const fromEnv = typeof process !== "undefined" ? process.env?.["SITE_SAME_AS"] : undefined;
+  return (fromEnv ?? "")
+    .split(",")
+    .map((entry) => entry.trim())
+    .filter(Boolean);
 }

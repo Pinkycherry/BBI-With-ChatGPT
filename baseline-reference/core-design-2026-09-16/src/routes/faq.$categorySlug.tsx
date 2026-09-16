@@ -50,7 +50,7 @@ export const Route = createFileRoute("/faq/$categorySlug")({
   },
   component: FaqCategoryPage,
   notFoundComponent: () => (
-    <SiteShell>
+    <SiteShell tone="instrument">
       <p className="mx-auto max-w-6xl px-4 py-24">We don&apos;t have that category.</p>
     </SiteShell>
   ),
@@ -67,7 +67,7 @@ function FaqCategoryPage() {
   const path = `/faq/${category.categorySlug}`;
 
   return (
-    <SiteShell>
+    <SiteShell tone="instrument">
       <JsonLd
         schema={[
           breadcrumbSchema([
@@ -94,9 +94,7 @@ function FaqCategoryPage() {
           ]}
         />
 
-        <p className="mt-8 t-eyebrow">
-          Questions
-        </p>
+        <p className="mt-8 t-eyebrow">Questions</p>
         <h1
           ref={headingRef}
           className="cx-layer cx-z3 mt-3 font-display text-3xl font-bold tracking-tight text-foreground sm:text-5xl"
@@ -120,10 +118,7 @@ function FaqCategoryPage() {
             >
               Read the {category.ideaCount} blueprints instead
             </Link>
-            <Link
-              to="/browse"
-              className="mo-link t-eyebrow"
-            >
+            <Link to="/browse" className="mo-link t-eyebrow">
               The full library
             </Link>
           </FaqEmptyState>
