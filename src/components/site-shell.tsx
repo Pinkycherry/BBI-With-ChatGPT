@@ -16,15 +16,7 @@ import {
   SiSupabase,
   SiVercel,
   SiGithub,
-  SiClaude,
-  SiClaudecode,
-  SiN8N,
-  SiGooglegemini,
 } from "react-icons/si";
-// ChatGPT (OpenAI) and Grok (xAI) marks live in the Remix Icon set, not
-// Simple Icons — so all 18 entries below render a real brand logo, none a
-// text placeholder.
-import { RiOpenaiFill, RiGrokAiFill } from "react-icons/ri";
 
 import { LiveSearch } from "@/components/live-search";
 import { FloatingDock } from "@/components/floating-dock";
@@ -84,12 +76,6 @@ const BUILT_WITH: BuiltWithItem[] = [
   { name: "Supabase", href: "https://supabase.com", Icon: SiSupabase, color: "#3FCF8E" },
   { name: "Vercel", href: "https://vercel.com", Icon: SiVercel, color: INK },
   { name: "GitHub", href: "https://github.com", Icon: SiGithub, color: INK },
-  { name: "Claude", href: "https://claude.com", Icon: SiClaude, color: "#D97757" },
-  { name: "Claude Code", href: "https://claude.com", Icon: SiClaudecode, color: "#D97757" },
-  { name: "n8n", href: "https://n8n.io", Icon: SiN8N, color: "#EA4B71" },
-  { name: "ChatGPT", href: "https://chatgpt.com", Icon: RiOpenaiFill, color: INK },
-  { name: "Grok", href: "https://x.ai", Icon: RiGrokAiFill, color: INK },
-  { name: "Gemini", href: "https://gemini.google.com", Icon: SiGooglegemini, color: "#8E75B2" },
 ];
 
 function BuiltWithItemLink({ item }: { item: BuiltWithItem }) {

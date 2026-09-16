@@ -762,9 +762,8 @@ function OperatorToolkitSection() {
         {/* Card 1: Calculators */}
         <Link
           to="/calculator"
+          className="glass glass-card"
           style={{
-            background: "#ffffff",
-            border: "1px solid #e9e2db",
             borderRadius: "20px",
             padding: "30px 26px",
             display: "flex",
@@ -780,7 +779,7 @@ function OperatorToolkitSection() {
                 fontSize: "10px",
                 fontWeight: 700,
                 letterSpacing: "0.18em",
-                color: "#c94c27",
+                color: "#000000",
                 textTransform: "uppercase",
               }}
             >
@@ -804,7 +803,7 @@ function OperatorToolkitSection() {
               fontSize: "12px",
               fontWeight: 700,
               letterSpacing: "0.14em",
-              color: "#bd401c",
+              color: "#000000",
               textTransform: "uppercase",
               marginTop: "24px",
             }}
@@ -816,9 +815,8 @@ function OperatorToolkitSection() {
         {/* Card 2: Startup Guides */}
         <Link
           to="/startup-guides"
+          className="glass glass-card"
           style={{
-            background: "#ffffff",
-            border: "1px solid #e9e2db",
             borderRadius: "20px",
             padding: "30px 26px",
             display: "flex",
@@ -834,7 +832,7 @@ function OperatorToolkitSection() {
                 fontSize: "10px",
                 fontWeight: 700,
                 letterSpacing: "0.18em",
-                color: "#c94c27",
+                color: "#000000",
                 textTransform: "uppercase",
               }}
             >
@@ -858,7 +856,7 @@ function OperatorToolkitSection() {
               fontSize: "12px",
               fontWeight: 700,
               letterSpacing: "0.14em",
-              color: "#bd401c",
+              color: "#000000",
               textTransform: "uppercase",
               marginTop: "24px",
             }}
@@ -870,9 +868,8 @@ function OperatorToolkitSection() {
         {/* Card 3: Founder Stories */}
         <Link
           to="/founder-stories"
+          className="glass glass-card"
           style={{
-            background: "#ffffff",
-            border: "1px solid #e9e2db",
             borderRadius: "20px",
             padding: "30px 26px",
             display: "flex",
@@ -888,7 +885,7 @@ function OperatorToolkitSection() {
                 fontSize: "10px",
                 fontWeight: 700,
                 letterSpacing: "0.18em",
-                color: "#15803d",
+                color: "#000000",
                 textTransform: "uppercase",
               }}
             >
@@ -912,7 +909,7 @@ function OperatorToolkitSection() {
               fontSize: "12px",
               fontWeight: 700,
               letterSpacing: "0.14em",
-              color: "#bd401c",
+              color: "#000000",
               textTransform: "uppercase",
               marginTop: "24px",
             }}
@@ -924,9 +921,8 @@ function OperatorToolkitSection() {
         {/* Card 4: Glossary */}
         <Link
           to="/founder-glossary"
+          className="glass glass-card"
           style={{
-            background: "#ffffff",
-            border: "1px solid #e9e2db",
             borderRadius: "20px",
             padding: "30px 26px",
             display: "flex",
@@ -942,7 +938,7 @@ function OperatorToolkitSection() {
                 fontSize: "10px",
                 fontWeight: 700,
                 letterSpacing: "0.18em",
-                color: "#4f46e5",
+                color: "#000000",
                 textTransform: "uppercase",
               }}
             >
@@ -966,7 +962,7 @@ function OperatorToolkitSection() {
               fontSize: "12px",
               fontWeight: 700,
               letterSpacing: "0.14em",
-              color: "#bd401c",
+              color: "#000000",
               textTransform: "uppercase",
               marginTop: "24px",
             }}
