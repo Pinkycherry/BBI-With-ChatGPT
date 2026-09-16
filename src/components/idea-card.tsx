@@ -32,7 +32,10 @@ export function IdeaCard({
   const locked = auth.status === "anonymous";
 
   return (
-    <CardSpotlight className={`mo-card h-full ${featured ? "sm:col-span-2" : ""}`}>
+    <CardSpotlight
+      glass
+      className={`mo-card glass-card rounded-2xl h-full ${featured ? "sm:col-span-2" : ""}`}
+    >
       <Link
         to="/idea/$slug"
         params={{ slug: idea.slug }}

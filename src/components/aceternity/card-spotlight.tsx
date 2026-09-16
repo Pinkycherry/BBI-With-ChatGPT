@@ -14,10 +14,16 @@ export default function CardSpotlight({
   children,
   className,
   radius = 380,
+  glass = false,
 }: {
   children: React.ReactNode;
   className?: string;
   radius?: number;
+  /** Liquid-glass plate instead of the flat `bg-card` plate. Opt-in so the
+   * other consumer of this component isn't reskinned by a change meant for
+   * idea cards. Pair with the `glass-card` utility (styles.css) on the
+   * caller's className for the hover lift. */
+  glass?: boolean;
 }) {
   const x = useMotionValue(-radius);
   const y = useMotionValue(-radius);
@@ -35,7 +41,8 @@ export default function CardSpotlight({
         y.set(-radius);
       }}
       className={cn(
-        "group relative overflow-hidden rounded-md border border-border bg-card transition-colors duration-300 hover:border-primary/50",
+        "group relative overflow-hidden rounded-md transition-colors duration-300 hover:border-primary/50",
+        glass ? "glass" : "border border-border bg-card",
         className,
       )}
     >

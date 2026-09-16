@@ -18,10 +18,10 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "glass-btn",
+        default: "glass-btn-light",
         destructive:
           "rounded-md bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
-        outline: "glass-btn",
+        outline: "glass-btn-light",
         secondary: "glass-btn",
         ghost: "rounded-md hover:bg-accent hover:text-accent-foreground",
         link: "rounded-none text-primary underline-offset-4 hover:underline",
