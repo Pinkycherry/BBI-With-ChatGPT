@@ -39,7 +39,7 @@ export function IdeaCard({
       <Link
         to="/idea/$slug"
         params={{ slug: idea.slug }}
-        className="group relative flex h-full min-w-0 flex-col p-4 sm:p-5"
+        className="group relative flex h-full min-w-0 flex-col p-5 sm:p-6"
       >
         <div
           className={`flex h-full flex-col gap-2.5 ${locked ? "pointer-events-none select-none blur-sm" : ""}`}
@@ -76,7 +76,7 @@ export function IdeaCard({
           </div>
         </div>
         {locked && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 bg-background/45">
+          <div className="absolute inset-0 flex flex-col items-center justify-center gap-1.5 rounded-[inherit] bg-white/10 backdrop-blur-[2px]">
             <Lock className="h-4 w-4 text-accent" aria-hidden />
             <span className="text-[10px] font-semibold uppercase tracking-widest text-foreground">
               Sign in to view

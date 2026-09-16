@@ -275,23 +275,23 @@
      glass than it needed over `#0C0C25`, and the drop shadow has to carry
      brand ink instead of black or it reads as a smudge, not elevation. */
   background:
-    linear-gradient(140deg, rgba(255, 255, 255, 0.3) 0%, rgba(255, 255, 255, 0.12) 48%, rgba(255, 255, 255, 0.05) 100%) !important;
-  backdrop-filter: blur(26px) saturate(180%) !important;
-  border: 1px solid rgba(255, 255, 255, 0.6) !important;
-  border-top-color: rgba(255, 255, 255, 0.9);
-  border-left-color: rgba(255, 255, 255, 0.75);
+    linear-gradient(140deg, rgba(255, 255, 255, 0.14) 0%, rgba(255, 255, 255, 0.05) 48%, rgba(255, 255, 255, 0.02) 100%) !important;
+  backdrop-filter: blur(22px) saturate(160%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.55) !important;
+  border-top-color: rgba(255, 255, 255, 0.85);
+  border-left-color: rgba(255, 255, 255, 0.7);
   position: relative;
-  /* Neutral, soft shadow — the previous pass leaned the shadow itself
-     violet, which read as a tinted smudge instead of elevation (see the
-     reference "Weather / Steps / Balance" cards: the shadow there is a
-     near-neutral soft gray, brand colour lives in the content, not the
-     card's own cast shadow). */
+  /* Near-fully transparent fill, on purpose — the card reads as glass
+     through its edge and shadow, not through a tinted fill (see the
+     "Weather / Steps / Balance" reference: the card is barely darker than
+     the page behind it; the shadow and the crisp edge are what say "this is
+     a separate object floating above the page"). */
   box-shadow:
-    0 0 0 1px rgba(70, 67, 186, 0.05),
-    0 1px 1px 0 rgba(255, 255, 255, 0.85) inset,
-    0 -1px 1px 0 rgba(70, 67, 186, 0.06) inset,
-    0 20px 40px -18px rgba(30, 28, 46, 0.16),
-    0 6px 14px -6px rgba(30, 28, 46, 0.08) !important;
+    0 0 0 1px rgba(0, 0, 0, 0.04),
+    0 1px 1px 0 rgba(255, 255, 255, 0.8) inset,
+    0 -1px 1px 0 rgba(0, 0, 0, 0.05) inset,
+    0 24px 48px -20px rgba(20, 20, 20, 0.2),
+    0 8px 18px -8px rgba(20, 20, 20, 0.1) !important;
   color: var(--foreground);
   /* Rim-light sweeping the top-left edge — brighter along the top than the
      bottom, per the Liquid Glass reference. Same mask-composite technique as
@@ -406,16 +406,19 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 0.4rem;
-  padding: 0.45rem 0.95rem;
-  border-radius: 0.375rem;
+  gap: 0.5rem;
+  padding: 0.7rem 1.35rem;
+  border-radius: 0.5rem;
   font-weight: 600;
   line-height: 1.25;
+  /* Overridden below by the later, monochrome `.glass-btn, .glass-pill,
+     .sheen…` rule (same specificity + !important, later wins) — kept
+     matching here anyway so this isn't a live contradiction on paper. */
   background: linear-gradient(
     180deg,
-    rgba(136, 134, 219, 0.26) 0%,
-    rgba(43, 40, 113, 0.34) 55%,
-    rgba(70, 67, 186, 0.28) 100%
+    rgba(40, 40, 40, 0.4) 0%,
+    rgba(10, 10, 10, 0.5) 55%,
+    rgba(30, 30, 30, 0.4) 100%
   ) !important;
   backdrop-filter: blur(18px) saturate(150%) !important;
   border: 1px solid rgba(182, 181, 227, 0.42) !important;
@@ -436,11 +439,11 @@
   /* transform is owned by the GSAP pill-interaction hook, not this rule. */
   background: linear-gradient(
     180deg,
-    rgba(136, 134, 219, 0.42) 0%,
-    rgba(70, 67, 186, 0.44) 55%,
-    rgba(58, 54, 151, 0.4) 100%
+    rgba(50, 50, 50, 0.55) 0%,
+    rgba(15, 15, 15, 0.62) 55%,
+    rgba(40, 40, 40, 0.5) 100%
   ) !important;
-  border-color: rgba(218, 217, 242, 0.7) !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
   box-shadow:
     0 1px 0 0 rgba(255, 255, 255, 0.5) inset,
     0 0 26px -8px rgba(136, 134, 219, 0.7) inset,
@@ -971,10 +974,10 @@ a.mo-link {
 @utility glass-btn {
   position: relative;
   isolation: isolate;
-  border-radius: 0.375rem;
+  border-radius: 0.625rem;
   color: #FCFBFE;
   background:
-    linear-gradient(180deg, rgba(30, 30, 30, 0.4) 0%, rgba(10, 10, 10, 0.5) 52%, rgba(30, 30, 30, 0.4) 100%);
+    linear-gradient(180deg, rgba(30, 30, 30, 0.22) 0%, rgba(10, 10, 10, 0.3) 52%, rgba(30, 30, 30, 0.22) 100%);
   backdrop-filter: blur(22px) saturate(170%);
   border: 1px solid rgba(255, 255, 255, 0.34);
   box-shadow:
@@ -997,9 +1000,9 @@ a[class*="from-primary"],
 button[class*="from-primary"],
 .iv-ticker-track a {
   color: #FCFBFE !important;
-  border-radius: 0.375rem;
+  border-radius: 0.625rem;
   background:
-    linear-gradient(180deg, rgba(30, 30, 30, 0.4) 0%, rgba(10, 10, 10, 0.5) 52%, rgba(30, 30, 30, 0.4) 100%) !important;
+    linear-gradient(180deg, rgba(30, 30, 30, 0.22) 0%, rgba(10, 10, 10, 0.3) 52%, rgba(30, 30, 30, 0.22) 100%) !important;
   backdrop-filter: blur(22px) saturate(170%) !important;
   border: 1px solid rgba(255, 255, 255, 0.34) !important;
   box-shadow:
@@ -1112,17 +1115,16 @@ button[class*="from-primary"]:hover,
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  border-radius: 0.375rem;
+  border-radius: 0.625rem;
   color: #12122E;
-  /* Real transparency — this should look like you could see through it, not
-     like a solid white pill. Most of what reads as "glass" below comes from
-     the blur + the rim/specular layers, not from an opaque fill. */
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.04) 100%);
+  /* Near-fully transparent — you should be able to see straight through it.
+     Definition comes from the rim + shadow, not the fill. */
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.02) 100%);
   backdrop-filter: blur(24px) saturate(190%);
   border: 1px solid transparent;
   box-shadow:
-    0 0 18px -8px rgba(255, 255, 255, 0.7) inset,
-    0 14px 28px -14px rgba(12, 12, 37, 0.22),
+    0 0 16px -8px rgba(255, 255, 255, 0.6) inset,
+    0 16px 32px -16px rgba(12, 12, 37, 0.24),
     0 2px 8px -3px rgba(12, 12, 37, 0.1);
 }
 /* The rim: a 1px gradient border, bright at the top, fading out by the
@@ -1148,11 +1150,12 @@ button[class*="from-primary"]:hover,
   inset: 0;
   border-radius: inherit;
   pointer-events: none;
+  /* Toned down for a matte read — a soft even sheen, not a shiny catch-light. */
   background:
-    radial-gradient(60px 44px at 16% 20%, rgba(255, 255, 255, 0.95), transparent 72%),
-    radial-gradient(50px 36px at 86% 84%, rgba(255, 255, 255, 0.4), transparent 74%);
+    radial-gradient(70px 50px at 18% 20%, rgba(255, 255, 255, 0.5), transparent 74%),
+    radial-gradient(60px 42px at 84% 82%, rgba(255, 255, 255, 0.22), transparent 76%);
   mix-blend-mode: screen;
-  opacity: 0.7;
+  opacity: 0.4;
   transition:
     opacity var(--mo-dur-3) var(--mo-ease),
     transform var(--mo-dur-3) var(--mo-ease);
@@ -2820,9 +2823,10 @@ html.bbi-motion [data-wave].revealed:not(:has(.rv)) {
   font-weight: 600;
   color: #FCFBFE;
   background:
-    linear-gradient(180deg, rgba(30, 30, 30, 0.4) 0%, rgba(10, 10, 10, 0.5) 52%, rgba(30, 30, 30, 0.4) 100%);
+    linear-gradient(180deg, rgba(30, 30, 30, 0.22) 0%, rgba(10, 10, 10, 0.3) 52%, rgba(30, 30, 30, 0.22) 100%);
   backdrop-filter: blur(22px) saturate(170%);
-  border-radius: 0.375rem;
+  border-radius: 0.625rem;
+  padding: 0.85rem 1.75rem;
   border: 1px solid rgba(255, 255, 255, 0.34);
   box-shadow:
     0 1px 0 0 rgba(255, 255, 255, 0.55) inset,

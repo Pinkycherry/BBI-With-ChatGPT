@@ -130,184 +130,6 @@ function clean(text: string, limit = 165) {
   const boundary = slice.lastIndexOf(" ");
   return `${slice.slice(0, boundary > 0 ? boundary : limit)}…`;
 }
-function Logo() {
-  return (
-    <Link to="/" className="nh-logo" aria-label="BBI — Bro Business Ideas home">
-      BBI<span>✳</span>
-    </Link>
-  );
-}
-
-function Header({ categories }: { categories: CategoryNode[] }) {
-  const [open, setOpen] = useState<"categories" | "explore" | "mobile" | null>(null);
-  const ref = useRef<HTMLElement>(null);
-  const auth = useAuth();
-  useEffect(() => {
-    if (!open) return;
-    const dismiss = (event: PointerEvent) => {
-      if (!ref.current?.contains(event.target as Node)) setOpen(null);
-    };
-    const keyboard = (event: globalThis.KeyboardEvent) => {
-      if (event.key === "Escape") {
-        ref.current?.querySelector<HTMLButtonElement>(`[aria-controls="nh-${open}-menu"]`)?.focus();
-        setOpen(null);
-      }
-    };
-    document.addEventListener("pointerdown", dismiss);
-    document.addEventListener("keydown", keyboard);
-    return () => {
-      document.removeEventListener("pointerdown", dismiss);
-      document.removeEventListener("keydown", keyboard);
-    };
-  }, [open]);
-  const account =
-    auth.status === "authenticated" ? (
-      <button
-        className="nh-nav-link"
-        onClick={() => {
-          void signOut();
-          setOpen(null);
-        }}
-      >
-        Sign out
-      </button>
-    ) : (
-      <Link className="nh-nav-link" to="/sign-in" search={{ redirect: "/" }}>
-        Sign in
-      </Link>
-    );
-  return (
-    <header ref={ref} className="nh-header">
-      <div className="nh-nav">
-        <Logo />
-        <nav className="nh-desktop-nav" aria-label="Main navigation">
-          <button
-            aria-expanded={open === "categories"}
-            aria-controls="nh-categories-menu"
-            onClick={() => setOpen(open === "categories" ? null : "categories")}
-          >
-            The library <ChevronDown size={15} />
-          </button>
-          <button
-            aria-expanded={open === "explore"}
-            aria-controls="nh-explore-menu"
-            onClick={() => setOpen(open === "explore" ? null : "explore")}
-          >
-            Explore BBI <ChevronDown size={15} />
-          </button>
-          {account}
-        </nav>
-        <div className="nh-nav-actions">
-          <Link className="nh-button nh-button-small" to="/browse">
-            Browse free <ArrowUpRight size={17} />
-          </Link>
-          <button
-            className="nh-mobile-toggle"
-            aria-expanded={open === "mobile"}
-            aria-controls="nh-mobile-menu"
-            aria-label={open === "mobile" ? "Close navigation" : "Open navigation"}
-            onClick={() => setOpen(open === "mobile" ? null : "mobile")}
-          >
-            {open === "mobile" ? <X /> : <Menu />}
-          </button>
-        </div>
-      </div>
-      {open === "categories" && (
-        <nav
-          id="nh-categories-menu"
-          className="nh-dropdown nh-category-dropdown"
-          aria-label="Business categories"
-        >
-          <div className="nh-dropdown-heading">
-            <span>Find your starting point</span>
-            <Link to="/browse">
-              View the library <ArrowUpRight size={16} />
-            </Link>
-          </div>
-          <div className="nh-dropdown-grid">
-            {categories.map((c) => (
-              <Link
-                key={c.categorySlug}
-                to="/category/$categorySlug"
-                params={{ categorySlug: c.categorySlug }}
-                onClick={() => setOpen(null)}
-              >
-                {c.categoryName}
-                <span>{c.ideaCount}</span>
-              </Link>
-            ))}
-          </div>
-        </nav>
-      )}
-      {open === "explore" && (
-        <nav
-          id="nh-explore-menu"
-          className="nh-dropdown nh-explore-dropdown"
-          aria-label="Explore BBI"
-        >
-          {(
-            [
-              { to: "/calculator", label: "Useful Calculators" },
-              { to: "/startup-guides", label: "Startup Guides" },
-              { to: "/founder-stories", label: "Founder Stories" },
-              { to: "/founder-glossary", label: "Founder Glossary" },
-              { to: "/learning-resources", label: "Learning Resources" },
-              { to: "/about", label: "Our story" },
-              { to: "/list", label: "Curated idea lists" },
-              { to: "/blog", label: "Field notes" },
-              { to: "/pricing", label: "Access & pricing" },
-              { to: "/contact", label: "Get in touch" },
-            ] as const
-          ).map((l) => (
-            <Link key={l.to} to={l.to} onClick={() => setOpen(null)}>
-              {l.label}
-              <ArrowUpRight size={16} />
-            </Link>
-          ))}
-        </nav>
-      )}
-      {open === "mobile" && (
-        <nav
-          id="nh-mobile-menu"
-          className="nh-dropdown nh-mobile-menu"
-          aria-label="Mobile navigation"
-        >
-          <Link to="/search" onClick={() => setOpen(null)}>
-            Search ideas <Search size={18} />
-          </Link>
-          <Link to="/calculator" onClick={() => setOpen(null)}>
-            Useful Calculators <ArrowUpRight size={18} />
-          </Link>
-          <Link to="/startup-guides" onClick={() => setOpen(null)}>
-            Startup Guides <ArrowUpRight size={18} />
-          </Link>
-          <Link to="/founder-stories" onClick={() => setOpen(null)}>
-            Founder Stories <ArrowUpRight size={18} />
-          </Link>
-          <Link to="/founder-glossary" onClick={() => setOpen(null)}>
-            Founder Glossary <ArrowUpRight size={18} />
-          </Link>
-          <Link to="/learning-resources" onClick={() => setOpen(null)}>
-            Learning Resources <ArrowUpRight size={18} />
-          </Link>
-          <a href="#categories" onClick={() => setOpen(null)}>
-            Browse categories <ArrowDown size={18} />
-          </a>
-          <a href="#how-it-works" onClick={() => setOpen(null)}>
-            How it works <ArrowDown size={18} />
-          </a>
-          <Link to="/about" onClick={() => setOpen(null)}>
-            Our story
-          </Link>
-          <Link to="/pricing" onClick={() => setOpen(null)}>
-            Access & pricing
-          </Link>
-          {account}
-        </nav>
-      )}
-    </header>
-  );
-}
 
 function BlueprintCard({ idea, index = 0 }: { idea: IdeaCard; index?: number }) {
   return (
@@ -975,59 +797,6 @@ function OperatorToolkitSection() {
   );
 }
 
-function Newsletter() {
-  const [email, setEmail] = useState("");
-  const subscribe = useServerFn(subscribeToNewsletter);
-  const mutation = useMutation({
-    mutationFn: () => subscribe({ data: { email, source: "homepage-nomu" } }),
-  });
-  function submit(e: FormEvent) {
-    e.preventDefault();
-    if (!mutation.isPending) mutation.mutate();
-  }
-  return (
-    <div className="nh-newsletter">
-      <h3>
-        A little inspiration.
-        <br />
-        Straight to your inbox.
-      </h3>
-      <p>New blueprints and honest notes. No spam.</p>
-      {mutation.isSuccess ? (
-        <p className="nh-feedback" role="status">
-          <Check size={17} /> You’re on the list. Thanks for being here.
-        </p>
-      ) : (
-        <form onSubmit={submit}>
-          <label className="nh-sr" htmlFor="nh-email">
-            Email address
-          </label>
-          <input
-            id="nh-email"
-            type="email"
-            autoComplete="email"
-            required
-            placeholder="Your email address"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-          <button
-            type="submit"
-            aria-label="Subscribe to the newsletter"
-            disabled={mutation.isPending}
-          >
-            {mutation.isPending ? "…" : <ArrowUpRight size={21} />}
-          </button>
-        </form>
-      )}
-      {mutation.isError && (
-        <p className="nh-feedback" role="alert">
-          Couldn’t subscribe right now. Please try again.
-        </p>
-      )}
-    </div>
-  );
-}
 
 export function HomeExperience({
   catalog,
@@ -1040,7 +809,7 @@ export function HomeExperience({
 }) {
   const root = useRef<HTMLDivElement>(null);
   const [search, setSearch] = useState("");
-  const [paused, setPaused] = useState(false);
+  const paused = false;
   const [faq, setFaq] = useState<number | null>(0);
   const navigate = useNavigate();
   const picks = (featured.length ? featured : trending).slice(0, 3);
@@ -1119,10 +888,6 @@ export function HomeExperience({
   }
   return (
     <div id="bbi-home" ref={root} className={paused ? "nh-motion-paused" : ""}>
-      <a className="nh-skip" href="#main-content">
-        Skip to content
-      </a>
-      <Header categories={catalog.categories} />
       <main id="main-content">
         <section className="nh-hero" aria-labelledby="nh-hero-title">
           <div className="nh-hero-inner">
@@ -1317,72 +1082,6 @@ export function HomeExperience({
           </div>
         </section>
       </main>
-      <footer className="nh-footer">
-        <div className="nh-footer-top">
-          <div>
-            <Logo />
-            <p className="nh-footer-brand">Bro Business Ideas</p>
-            <p>
-              Made in India.
-              <br />
-              For everyone starting from zero.
-            </p>
-            <button
-              className="nh-motion-control"
-              aria-pressed={paused}
-              onClick={() => setPaused(!paused)}
-            >
-              {paused ? <Play size={13} /> : <Pause size={13} />}{" "}
-              {paused ? "Resume motion" : "Pause motion"}
-            </button>
-          </div>
-          <Newsletter />
-          <div className="nh-footer-links">
-            <h3>Resources</h3>
-            <Link to="/calculator">Useful Calculators</Link>
-            <Link to="/startup-guides">Startup Guides</Link>
-            <Link to="/founder-stories">Founder Stories</Link>
-            <Link to="/founder-glossary">Startup Glossary</Link>
-            <Link to="/learning-resources">Learning Resources</Link>
-          </div>
-          <div className="nh-footer-links">
-            <h3>Explore</h3>
-            <Link to="/browse">The library</Link>
-            <Link to="/search">Search ideas</Link>
-            <Link to="/list">Curated lists</Link>
-            <Link to="/blog">Field notes</Link>
-          </div>
-          <div className="nh-footer-links">
-            <h3>BBI</h3>
-            <Link to="/about">Our story</Link>
-            <Link to="/services">How BBI works</Link>
-            <Link to="/pricing">Access & pricing</Link>
-            <Link to="/contact">Get in touch</Link>
-            <Link to="/sign-in" search={{ redirect: "/" }}>
-              Sign in
-            </Link>
-          </div>
-        </div>
-        <div className="nh-footer-bottom">
-          <span>© {new Date().getFullYear()} Bro Business Ideas</span>
-          <nav aria-label="Legal">
-            {(
-              [
-                { to: "/terms", label: "Terms" },
-                { to: "/privacy", label: "Privacy" },
-                { to: "/disclaimer", label: "Disclaimer" },
-                { to: "/gdpr", label: "GDPR" },
-                { to: "/refund-policy", label: "Refund policy" },
-              ] as const
-            ).map((l) => (
-              <Link key={l.to} to={l.to}>
-                {l.label}
-              </Link>
-            ))}
-          </nav>
-          <a href="#main-content">Back to top ↑</a>
-        </div>
-      </footer>
     </div>
   );
 }
