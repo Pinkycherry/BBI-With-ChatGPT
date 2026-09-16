@@ -269,31 +269,34 @@
    GLOW & GLASS PANEL — exact Image 2 dark neon glass
    ================================================================ */
 @utility glass {
-  /* Liquid Glass, tuned for the one permanent (light) ground rather than the
-     dark backdrop this was originally authored against. Translucent WHITE
-     over `--background: #F7F6FB` needs far less opacity to read as tinted
-     glass than it needed over `#0C0C25`, and the drop shadow has to carry
-     brand ink instead of black or it reads as a smudge, not elevation. */
+  /* Frosted LIGHT panel floating on the dark ground (--background: #0A0A0C).
+     This is the standard, legible way glassmorphism actually shows up — the
+     fill is light, the border/glow has to be light too (a dark border or
+     dark shadow is invisible against a background this dark), and anything
+     nested inside reads dark ink against the panel's own light fill, not
+     white against the page. That's what the two local variable overrides
+     just below are for — every Tailwind `text-foreground`/`text-muted-
+     foreground` inside a `.glass` container picks this up automatically. */
+  --foreground: #12122E;
+  --muted-foreground: #5B5892;
+  --card-foreground: #12122E;
   background:
-    linear-gradient(140deg, rgba(255, 255, 255, 0.22) 0%, rgba(255, 255, 255, 0.09) 48%, rgba(255, 255, 255, 0.04) 100%) !important;
-  backdrop-filter: blur(22px) saturate(160%) !important;
-  /* A white border on a near-white page is invisible at any opacity — the
-     rim has to be dark to actually show. */
-  border: 1.5px solid rgba(0, 0, 0, 0.16) !important;
-  border-top-color: rgba(255, 255, 255, 0.9);
-  border-left-color: rgba(0, 0, 0, 0.1);
+    linear-gradient(140deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0.24) 48%, rgba(255, 255, 255, 0.14) 100%) !important;
+  backdrop-filter: blur(20px) saturate(180%) brightness(1.06) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.5) !important;
+  border-top-color: rgba(255, 255, 255, 0.85);
+  border-left-color: rgba(255, 255, 255, 0.4);
   position: relative;
-  /* There is no background image behind this any more (removed on request),
-     so nothing is left to distort through the blur — the card has to read
-     as a distinct floating object through its edge and shadow alone, and
-     that means those two need to be loud, not subtle. */
+  /* Dark shadows don't read on a dark ground — elevation here comes from a
+     soft light glow instead, the same way any light panel "lifts" off a
+     dark backdrop. */
   box-shadow:
-    0 0 0 1px rgba(0, 0, 0, 0.08),
+    0 0 0 1px rgba(255, 255, 255, 0.06),
     0 1px 1px 0 rgba(255, 255, 255, 0.95) inset,
     0 -1px 2px 0 rgba(0, 0, 0, 0.08) inset,
-    0 36px 64px -24px rgba(20, 20, 20, 0.32),
-    0 14px 28px -12px rgba(20, 20, 20, 0.18) !important;
-  color: var(--foreground);
+    0 30px 60px -20px rgba(0, 0, 0, 0.55),
+    0 0 40px -18px rgba(255, 255, 255, 0.25) !important;
+  color: #12122E;
   /* Rim-light sweeping the top-left edge — brighter along the top than the
      bottom, per the Liquid Glass reference. Same mask-composite technique as
      before, recoloured from a neon rim to a bright-white one. */
@@ -646,11 +649,11 @@ a.mo-link {
   position: absolute;
   inset: 0;
   border-radius: 9999px;
-  border: 1px dashed rgba(182, 181, 227, 0.35);
+  border: 1px dashed rgba(255, 255, 255, 0.3);
 }
 .bbi-orbit-ring-inner {
   inset: 15%;
-  border-color: rgba(182, 181, 227, 0.5);
+  border-color: rgba(255, 255, 255, 0.45);
   animation: bbi-orbit-spin 34s linear infinite;
 }
 .bbi-orbit-ring-outer {
@@ -678,10 +681,10 @@ a.mo-link {
   justify-content: center;
   text-align: center;
   padding: 0.4rem;
-  background: linear-gradient(135deg, #DAD9F2, #4643BA);
+  background: linear-gradient(135deg, #FFFFFF, #8A8A8A);
   box-shadow:
-    0 0 20px 0 rgba(182, 181, 227, 0.42),
-    0 0 40px -8px rgba(70, 67, 186, 0.34);
+    0 0 20px 0 rgba(255, 255, 255, 0.4),
+    0 0 40px -8px rgba(255, 255, 255, 0.3);
 }
 .bbi-orbit-center-label {
   font-family: var(--font-display);
@@ -713,7 +716,7 @@ a.mo-link {
   height: 0.5rem;
   border-radius: 9999px;
   background: var(--accent);
-  box-shadow: 0 0 9px rgba(182, 181, 227, 0.68);
+  box-shadow: 0 0 9px rgba(255, 255, 255, 0.6);
 }
 .bbi-orbit-node-label {
   font-size: 0.6rem;
@@ -958,9 +961,9 @@ a.mo-link {
 
 /* Orbit centre must stay legible over the glass layer. */
 .bbi-orbit-center {
-  background: linear-gradient(135deg, #DAD9F2 0%, #4643BA 100%) !important;
-  background-image: linear-gradient(135deg, #DAD9F2 0%, #4643BA 100%) !important;
-  border: 1px solid rgba(238, 236, 248, 0.7) !important;
+  background: linear-gradient(135deg, #FFFFFF 0%, #8A8A8A 100%) !important;
+  background-image: linear-gradient(135deg, #FFFFFF 0%, #8A8A8A 100%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.7) !important;
   box-shadow: 0 0 34px -8px rgba(255, 255, 255, 0.75) !important;
 }
 .bbi-orbit-center .bbi-orbit-center-label { color: #0C0C25 !important; }
@@ -1117,19 +1120,15 @@ button[class*="from-primary"]:hover,
   overflow: hidden;
   border-radius: 0.625rem;
   color: #12122E;
-  /* Transparent fill, loud edge + shadow — no background image behind this
-     any more, so the fill alone can't carry it. */
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.16) 0%, rgba(255, 255, 255, 0.04) 100%);
-  backdrop-filter: blur(24px) saturate(190%);
-  /* White is invisible on a light page at any opacity — dark border, bright
-     catch-light on top only (the ::before rim below). */
-  border: 1.5px solid rgba(0, 0, 0, 0.18);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.16) 100%);
+  backdrop-filter: blur(20px) saturate(200%) brightness(1.08);
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
   box-shadow:
     0 0 18px -8px rgba(255, 255, 255, 0.75) inset,
-    0 22px 40px -18px rgba(12, 12, 37, 0.32),
-    0 6px 14px -5px rgba(12, 12, 37, 0.16);
+    0 22px 40px -18px rgba(0, 0, 0, 0.55),
+    0 0 24px -10px rgba(255, 255, 255, 0.2);
 }
-/* The rim: a 1px gradient border, bright at the top, fading to dark by the
+/* The rim: a 1px gradient border, bright at the top, fading by the
    bottom edge — masked so only the ring shows, same technique as `.glass`. */
 .glass-btn-light::before {
   content: "";
@@ -1137,7 +1136,7 @@ button[class*="from-primary"]:hover,
   inset: 0;
   border-radius: inherit;
   padding: 1px;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.4) 25%, rgba(0, 0, 0, 0.12) 100%);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.45) 25%, rgba(255, 255, 255, 0.15) 100%);
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
@@ -1214,37 +1213,40 @@ html.light {
      brief usually attracts: the ground is cooled toward the brand
      violet so paper and ink belong to one family.
      ------------------------------------------------------------ */
-  --background: #F7F6FB;
-  --background-2: #EFEDF7;
-  --foreground: #12122E;
-  --foreground-hover: #F7F6FB;
-  /* Opaque. A plate is printed, not frosted — this single value is
-     what stops every card in the site reading as glass. */
-  --card: #FFFFFF;
-  --card-foreground: #000000;
-  --popover: #FFFFFF;
-  --popover-foreground: #000000;
+  /* Midnight ground — glass needs contrast to actually read as glass, and a
+     flat light page gives a light frosted fill nothing to show against.
+     Frosted white/light panels floating on a dark ground is the standard,
+     legible way to show glassmorphism; still black/white/gray only, just
+     inverted (dark ground, light text) instead of light ground/dark text. */
+  --background: #0A0A0C;
+  --background-2: #121214;
+  --foreground: #FAFAFA;
+  --foreground-hover: #0A0A0C;
+  --card: rgba(255, 255, 255, 0.06);
+  --card-foreground: #FFFFFF;
+  --popover: #17171A;
+  --popover-foreground: #FFFFFF;
   /* TEMPORARY — no brand colour anywhere, black/white/gray only, per
      explicit instruction ("I will tell you which colours to use later").
      Every token below still exists and is still read everywhere it always
      was; only the VALUES are neutralized, so restoring the palette later
      is a token edit here, not a re-touch of every component. */
-  --primary: #111111;
-  --primary-foreground: #FFFFFF;
-  --secondary: #EFEFEF;
-  --secondary-foreground: #000000;
-  --muted: rgba(0, 0, 0, 0.05);
-  --muted-foreground: #555555;
-  --accent: #111111;
-  --accent-foreground: #FFFFFF;
-  --border: rgba(0, 0, 0, 0.16);
-  --input: rgba(0, 0, 0, 0.2);
-  --ring: #111111;
-  --ember: #111111;
-  --warm: #555555;
-  --glass-border: rgba(0, 0, 0, 0.16);
-  --violet: #111111;
-  --violet-soft: #555555;
+  --primary: #FFFFFF;
+  --primary-foreground: #0A0A0C;
+  --secondary: #1C1C1F;
+  --secondary-foreground: #FFFFFF;
+  --muted: rgba(255, 255, 255, 0.06);
+  --muted-foreground: #A3A3A3;
+  --accent: #FFFFFF;
+  --accent-foreground: #0A0A0C;
+  --border: rgba(255, 255, 255, 0.16);
+  --input: rgba(255, 255, 255, 0.2);
+  --ring: #FFFFFF;
+  --ember: #FFFFFF;
+  --warm: #A3A3A3;
+  --glass-border: rgba(255, 255, 255, 0.18);
+  --violet: #FFFFFF;
+  --violet-soft: #A3A3A3;
 
   /* ============================================================
      HIGHLIGHT PALETTE
@@ -1286,22 +1288,22 @@ html.light {
        coral  a cost or a risk: what hurts, what to watch
        teal   data: trend scores, counts, measured figures
      ============================================================ */
-  --hl-gold: #111111;
-  --hl-green: #111111;
-  --hl-coral: #111111;
-  --hl-teal: #111111;
+  --hl-gold: #FFFFFF;
+  --hl-green: #FFFFFF;
+  --hl-coral: #FFFFFF;
+  --hl-teal: #FFFFFF;
 }
 html.light body {
-  background-color: #F7F6FB !important;
-  color: #000000;
+  background-color: #0A0A0C !important;
+  color: #FFFFFF;
 }
 /* The base body background is `!important` inside @layer base; important
    declarations in a layer beat unlayered ones, so the light override must
    live in the same layer to win. */
 @layer base {
   html.light body {
-    background-color: #F7F6FB !important;
-    color: #12122E;
+    background-color: #0A0A0C !important;
+    color: #FFFFFF;
   }
 }
 /* `body::before` is the old starfield — stays off, a business content site
@@ -1325,17 +1327,26 @@ html.light body::before {
    doesn't repaint), covers the viewport, centred. */
 /* Background image removed on request — flat ground again, glass surfaces
    stand on their own contrast/blur/shadow, no photo behind them. */
+/* Not the removed photo — a soft, fixed tonal wash. Glass reads as glass
+   because backdrop-blur is visibly distorting something behind it; a flat
+   single-colour page gives it nothing to distort, which is the reason every
+   card/footer/header read as "just a white box with a border" no matter how
+   the fill or border was tuned. This is deliberately faint and grayscale
+   (no brand colour), not a return to the photo. */
 html.light body::after {
-  opacity: 0 !important;
+  opacity: 1 !important;
   animation: none !important;
-  background-image: none !important;
+  background-image:
+    radial-gradient(56rem 40rem at 10% -10%, rgba(255, 255, 255, 0.07), transparent 70%),
+    radial-gradient(48rem 36rem at 100% 0%, rgba(255, 255, 255, 0.05), transparent 70%),
+    radial-gradient(60rem 46rem at 40% 100%, rgba(255, 255, 255, 0.06), transparent 72%) !important;
 }
 /* The nav shell is glass now too — "all means all" — instead of the flat
    plate it was reprinted as here. `@utility glass-nav` above carries the
    real (light, transparent) treatment; this override used to cancel it out
    the same way the old `.glass`/`.glass-btn` overrides did. */
 html.light .glass-nav {
-  color: #12122E;
+  color: #FFFFFF;
 }
 /* The Aceternity hover signature, given to every legacy plate on the site in
    one rule rather than at twenty-odd call sites: the border takes brand ink
@@ -1479,20 +1490,20 @@ html.light .iv-skeleton {
      (blur + a glossy top highlight + shadow), never a flat white plate. */
   .iv-nav-panel {
     background:
-      linear-gradient(180deg, rgba(255, 255, 255, 0.92) 0%, rgba(240, 240, 240, 0.85) 100%) !important;
+      linear-gradient(180deg, rgba(40, 40, 44, 0.92) 0%, rgba(20, 20, 22, 0.88) 100%) !important;
     backdrop-filter: blur(40px) saturate(180%) !important;
-    border: 1px solid rgba(0, 0, 0, 0.14) !important;
-    color: #000000 !important;
+    border: 1px solid rgba(255, 255, 255, 0.16) !important;
+    color: #FFFFFF !important;
     box-shadow:
-      0 1px 0 0 rgba(255, 255, 255, 0.9) inset,
-      0 28px 64px -24px rgba(0, 0, 0, 0.35) !important;
+      0 1px 0 0 rgba(255, 255, 255, 0.12) inset,
+      0 28px 64px -24px rgba(0, 0, 0, 0.6) !important;
   }
   html.light .glass-nav a,
   html.light .glass-nav button {
-    color: #12122E !important;
+    color: #FFFFFF !important;
   }
   html.light .glass-nav a:hover {
-    color: #2B2871 !important;
+    color: rgba(255, 255, 255, 0.65) !important;
   }
   /* This @layer-utilities block used to reprint `.glass`, `.glass-btn` and
      `.glass-pill` as a flat plate — and because an !important inside a
@@ -1586,19 +1597,19 @@ footer .iv-tag-cloud { gap: 0.5rem; }
 /* Glass, not a flat plate. */
 html.light .iv-tag-cloud .iv-tag {
   background:
-    linear-gradient(140deg, rgba(255, 255, 255, 0.42) 0%, rgba(255, 255, 255, 0.18) 100%) !important;
+    linear-gradient(140deg, rgba(255, 255, 255, 0.55) 0%, rgba(255, 255, 255, 0.26) 100%) !important;
   backdrop-filter: blur(16px) saturate(170%) !important;
-  border-color: rgba(0, 0, 0, 0.14) !important;
-  color: #000000 !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+  color: #12122E !important;
   box-shadow:
-    0 1px 0 0 rgba(255, 255, 255, 0.8) inset,
-    0 10px 22px -18px rgba(0, 0, 0, 0.3) !important;
+    0 1px 0 0 rgba(255, 255, 255, 0.85) inset,
+    0 10px 22px -18px rgba(0, 0, 0, 0.5) !important;
 }
 html.light .iv-tag-cloud .iv-tag:hover {
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.6) 0%, rgba(255, 255, 255, 0.32) 100%) !important;
-  border-color: rgba(0, 0, 0, 0.18) !important;
-  color: #000000 !important;
+    linear-gradient(180deg, rgba(255, 255, 255, 0.72) 0%, rgba(255, 255, 255, 0.42) 100%) !important;
+  border-color: rgba(255, 255, 255, 0.7) !important;
+  color: #12122E !important;
 }
 
 /* ============================================================
@@ -1630,29 +1641,29 @@ html.light .iv-tag-cloud .iv-tag:hover {
    ORBIT DIAGRAM — light-mode visibility (rings washed out on white)
    ============================================================ */
 html.light .bbi-orbit-ring {
-  border-color: rgba(180, 120, 40, 0.55) !important;
+  border-color: rgba(255, 255, 255, 0.55) !important;
   opacity: 0.7;
   box-shadow:
-    0 0 26px -6px rgba(200, 140, 60, 0.45),
-    inset 0 0 30px -12px rgba(180, 120, 40, 0.4) !important;
+    0 0 26px -6px rgba(255, 255, 255, 0.4),
+    inset 0 0 30px -12px rgba(255, 255, 255, 0.3) !important;
 }
 html.light .bbi-orbit-ring-inner {
-  border-color: rgba(160, 105, 35, 0.6) !important;
+  border-color: rgba(255, 255, 255, 0.6) !important;
 }
 html.light .bbi-orbit-dot {
-  background: #B4782A;
-  box-shadow: 0 0 12px 2px rgba(180, 120, 40, 0.75);
+  background: #FFFFFF;
+  box-shadow: 0 0 12px 2px rgba(255, 255, 255, 0.6);
 }
-/* Bubbles need a real shadow in light mode so they detach from the background. */
+/* Bubbles need a real shadow so they detach from the background. */
 html.light .bbi-orbit-node-inner,
 html.light .bbi-tree-node-m {
-  filter: drop-shadow(0 10px 18px rgba(12, 12, 37, 0.18));
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.35));
 }
 html.light .bbi-orbit-node-label {
   color: #0C0C25 !important;
   background: rgba(255, 255, 255, 0.94) !important;
-  border-color: rgba(43, 40, 113, 0.22) !important;
-  box-shadow: 0 8px 18px -10px rgba(12, 12, 37, 0.45);
+  border-color: rgba(255, 255, 255, 0.4) !important;
+  box-shadow: 0 8px 18px -10px rgba(0, 0, 0, 0.45);
 }
 
 /* ============================================================
@@ -2000,19 +2011,21 @@ html.light .idea-shell::before { opacity: 0.42; }
    ================================================================== */
 
 .bbi-footer {
-  /* A white-tinted border/fill on a near-white page has almost no visible
-     contrast no matter the opacity — that's the same reason the whole site
-     was reading as "no glass at all". The fill stays light (frosted); the
-     border and shadow, which are what actually make an edge visible on a
-     light page, are dark instead of white. */
+  /* Light glass panel on the dark page ground — border/glow have to be
+     light to show against a background this dark. Nested headings/links
+     use var(--foreground)/var(--muted-foreground); these two local
+     overrides make that text dark ink against the panel's own light fill,
+     same as `.glass`. */
+  --foreground: #12122E;
+  --muted-foreground: #5B5892;
   background:
-    linear-gradient(140deg, rgba(255, 255, 255, 0.45) 0%, rgba(255, 255, 255, 0.2) 100%);
-  backdrop-filter: blur(26px) saturate(170%);
-  border: 1.5px solid rgba(0, 0, 0, 0.14);
+    linear-gradient(140deg, rgba(255, 255, 255, 0.65) 0%, rgba(255, 255, 255, 0.32) 100%);
+  backdrop-filter: blur(24px) saturate(190%) brightness(1.06);
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
   box-shadow:
-    0 1px 0 0 rgba(255, 255, 255, 0.85) inset,
-    0 32px 64px -30px rgba(0, 0, 0, 0.28),
-    0 12px 24px -12px rgba(0, 0, 0, 0.14);
+    0 1px 0 0 rgba(255, 255, 255, 0.9) inset,
+    0 40px 70px -30px rgba(0, 0, 0, 0.6),
+    0 0 50px -20px rgba(255, 255, 255, 0.18);
 }
 
 .bbi-footer-heading {
@@ -2052,9 +2065,9 @@ html.light .idea-shell::before { opacity: 0.42; }
   font-size: 0.875rem;
   color: var(--foreground);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0.12) 100%);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.16) 100%);
   backdrop-filter: blur(18px) saturate(170%);
-  border: 1px solid rgba(0, 0, 0, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.4);
   transition:
     border-color var(--mo-dur-2, 240ms) ease,
     box-shadow var(--mo-dur-2, 240ms) ease;
